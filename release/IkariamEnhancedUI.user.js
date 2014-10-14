@@ -3,14 +3,16 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			4.01
+// @version			4.02
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @history			4.01	Bugfix: Fixed bug with the name of a class (hidden).
+// @history			4.02	Bugfix: Not all occurrences of hidden were changed.
+// 
+// @history			4.01	Bugfix: Name of a class (hidden) is used by GF.
 // 
 // @history			4.00	Feature: Options panel to enable/disable funtions and set settings. (mobile & desktop)
 // @history			4.00	Feature: Update interval can be set. (mobile & desktop)
@@ -61,7 +63,7 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'4.01',
+	version:	'4.02',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -306,7 +308,7 @@ General = {
 		// Add the select options wrapper.
 		var optionsWrapper	= General.addElement('div', id + 'SelectOptions', wrapper, null);
 		optionsWrapper.classList.add('yuimenu');
-		optionsWrapper.classList.add('hidden');
+		optionsWrapper.classList.add('invisible');
 		optionsWrapper.classList.add('script' + scriptInfo.id + 'selectOptions');
 		
 		// Set the list wrapper to the optionsWrapper.
