@@ -3,7 +3,7 @@
 // @description		Shows the actual income also on top of the site.
 // @namespace		http://*.ikariam.*/*
 // @author			TOBBE
-// @version			1.06
+// @version			1.07
 //
 // @include			http://*.ikariam.*/index.php?view=finances
 //
@@ -11,6 +11,7 @@
 // @exclude			http://support.ikariam.*/*
 // @exclude			http://support.*.ikariam.*/*
 // 
+// @history			1.07	Fixed: Problem with negative Numbers and 0.4.2.4
 // @history			1.06	Added: Own Script-Updater.
 // @history			1.06	Fixed: Remove everything what refered to other Scripts.
 // @history			1.05	Added: New Script-Updater - will be replaced by my own Updater in the next few days.
@@ -24,7 +25,7 @@
 // ==/UserScript==
 
 // Version and Script-ID
-var version = 1.06;
+var version = 1.07;
 var scriptId = 74221;
 
 // Check for Updates
@@ -54,8 +55,14 @@ function main() {
 
 // Returns the actual income.
 function getIncome() {
-	var hidden = document.getElementsByClassName('hidden');
-	var txt = hidden[hidden.length - 1].innerHTML;
+	var incomeCell = document.getElementsByClassName('hidden');
+	incomeCell = incomeCell[incomeCell.length - 1];
+
+	while(incomeCell.firstChild.firstChild) {
+		incomeCell = incomeCell.firstChild;
+	}
+
+	var txt = incomeCell.innerHTML;
 
 	if(txt.search(',') != -1) {
 		txt = txt.replace(',', '');
@@ -69,15 +76,19 @@ function getIncome() {
 
 // Formats a number to that format that is used in Ikariam.
 function formatToIkaNumber(num) {
-	num += '';
-
+	var txt = num + '';
+	
 	if(point) {
-		num = num.replace(/(\d)(?=(\d{3})+\b)/g,'$1.');
+		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g,'$1.');
 	} else {
-		num = num.replace(/(\d)(?=(\d{3})+\b)/g,'$1,');
+		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g,'$1,');
 	}
-
-	return num;
+	
+	if(num < 0) {
+		txt = '<span class="negative">' + txt + '</span>';
+	}
+	
+	return txt;
 }
 
 // Adds cells to an table row.
