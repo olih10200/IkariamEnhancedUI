@@ -3,12 +3,14 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			4.00
+// @version			4.01
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
+// 
+// @history			4.01	Bugfix: Fixed bug with the name of a class (hidden).
 // 
 // @history			4.00	Feature: Options panel to enable/disable funtions and set settings. (mobile & desktop)
 // @history			4.00	Feature: Update interval can be set. (mobile & desktop)
@@ -59,7 +61,7 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'4.00',
+	version:	'4.01',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -139,7 +141,7 @@ General = {
 		// Add the general used styles.
 		GM_addStyle(
 				 ".script" + scriptInfo.id + "selectOptions	{ z-Index: 65112 !important; position: absolute !important; top: 25px !important; left: 0px !important; } \
-				 .hidden									{ visibility: hidden !important; }"
+				 .invisible									{ visibility: hidden !important; }"
 			);
 	},
 	
@@ -564,7 +566,7 @@ EventHandling = {
 			var selectOptionsShown = General.$$('yui-button-active');
 			
 			for(var i = 0; i < selectOptionsShown.length; i++) {
-				selectOptionsShown[i].nextSibling.classList.add('hidden');
+				selectOptionsShown[i].nextSibling.classList.add('invisible');
 				selectOptionsShown[i].classList.remove('yui-button-active');
 				
 			}
@@ -572,7 +574,7 @@ EventHandling = {
 			// If the select field should be activated do so.
 			if(activate) {
 				this.classList.add('yui-button-active');
-				this.nextSibling.classList.remove('hidden');
+				this.nextSibling.classList.remove('invisible');
 			}
 		},
 	},
@@ -634,7 +636,7 @@ EventHandling = {
 			headerBtn.innerHTML	= this.lastChild.innerHTML;
 			
 			// Hide the option list and reset the header view.
-			General.$(idStart + 'SelectOptions').classList.toggle('hidden');
+			General.$(idStart + 'SelectOptions').classList.toggle('invisible');
 			General.$(idStart + 'SelectHeader').classList.toggle('yui-button-active');
 		},
 	},
