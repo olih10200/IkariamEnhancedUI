@@ -3,12 +3,15 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			2.00
+// @version			2.01
 //
-// @include			http://s*.*.ikariam.*/*
-//
-// @exclude			http://board.*.ikariam.*/*
+// @include			http://s*.*.ikariam.com/*
+// @include			http://m*.*.ikariam.com/*
+// 
 // @exclude			http://support.*.ikariam.*/*
+// 
+// @history			2.01	Feature: Support for mobile interface.
+// @history			2.01	Bugfix: Fixed bug with scrollbar in finances view. (desktop)
 // 
 // @history			2.00	Feature: Ready for 0.5.0, but also supports 0.4.5 furthermore.
 // @history			2.00	Feature: Implemented support for different languages.
@@ -39,13 +42,13 @@
 
 /******************************************************************************************************************
 *** The update function which is used in the script was developed by PhasmaExMachina and adapted by me (Tobbe). ***
-*****************************************************************************************************************/
+******************************************************************************************************************/
 
 /**
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	2.00,
+	version:	2.01,
 	id:			74221,
 	name:		'Enhanced UI',
 	author:		'Tobbe',
@@ -127,7 +130,7 @@ General = {
 	formatToIkaNumber: function(num) {
 		var txt = num + '';
 		
-		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g,'$1' + lText.kiloSep);
+		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g,'$1' + lText.settings.kiloSep);
 		
 		if(num < 0) {
 			txt = '<span class="red bold negative">' + txt + '</span>';
@@ -145,7 +148,7 @@ General = {
 	 */
 	createTableRow: function(cellText, cellClassName, row) {
 		for(var i = 0; i < cellText.length; i++) {
-			var cell = General.addElement('td', '', row);
+			var cell = General.addElement('td', '', row, null);
 			
 			cell.innerHTML = cellText[i];
 			cell.className = cellClassName[i];
@@ -158,99 +161,23 @@ General = {
 	 * @param	type	- the type of the new element
 	 * @param	id		- the last part of the id of the element (the first part will be "script" + the id script-id)
 	 * @param	parent	- the parent of the new element
+	 * @param	nextSib - the next sibling of the element (if null the element will be added at the end)
 	 * @return	the new element
 	 */
-	addElement: function(type, id, parent) {
+	addElement: function(type, id, parent, nextSib) {
 		var newElement = document.createElement(type);
-	
+		
 		if(id) {
 			newElement.id = 'script' + scriptInfo.id + id;
 		}
-	
-		parent.appendChild(newElement);
+		
+		if(nextSib) {
+			parent.insertBefore(newElement, nextSib);
+		} else {
+			parent.appendChild(newElement);
+		}
 		
 		return newElement;
-	},
-};
-
-/**
- * Functions for language.
- */
-Language = {
-	/**
-	 * Returns country code.
-	 * 
-	 * @return	the country code.
-	 */
-	getLang: function() {
-		var lang = top.location.host.split('.');
-		
-		return (lang?lang[1]:false) || 'en';
-	},
-	
-	/**
-	 * Returns the name of the current language.
-	 * 
-	 * @return	The name of the language.
-	 */
-	getLanguageName: function() {
-		var languageName = {
-			ae: 'arabic',		ar: 'spanish',		ba: 'bosnian',		bg: 'bulgarian',	br: 'portuguese',	by: 'russian',
-			cl: 'spanish',		cn: 'chinese',		co: 'spanish',		cz: 'czech',		de: 'german',		dk: 'danish',
-			ee: 'estonian',		en: 'english',		es: 'spanish',		fi: 'finish',		fr: 'french',		gr: 'greek',
-			hk: 'chinese',		hr: 'bosnian',		hu: 'hungarian',	id: 'indonesian',	il: 'hebrew',		it: 'italian',
-			kr: 'korean',		lt: 'lithuanian',	lv: 'latvian',		mx: 'spanish',		nl: 'dutch',		no: 'norwegian',
-			pe: 'spanish',		ph: 'filipino',		pk: 'urdu',			pl: 'polish',		pt: 'portuguese',	ro: 'romanian',
-			rs: 'serbian',		ru: 'russian',		se: 'swedish',		si: 'slovene',		sk: 'slovak',		tr: 'turkish',
-			tw: 'chinese',		ua: 'ukranian',		us: 'english',		ve: 'spanish',		vn: 'vietnamese',	yu: 'bosnian'
-		}[Language.getLang()];
-
-		return languageName;
-	},
-	
-	/*
-	 * Returns the text for the Script.
-	 * 
-	 * @return	The script text.
-	 */
-	getText: function() {
-		var text = {
-			'arabic':		{ kiloSep: ',',	decSep: '.',	left2right: false,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'bulgarian':	{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'chinese':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'czech':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'danish':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'dutch':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'english':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'filipino':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'finish':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'french':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'german':		{ kiloSep: '.',	decSep: ',',	left2right: true,	income: 'Einkommen pro Stunde',	income24: 'Einkommen pro Tag',	update: { header: 'Update verf&uuml;gbar',	text1: 'Es ist ein Update f&uuml;r ',	text2: ' verf&uuml;gbar',	text3: 'Zur Zeit ist Version ',				text4: ' installiert. Die neueste Version ist ',	hist: 'Versionshistorie' },	install: 'Installieren',	close: 'Schließen',		feature: 'Neuerung(en)',	bugfix: 'Bugfix(es)'	},
-			'greek':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'hebrew':		{ kiloSep: ',',	decSep: '.',	left2right: false,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'hungarian':	{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'italian':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'korean':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'latvian':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'lithuanian':	{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'norwegian':	{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'pinoy':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'polish':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'portuguese':	{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'romanian':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'russian': 		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'serbian':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'slovak':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'slovene':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'spanish':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'swedish':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'turkish':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'ukranian':		{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'urdu': 		{ kiloSep: ',',	decSep: '.',	left2right: false,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	},
-			'vietnamese':	{ kiloSep: ',',	decSep: '.',	left2right: true,	income: 'Income per hour',		income24: 'Income per day',		update: { header: 'Update available',		text1: 'There is an update for ',		text2: ' available',		text3: 'At the moment there is version ',	text4: ' installed. The newest version is ',		hist: 'Version History' },	install: 'Install',			close: 'Close',			feature: 'Feature(s)',		bugfix: 'Bugfix(es)'	}
-		}[Language.getLanguageName()];
-
-		return text;
 	},
 };
 
@@ -262,9 +189,9 @@ EnhancedView = {
 	 * "Constructor"
 	 */
 	start: function() {
-		// Is it 0.4.5 or 0.5.0?
+		// Is it mobile or desktop?
 		if(!General.$('js_GlobalMenu_gold')) {
-			EnhancedView.showIncomeOnTopOld();
+			EnhancedView.showIncomeOnTopMobile();
 		} else {
 			EnhancedView.addListener();
 		}
@@ -279,7 +206,7 @@ EnhancedView = {
 	},
 
 	/**
-	 * Shows the actual income also on top of the site.
+	 * Shows the actual income also on top of the site. (desktop)
 	 */
 	showIncomeOnTop: function() {
 		if(!General.$('finances')) {
@@ -296,10 +223,13 @@ EnhancedView = {
 		incomeRow.className = 'result alt';
 		incomeRow24h.className = 'result';
 
-		General.createTableRow(new Array(lText.income, '', '', General.formatToIkaNumber(income)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow);
-		General.createTableRow(new Array(lText.income24, '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow24h);
+		General.createTableRow(new Array(lText.income.perHour, '', '', General.formatToIkaNumber(income)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow);
+		General.createTableRow(new Array(lText.income.perDay, '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow24h);
+		
+		// Adjust the size of the Scrollbar.
+		unsafeWindow.ikariam.controller.adjustSizes();
 	},
-
+	
 	/**
 	 * Gets the actual income from the Ikariam-page and returns it.
 	 * 
@@ -315,40 +245,25 @@ EnhancedView = {
 		
 		var txt = incomeCell.innerHTML;
 		
-		return Number(txt.replace(lText.kiloSep, ''));
+		return Number(txt.replace(lText.settings.kiloSep, ''));
 	},
 
 	/**
-	 * Shows the actual income also on top of the site.
+	 * Shows the actual income also on top of the site. (mobile)
 	 */
-	showIncomeOnTopOld: function() {
-		var income = EnhancedView.getIncomeOld();
+	showIncomeOnTopMobile: function() {
+		var income = EnhancedView.getIncome();
 		
 		var balance = General.$('balance');
 		
 		incomeRow = balance.insertRow(1);
 		incomeRow24h = balance.insertRow(2);
 		
-		General.createTableRow(new Array(lText.income, '', '', General.formatToIkaNumber(income)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow);
-		General.createTableRow(new Array(lText.income24, '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow24h);
-	},
+		incomeRow.className = 'result alt';
+		incomeRow24h.className = 'result';
 
-	/**
-	 * Gets the actual income from the Ikariam-page and returns it.
-	 * 
-	 * @return	the actual income
-	 */
-	getIncomeOld: function() {
-		var incomeCell = General.$$('hidden');
-		incomeCell = incomeCell[incomeCell.length - 1];
-		
-		while(incomeCell.firstChild.firstChild) {
-			incomeCell = incomeCell.firstChild;
-		}
-		
-		var txt = incomeCell.innerHTML;
-		
-		return Number(txt.replace(lText.kiloSep, ''));
+		General.createTableRow(new Array(lText.income.perHour, '', '', General.formatToIkaNumber(income)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow);
+		General.createTableRow(new Array(lText.income.perDay, '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow24h);
 	},
 };
 
@@ -356,6 +271,13 @@ EnhancedView = {
  * Updater
  */
 Updater = {
+	/**
+	 * "Constructor"
+	 */
+	start: function() {
+		Updater.checkForUpdates();
+	},
+
 	/**
 	 * Checks for updates for the Script.
 	 */
@@ -384,34 +306,34 @@ Updater = {
 		
 		Updater.setUpdateStyles();
 		
-		var updateBackground		= General.addElement('div', 'updateBackground', document.body);
-		var updatePanelContainer	= General.addElement('div', 'updatePanelContainer', document.body);
-		var updatePanel				= General.addElement('div', 'updatePanel', updatePanelContainer);
+		var updateBackground		= General.addElement('div', 'updateBackground', document.body, null);
+		var updatePanelContainer	= General.addElement('div', 'updatePanelContainer', document.body, null);
+		var updatePanel				= General.addElement('div', 'updatePanel', updatePanelContainer, null);
 	
-		var updatePanelHeader		= General.addElement('div', 'updatePanelHeader', updatePanel);
-		var updatePanelHeaderL		= General.addElement('div', 'updatePanelHeaderL', updatePanelHeader);
-		var updatePanelHeaderR		= General.addElement('div', 'updatePanelHeaderR', updatePanelHeaderL);
-		var updatePanelHeaderM		= General.addElement('p',	'updatePanelHeaderM', updatePanelHeaderR);
+		var updatePanelHeader		= General.addElement('div', 'updatePanelHeader', updatePanel, null);
+		var updatePanelHeaderL		= General.addElement('div', 'updatePanelHeaderL', updatePanelHeader, null);
+		var updatePanelHeaderR		= General.addElement('div', 'updatePanelHeaderR', updatePanelHeaderL, null);
+		var updatePanelHeaderM		= General.addElement('p',	'updatePanelHeaderM', updatePanelHeaderR, null);
 	
-		var updatePanelBody			= General.addElement('div', 'updatePanelBody', updatePanel);
-		var updatePanelBodyL		= General.addElement('div', 'updatePanelBodyL', updatePanelBody);
-		var updatePanelBodyR		= General.addElement('div', 'updatePanelBodyR', updatePanelBodyL);
-		var updatePanelBodyM		= General.addElement('div', 'updatePanelBodyM', updatePanelBodyR);
-		var updatePanelBodyMTop		= General.addElement('p',	'updatePanelBodyMTop', updatePanelBodyM);
-		var updatePanelBodyMBottom	= General.addElement('div', 'updatePanelBodyMBottom', updatePanelBodyM);
+		var updatePanelBody			= General.addElement('div', 'updatePanelBody', updatePanel, null);
+		var updatePanelBodyL		= General.addElement('div', 'updatePanelBodyL', updatePanelBody, null);
+		var updatePanelBodyR		= General.addElement('div', 'updatePanelBodyR', updatePanelBodyL, null);
+		var updatePanelBodyM		= General.addElement('div', 'updatePanelBodyM', updatePanelBodyR, null);
+		var updatePanelBodyMTop		= General.addElement('p',	'updatePanelBodyMTop', updatePanelBodyM, null);
+		var updatePanelBodyMBottom	= General.addElement('div', 'updatePanelBodyMBottom', updatePanelBodyM, null);
 		
-		var updatePanelFooter		= General.addElement('div', 'updatePanelFooter', updatePanel);
-		var updatePanelFooterL		= General.addElement('div', 'updatePanelFooterL', updatePanelFooter);
-		var updatePanelFooterR		= General.addElement('div', 'updatePanelFooterR', updatePanelFooterL);
-		var updatePanelFooterM		= General.addElement('div', 'updatePanelFooterM', updatePanelFooterR);
+		var updatePanelFooter		= General.addElement('div', 'updatePanelFooter', updatePanel, null);
+		var updatePanelFooterL		= General.addElement('div', 'updatePanelFooterL', updatePanelFooter, null);
+		var updatePanelFooterR		= General.addElement('div', 'updatePanelFooterR', updatePanelFooterL, null);
+		var updatePanelFooterM		= General.addElement('div', 'updatePanelFooterM', updatePanelFooterR, null);
 		
-		var updatePanelInstall		= General.addElement('input', 'updatePanelInstall', updatePanel);
+		var updatePanelInstall		= General.addElement('input', 'updatePanelInstall', updatePanel, null);
 		updatePanelInstall.type		= 'button';
-		updatePanelInstall.value	= lText.install;
+		updatePanelInstall.value	= lText.update.install;
 		
-		var updatePanelCB			= General.addElement('input', 'updatePanelCB', updatePanel);
+		var updatePanelCB			= General.addElement('input', 'updatePanelCB', updatePanel, null);
 		updatePanelCB.type			= 'button';
-		updatePanelCB.value			= lText.close;
+		updatePanelCB.value			= lText.update.close;
 		
 		updatePanelHeaderM.innerHTML		= lText.update.header + '<span><a><img id="script' + scriptInfo.id + 'updatePanelClose" src="skin/layout/notes_close.gif"></a></span>';
 		updatePanelBodyMTop.innerHTML		= lText.update.text1 + '<a href="http://userscripts.org/scripts/show/' + scriptInfo.id + '" target="_blank" >' + scriptInfo.name + '</a>' + lText.update.text2 + '.<br>' + lText.update.text3 + scriptInfo.version + lText.update.text4 + metadata.version + '.<br>&nbsp;&nbsp;<b><u>' + lText.update.hist + ':</u></b>';
@@ -537,14 +459,14 @@ Updater = {
 	 * @return	the formated update history
 	 */
 	formatUpdateHistory: function(updateHistory) {
-		var types = { feature: lText.feature,	bugfix: lText.bugfix,	other: '' };
+		var types = { feature: lText.update.feature,	bugfix: lText.update.bugfix,	other: '' };
 		var formatedUpdateHistory = '';
 	
 		for(var version in updateHistory) {
-			formatedUpdateHistory += '<h2>v ' + version + '</h2><br><table class="' + 'script' + scriptInfo.id + 'updateTable"><tbody>';
+			formatedUpdateHistory += '<h2>v ' + version + '</h2><br><table class="script' + scriptInfo.id + 'updateTable"><tbody>';
 	
 			for(var type in updateHistory[version]) {
-				formatedUpdateHistory += '<tr><td class="' + 'script' + scriptInfo.id + 'updateDataType">' + types[type] + '</td><td class="' + 'script' + scriptInfo.id + 'updateDataInfo"><ul>';
+				formatedUpdateHistory += '<tr><td class="script' + scriptInfo.id + 'updateDataType">' + types[type] + '</td><td class="script' + scriptInfo.id + 'updateDataInfo"><ul>';
 				
 				for(var i = 0 ; i < updateHistory[version][type].length; i++) {
 					formatedUpdateHistory += '<li>' + updateHistory[version][type][i] + '</li>';
@@ -576,6 +498,108 @@ Updater = {
 	},
 };
 
+/**
+ * Functions for language.
+ */
+Language = {
+	/**
+	 * Returns country code.
+	 * 
+	 * @return	the country code.
+	 */
+	getLang: function() {
+		var lang = top.location.host.split('.');
+		
+		return (lang ? lang[1] : false) || 'en';
+	},
+	
+	/**
+	 * Returns the name of the current language.
+	 * 
+	 * @return	The name of the language.
+	 */
+	getLanguageName: function() {
+		var implemented = new Array('english', 'german');
+
+		var languageName = {
+			ae: 'arabic',		ar: 'spanish',		ba: 'bosnian',		bg: 'bulgarian',	br: 'portuguese',	by: 'russian',
+			cl: 'spanish',		cn: 'chinese',		co: 'spanish',		cz: 'czech',		de: 'german',		dk: 'danish',
+			ee: 'estonian',		en: 'english',		es: 'spanish',		fi: 'finish',		fr: 'french',		gr: 'greek',
+			hk: 'chinese',		hr: 'bosnian',		hu: 'hungarian',	id: 'indonesian',	il: 'hebrew',		it: 'italian',
+			kr: 'korean',		lt: 'lithuanian',	lv: 'latvian',		mx: 'spanish',		nl: 'dutch',		no: 'norwegian',
+			pe: 'spanish',		ph: 'filipino',		pk: 'urdu',			pl: 'polish',		pt: 'portuguese',	ro: 'romanian',
+			rs: 'serbian',		ru: 'russian',		se: 'swedish',		si: 'slovene',		sk: 'slovak',		tr: 'turkish',
+			tw: 'chinese',		ua: 'ukranian',		us: 'english',		ve: 'spanish',		vn: 'vietnamese',	yu: 'bosnian'
+		}[Language.getLang()];
+		
+		for(var i = 0; i < implemented.length; i++) {
+			if(implemented[i] == languageName) {
+				return languageName;
+			}
+		}
+
+		return 'english';
+	},
+	
+	/*
+	 * Returns the text for the Script.
+	 * 
+	 * @return	The script text.
+	 */
+	getText: function() {
+		var text = {
+			'english': {
+				settings: {
+					kiloSep:	',',
+					decSep:		'.',
+					left2right:	true,
+				},
+				income: {
+					perHour:	'Income per hour',
+					perDay:		'Income per day',
+				},
+				update: {
+					header:		'Update available',
+					text1:		'There is an update for ',
+					text2:		' available',
+					text3:		'At the moment there is version ',
+					text4:		' installed. The newest version is ',
+					hist:		'Version History',
+					feature:	'Feature(s)',
+					bugfix:		'Bugfix(es)',
+					install:	'Install',
+					close:		'Close',
+				},
+			},
+			'german': {
+				settings: {
+					kiloSep:	'.',
+					decSep:		',',
+					left2right:	true,
+				},
+				income: {
+					perHour:	'Einkommen pro Stunde',
+					perDay:		'Einkommen pro Tag',
+				},
+				update: {
+					header:		'Aktualisierung verf&uuml;gbar',
+					text1:		'Es ist ein Update f&uuml;r ',
+					text2:		' verf&uuml;gbar',
+					text3:		'Zur Zeit ist Version ',
+					text4:		' installiert. Die neueste Version ist ',
+					hist:		'Versionshistorie',
+					feature:	'Neuerung(en)',
+					bugfix:		'Bugfix(e)',
+					install:	'Installieren',
+					close:		'Schlieï¿½en',
+				},
+			},
+		}[Language.getLanguageName()];
+
+		return text;
+	},
+};
+
 lText = Language.getText();
 
 /**
@@ -583,7 +607,7 @@ lText = Language.getText();
  */
 function main() {
 	// Call the function to check for updates.
-	Updater.checkForUpdates();
+	Updater.start();
 	
 	// Call the function to enhance the view.
 	EnhancedView.start();
