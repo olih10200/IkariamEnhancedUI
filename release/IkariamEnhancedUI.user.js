@@ -3,12 +3,18 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			4.02
+// @version			5.00
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
+// 
+// @history			5.00	Feature: Possibility to hide only the bird swarm animation. (desktop)
+// @history			5.00	Feature: Easier upkeep reduction table. (mobile & desktop)
+// @history			5.00	Feature: Enhanced zoom function using the Ikariam zoom function. (desktop)
+// @history			5.00	Feature: Due to the use of Ikariam functions the code could be reduced.
+// @history			5.00	Feature: Code enhancements for shorter code.
 // 
 // @history			4.02	Bugfix: Not all occurrences of hidden were changed.
 // 
@@ -63,22 +69,33 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'4.02',
+	version:	'5.00',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
 	debug:		false,
 };
 
+/**
+ * Sets unsafeWindow to win for easier access.
+ */
+var win = unsafeWindow;
+
+/**
+ * Storage for the unsafeWindow.ikariam funtion.
+ */
+var ika;
+
 /***********************************************
 *** Start of the "debugging settings block". ***
 ***********************************************/
 
 // For more information about commands that are available for the Firebug console see http://getfirebug.com/wiki/index.php/Console_API.
-if(scriptInfo.debug && unsafeWindow.console) {
-	var con_tmp = unsafeWindow.console;
-} else { // If debugging is not allowed or the Firebug console is closed set all functions to "null".
-	var con_tmp = {
+if(scriptInfo.debug) {
+	var conTmp = win.console;
+} else {
+	var conTmp = {
+		// Non static functions are set to 'null'.
 		log:			function () { return false; },
 		info:			function () { return false; },
 		warn:			function () { return false; },
@@ -105,7 +122,7 @@ if(scriptInfo.debug && unsafeWindow.console) {
 /**
  * Debugging console.
  */
-const con = con_tmp;
+const con		= conTmp;
 
 /*********************************************
 *** End of the "debugging settings block". ***
@@ -115,36 +132,113 @@ const con = con_tmp;
  * General functions.
  */
 General = {
+		/**
+	 * Init the script.
+	 */
+	init: function() {
+		// Set unsafeWindow.ikariam to ika for easier access.
+		ika = unsafeWindow.ikariam;
+
+		// Get the id of the body.
+		var viewId = document.body.id;
+		
+		// Get the name of the view depending on the body id.
+		switch(viewId) {
+			case 'worldmap_iso':
+				View.name = 'world';
+			  break;
+			
+			case 'island':
+				View.name = 'island';
+			  break;
+			
+			case 'city':
+				View.name = 'town';
+			  break;
+			
+			default:
+			  break;
+		}
+	},
+	
 	/**
-	 * Gets an element by the id and returns it.
+	 * Gets the first matching child element by a query and returns it.
 	 * 
-	 * @param	int		id
-	 *   The id of the element.
+	 * @param	String	query
+	 *   The query for the element.
+	 * @param	element	parent
+	 *   The parent element. (optional, default document)
+	 * 
 	 * @return	element
 	 *   The element.
 	 */
-	$: function(id) {
-		return document.getElementById(id);
+	$: function(query, parent) {
+		return this.$$(query, parent)[0];
 	},
 	
 	/**
-	 * Gets elements by their class name and returns them.
+	 * Gets all matching child elements by a query and returns them.
 	 * 
-	 * @param	String	className
-	 *   The class name of the elements.
+	 * @param	String	query
+	 *   The query for the elements.
+	 * @param	element	parent
+	 *   The parent element. (optional, default document)
+	 * 
 	 * @return	element[]
 	 *   The elements.
 	 */
-	$$: function(className) {
-		return document.getElementsByClassName(className);
+	$$: function(query, parent) {
+		// If there is no parent set, set it to document.
+		if(!parent)	parent = document;
+		
+		// Return the elements.
+		return parent.querySelectorAll(query);
 	},
 	
+	/**
+	 * Set the general script styles.
+	 */
 	setStyles: function() {
 		// Add the general used styles.
 		GM_addStyle(
-				 ".script" + scriptInfo.id + "selectOptions	{ z-Index: 65112 !important; position: absolute !important; top: 25px !important; left: 0px !important; } \
-				 .invisible									{ visibility: hidden !important; }"
+				".bottomLine					{ border-bottom: 1px dotted #CCA569; } \
+				 .minimizeImg, .maximizeImg		{ background: url('skin/interface/window_control_sprite.png') no-repeat scroll 0 0 transparent; cursor: pointer; display: block; height: 18px; width: 18px; } \
+				 .minimizeImg					{ background-position: -144px 0; } \
+				 .minimizeImg:hover				{ background-position: -144px -19px; } \
+				 .maximizeImg					{ background-position: -126px 0; } \
+				 .maximizeImg:hover				{ background-position: -126px -19px; }"
 			);
+	},
+	
+	/**
+	 * Parses a string number to an int value.
+	 *
+	 * @param	String	txt
+	 *   The number to format.
+	 * 
+	 * @return	int
+	 *   The formated value.
+	 */
+	getInt: function(txt) {
+		// Return the formated number.
+		return parseInt(txt.replace(Language.$('settings_kiloSep'), ''));
+	},
+	
+	/**
+	 * Returns the value of the selected option of a select field.
+	 * 
+	 * @param	String	id
+	 *   The last part of the id of the element (The first part will be "script" + the script-id.).
+	 * 
+	 * @return	String
+	 *   The value.
+	 */
+	getSelectValue: function(id) {
+		// Get the select field.
+		var select = General.$('#script' + scriptInfo.id + id);
+		
+		// Return the value.
+		return select.options[select.selectedIndex].value;
 	},
 	
 	/**
@@ -152,6 +246,7 @@ General = {
 	 *
 	 * @param	int		num
 	 *   The number to format.
+	 * 
 	 * @return	String
 	 *   The formated number.
 	 */
@@ -159,7 +254,7 @@ General = {
 		var txt = num + '';
 		
 		// Set a seperator every 3 digits from the end.
-		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g,'$1' + lText.settings.kiloSep);
+		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g, '$1' + Language.$('settings_kiloSep'));
 		
 		// If the number ist negative write it in red.
 		if(num < 0) {
@@ -179,36 +274,40 @@ General = {
 	 *   Array with the classes of the cells.
 	 * @param	element		row
 	 *   Table row where the cells should be added.
+	 * @param	boolean		head
+	 *   If the row is a table head row.
 	 */
-	createTableRow: function(cellText, cellClassName, row) {
+	createTableRow: function(cellText, cellClassName, row, head) {
 		// Do this for every cell.
 		for(var i = 0; i < cellText.length; i++) {
 			// Add the cell.
-			var cell = General.addElement('td', '', row, null);
+			var cell = this.addElement(head ? 'th' : 'td', row, null, cellClassName[i]);
 			
 			// Set the content of the cell.
 			cell.innerHTML = cellText[i];
-
-			// Set the class of the cell.
-			cell.className = cellClassName[i];
 		}
 	},
 	
 	/**
 	 * Creates a new element and adds it to a parent.
 	 * 
-	 * @param	String	type
+	 * @param	String				type
 	 *   The type of the new element.
-	 * @param	int		id
-	 *   The last part of the id of the element (The first part will be "script" + the script-id. If null, no id will be set.).
-	 * @param	element	parent
+	 * @param	element				parent
 	 *   The parent of the new element.
-	 * @param	element	nextSib
-	 *   The next sibling of the element (If null the element will be added at the end).
+	 * @param	int					id
+	 *   The last part of the id of the element. The first part will be "script" + the script-id. (optional, if not set, no id will be set)
+	 * @param	String || String[]	classes
+	 *   The class(es) of the element. (optional, if not set, no class will be set)
+	 * @param	mixed[]				style
+	 *   The styles of the element. (optional, if not set, no style will be set)
+	 * @param	element				nextSib
+	 *   The next sibling of the element. (optional, if not set the element will be added at the end)
+	 * 
 	 * @return	element
 	 *   The new element.
 	 */
-	addElement: function(type, id, parent, nextSib) {
+	addElement: function(type, parent, id, classes, style, nextSib) {
 		// Create the new Element.
 		var newElement = document.createElement(type);
 		
@@ -217,6 +316,23 @@ General = {
 			newElement.id = 'script' + scriptInfo.id + id;
 		}
 		
+		// Add all classes.
+		if(classes && classes != '') {
+			if(typeof classes == 'string') {
+				newElement.classList.add(classes);
+			} else {
+				for(var i = 0; i < classes.length; i++) {
+					newElement.classList.add(classes[i]);
+				}
+			}
+		}
+		
+		if(style) {
+			for(var i = 0; i < style.length; i++) {
+				newElement.style[style[i][0]] = style[i][1];
+			}
+		}
+
 		// If there is the next sibling defined, insert it before it.
 		if(nextSib) {
 			parent.insertBefore(newElement, nextSib);
@@ -231,12 +347,12 @@ General = {
 	},
 	
 	/**
-	 * Creates a new checkbox with label and adds it to a parent.
+	 * Creates a new checkbox and adds it to a parent.
 	 * 
 	 * @param	element	parent
 	 *   The parent of the new checkbox.
 	 * @param	String	id
-	 *   The middle part of the id of the elements.
+	 *   The middle part of the id of the checkbox.
 	 * @param	boolean	checked
 	 *   If the checkbox is checked or not.
 	 * @param	String	labelText
@@ -244,158 +360,56 @@ General = {
 	 */
 	addCheckbox: function(parent, id, checked, labelText) {
 		// Create the wrapper for the checkbox and the label.
-		var cbWrapper		= General.addElement('div', null, parent, null);
-		cbWrapper.classList.add('cbWrapper');
+		var cbWrapper	= this.addElement('div', parent, null, 'cbWrapper');
 
-		// Create the checkbox and the label.
-		var cbInvisible			= General.addElement('input', id + 'CbInvisible', cbWrapper, null);
-		var cb					= General.addElement('div', id + 'Cb', cbWrapper, null);
-		var cbLabel				= General.addElement('span', id + 'CbLabel', cbWrapper, null);
+		// Create the checkbox and set the attributes.
+		var cb		= this.addElement('input', cbWrapper, id + 'Cb', 'checkbox');
+		cb.type		= 'checkbox';
+		cb.title	= labelText;
+		cb.checked	= checked ? 'checked' : '';
 		
-		// Set the checkbox settings.
-		cbInvisible.type		= 'checkbox';
-		cbInvisible.checked		= checked ? 'checked' : '';
-		cbInvisible.classList.add('invisible');
-		
-		// Set the settings of the label.
-		cbLabel.innerHTML		= labelText;
-		
-		// Set the settings of the picture of the checkbox the user sees.
-		cb.classList.add('checkbox');
-		cb.classList.add('floatleft');
-		if(checked)	cb.classList.add('checked');
-
-		// Add the action listener.
-		cb.addEventListener('click', EventHandling.checkbox.toggle, false);
+		// Replace the checkbox for better appearance.
+		ika.controller.replaceCheckboxes();
 	},
-	
+
 	/**
-	 * Creates a new select field with label and options and adds it to a parent.
+	 * Creates a new select field and adds it to a parent.
 	 * 
 	 * @param	element	parent
-	 *   The parent of the new checkbox.
+	 *   The parent of the new select field.
 	 * @param	String	id
-	 *   The middle part of the id of the elements.
+	 *   The last part of the id of the select field.
 	 * @param	boolean	selected
 	 *   The value of the selected option.
 	 * @param	mixed[]	opts
 	 *   An array with the names an values of the options.
-	 */
-	addSelect: function(parent, id, selected, opts, maxOptsShown) {
+	 */	
+	addSelect: function(parent, id, selected, opts) {
 		// Create the wrapper for the select.
-		var wrapper				= General.addElement('div', null, parent, null);
-		wrapper.style.position	= 'relative';
-		wrapper.classList.add('select_container');
-		wrapper.classList.add('size175');
-
-		// Create the hidden field to store the selection.
-		var hiddenField		= General.addElement('input', id + 'SelectHiddenField', wrapper, null);
-		hiddenField.type	= 'hidden';
-		hiddenField.value	= selected;
+		var wrapper				= this.addElement('div', parent, null, new Array('select_container', 'size175'), new Array(['position', 'relative']));
 		
-		// Add the select header.
-		var headerWrapper		= General.addElement('span', id + 'SelectHeader', wrapper, null);
-		headerWrapper.classList.add('yui-button');
-		var	header				= General.addElement('button', id + 'SelectHeaderButton', headerWrapper, null);
-		header.type				= 'button';
-		header.innerHTML		= opts['name'][opts['value'].indexOf(selected)];
-
-		// Set the actions for the header.
-		headerWrapper.addEventListener('mouseover', EventHandling.selectHeaderWrapper.mouseover, false);
-		headerWrapper.addEventListener('mouseout', EventHandling.selectHeaderWrapper.mouseout, false);
-		headerWrapper.addEventListener('click', EventHandling.selectHeaderWrapper.click, false);
+		// Create the select field.
+		var select	= this.addElement('select', wrapper, id + 'Select', 'dropdown');
 		
-		// Add the select options wrapper.
-		var optionsWrapper	= General.addElement('div', id + 'SelectOptions', wrapper, null);
-		optionsWrapper.classList.add('yuimenu');
-		optionsWrapper.classList.add('invisible');
-		optionsWrapper.classList.add('script' + scriptInfo.id + 'selectOptions');
-		
-		// Set the list wrapper to the optionsWrapper.
-		var listWrapper = optionsWrapper;
-
-		// Add the scroll funtion if necessary.
-		if(opts['name'].length > maxOptsShown) {
-			// Create arrow for scroll up.
-			var scrollUp	= General.addElement('div', null, optionsWrapper, null);
-			scrollUp.classList.add('topscrollbar');
-			
-			// Create scroll body.
-			var scrollBody			= General.addElement('div', id + 'SelectScrollBody', optionsWrapper, null);
-			scrollBody.style.height	= maxOptsShown * 24 + 'px';
-			scrollBody.classList.add('yui-menu-body-scrolled');
-			
-			// Set the lsit wrapper to the scroll body.
-			listWrapper		= scrollBody;
-			
-			// Create arrow for scroll down.
-			var scrollDown	= General.addElement('div', null, optionsWrapper, null);
-			scrollDown.classList.add('bottomscrollbar');
-			
-			// Add the Event listener.
-			scrollUp.addEventListener('mouseover', EventHandling.selectOptionsScrollUp.mouseover, false);
-			scrollDown.addEventListener('mouseover', EventHandling.selectOptionsScrollDown.mouseover, false);
-			scrollUp.addEventListener('mouseout', EventHandling.selectOptionsScrollUp.mouseout, false);
-			scrollDown.addEventListener('mouseout', EventHandling.selectOptionsScrollDown.mouseout, false);
-		}
-
-		// Add the options list.
-		var optionsList	= General.addElement('ul', null, listWrapper, null);
-		
-		// Add a hidden field, where the first part of the name of the elements id is stored.
-		var hiddenField		= General.addElement('input', null, optionsList, null);
-		hiddenField.type	= 'hidden';
-		hiddenField.value	= 'script' + scriptInfo.id + id;
-
 		// Add the Options.
 		for(var i = 0; i < opts['name'].length; i++) {
 			// Create an option.
-			var option	= General.addElement('li', null, optionsList, null);
-			option.classList.add('yuimenuitem');
+			var option			= this.addElement('option', select);
 
-			// Set the value.
-			var optionValue		= General.addElement('input', null, option, null);
-			optionValue.type	= 'hidden';
-			optionValue.value	= opts['value'][i];
+			// Set the value and the name.
+			option.value		= opts['value'][i];
+			option.innerHTML	= opts['name'][i];
 
-			// Set the shown name.
-			var optionName			= General.addElement('span', null, option, null);
-			optionName.innerHTML	= opts['name'][i];
-			
-			// Set the actions for the option.
-			option.addEventListener('mouseover', EventHandling.selectOption.mouseover, false);
-			option.addEventListener('mouseout', EventHandling.selectOption.mouseout, false);
-			option.addEventListener('click', EventHandling.selectOption.click, false);
-		}
-	},
-	
-	/**
-	 * Scrolls an element vertically.
-	 * 
-	 * @param	element	elem
-	 *   The element which should be scrolled.
-	 * @param	boolean	up
-	 *   If the element hould be scrolled upwards.
-	 * @param	in		step
-	 *   The step the element should be scrolled.
-	 */
-	scrollVertical: function(toScroll, up, step) {
-		// Get the actual position of the scrollbar.
-		var scrolled	= toScroll.scrollTop;
-		
-		// If scrolling upwards, subtract the step from the position.
-		if(up) {
-			scrollTo	= scrolled - step;
-
-		// Otherwise add the step to the position.
-		} else {
-			scrollTo	= scrolled + step;
+			// If the option is selected, set selected to true.
+			if(option.value == selected) {
+				option.selected = 'selected';
+			}
 		}
 		
-		// Set the new position.
-		toScroll.scrollTop	= scrollTo;
+		// Replace the dropdown for better appearance.
+		ika.controller.replaceDropdownMenus();
 	},
-	
+		
 	/**
 	 * Returns if the user is logged in to the mobile version.
 	 * 
@@ -409,81 +423,75 @@ General = {
 	/**
 	 * Shows a hint to the user (desktop).
 	 * 
+	 * @param	String	located
+	 *   The location of the hint. Possible are all advisors, a clicked element or a committed element.
 	 * @param	String	type
-	 *   The type of the hint.
-	 * @param	String	text
+	 *   The type of the hint. Possible is confirm, error, neutral or follow the mouse.
+	 * @param	String	msgText
 	 *   The hint text.
-	 * @param	int		duration
-	 *   The time in seconds the hint should be shown.
+	 * @param	String	msgBindTo
+	 *   An element the tooltip is binded (only used if located = committedElement).
+	 * @param	String	msgIsMinSize
+	 *   If the message is minimized (only used if type = followMouse).
 	 */
-	showHint: function(type, text, duration) {
-		// Set type specific vars.
-		switch(type) {
-			// Confirm action.
-			case 'confirm':
-				tipColorClass	= 'greenTip';
-				tipSymbolClass	= 'confirmCheckmark';
+	showTooltip: function(located, type, msgText, msgBindTo, msgIsMinSize) {
+		// Get the message location.
+		switch(located) {
+			case 'cityAdvisor':
+				msgLocation = 1;
 			  break;
 			
-			case 'error':
-				tipColorClass	= 'redTip';
-				tipSymbolClass	= 'errorCross';
+			case 'militaryAdvisor':
+				msgLocation = 2;
+			  break;
+			
+			case 'researchAdvisor':
+				msgLocation = 3;
+			  break;
+			
+			case 'diplomacyAdvisor':
+				msgLocation = 4;
+			  break;
+			
+			case 'clickedElement':
+				msgLocation = 5;
+			  break;
+			
+			case 'committedElement':
+				msgLocation = 6;
 			  break;
 			
 			default:
-				tipColorClass	= '';
-				tipSymbolClass	= '';
+				msgLocation = -1;
 			  break;
 		}
 		
-		// Get the tooltip placeholder.
-		var bubbleTip			= General.$$('bubble_tip')[0];
+		// Get the message type.
+		switch(type) {
+			case 'confirm':
+				msgType = 10;
+			  break;
+			
+			case 'error':
+				msgType = 11;
+			  break;
+			
+			case 'neutral':
+				msgType = 12;
+			  break;
+			
+			case 'followMouse':
+				msgType = 13;
+			  break;
+			
+			default:
+				msgType = -1;
+			  break;
+		}
 		
-		// Move the tooltip to the correct position.
-		var advisors			= General.$('advisors');
-		bubbleTip.style.left	= advisors.offsetLeft - 134 + 'px';
-		bubbleTip.style.top		= advisors.offsetTop + advisors.offsetHeight - 50 + 'px';
-		
-		// Create the wrapper of the tooltip.
-		var feedbackTip	= General.addElement('div', null, bubbleTip, null);
-		feedbackTip.classList.add('feedbackTip');
-		feedbackTip.classList.add('bubbleTooltip');
-		feedbackTip.classList.add(tipColorClass);
-		feedbackTip.style.opacity	= 0.9;
-		
-		// Create the header of the tooltip.
-		var top	= General.addElement('div', null, feedbackTip, null);
-		top.classList.add('top');
-		
-		// Create the body of the tooltip.
-		var repeat			= General.addElement('div', null, feedbackTip, null);
-		repeat.innerHTML	= text;
-		repeat.classList.add('repeat');
-		
-		// Create the bottom of the tooltip.
-		var bottom	= General.addElement('div', null, feedbackTip, null);
-		bottom.classList.add('bottom');
-		
-		// Set the symbol.
-		var symbol	= General.addElement('span', null, feedbackTip, null);
-		symbol.classList.add(tipSymbolClass);
-
-		// Set time untill the hint will be removed.
-		setTimeout(General.removeHint, duration * 1000);
+		// Show the tooltip.
+		ika.controller.tooltipController.bindBubbleTip(msgLocation, msgType, msgText, null, msgBindTo, msgIsMinSize);
 	},
-	
-	/**
-	 * Removes a hint.
-	 */
-	removeHint: function() {
-		// Get the tooltip placeholder.
-		var bubbleTip	= General.$$('bubble_tip')[0];
-		// Get the child node to remove.
-		var toDelete	= bubbleTip.firstChild;
-		
-		// Remove the child node.
-		bubbleTip.removeChild(toDelete);
-	}
 };
 
 /**
@@ -491,241 +499,125 @@ General = {
  */
 EventHandling = {
 	/**
-	 * Events for checkboxes.
+	 * Events for the upkeep reduction tables.
 	 */
-	checkbox: {
+	upkeepReductionTable: {
 		/**
-		 * Switches the value of a checkbox.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
+		 * Toggles the visibility of the reduction information rows.
 		 */
 		toggle: function(e) {
 			// Get the element from the event.
-			e = e || unsafeWindow.event;
+			e = e || win.event;
 			var target = e.target || e.srcElement;
 			
-			// Get the information which is needed.
-			var callerId = this.id;
-			var cb = General.$(callerId + 'Invisible');
-			var checked = cb.checked;
-			
-			// Switch the value.
-			this.classList.toggle('checked');
-			cb.checked = !checked;
-		},
-	},
-	
-	/**
-	 * Events for select header.
-	 */
-	selectHeaderWrapper: {
-		/**
-		 * Hovers the header of a select field.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		mouseover: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Add the hover classes.
-			this.classList.add('yui-button-hover');
-		},
-		
-		/**
-		 * Removes the hover of the header of a select field.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		mouseout: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Remove the hover classes.
-			this.classList.remove('yui-button-hover');
-		},
-		
-		/**
-		 * Shows/Removes the options div and toggles the button active classes.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		click: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Should the select field be activated?
-			var activate	= !this.classList.contains('yui-button-active');
-			
-			// Close all other select fields.
-			var selectOptionsShown = General.$$('yui-button-active');
-			
-			for(var i = 0; i < selectOptionsShown.length; i++) {
-				selectOptionsShown[i].nextSibling.classList.add('invisible');
-				selectOptionsShown[i].classList.remove('yui-button-active');
-				
+			// If mobile version, switch the inner html.
+			if(General.isMobileVersion()) {
+				if(this.innerHTML == '+') {
+					this.innerHTML = '-';
+				} else {
+					this.innerHTML = '+';
+				}
 			}
 			
-			// If the select field should be activated do so.
-			if(activate) {
-				this.classList.add('yui-button-active');
-				this.nextSibling.classList.remove('invisible');
+			// Switch the button picture.
+			this.classList.toggle('minimizeImg');
+			this.classList.toggle('maximizeImg');
+			
+			// Get the table rows.
+			var tr = General.$$('tr', this.parentNode.parentNode.parentNode);
+			
+			// Toggle the visibility of all table rows except the first.
+			for(var i = 1; i < tr.length; i++) {
+				tr[i].classList.toggle('invisible');
 			}
-		},
-	},
-	
-	/**
-	 * Events for select option.
-	 */
-	selectOption: {
-		/**
-		 * Hovers an option of a select field.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		mouseover: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Add the hover class.
-			this.classList.add('yuimenuitem-selected');
-		},
-		
-		/**
-		 * Removes the hover of an option of a select field.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		mouseout: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Remove the hover class.
-			this.classList.remove('yuimenuitem-selected');
-		},
-		
-		/**
-		 * Sets the hidden value to be stored to the value of this field.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		click: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Get the first part of the elements id.
-			var idStart			= this.parentNode.firstChild.value;
 
-			// Set the value of the hidden field.
-			var hiddenField		= General.$(idStart + 'SelectHiddenField');
-			hiddenField.value	= this.firstChild.value;
-			
-			// Set the header.
-			var headerBtn		= General.$(idStart + 'SelectHeaderButton');
-			headerBtn.innerHTML	= this.lastChild.innerHTML;
-			
-			// Hide the option list and reset the header view.
-			General.$(idStart + 'SelectOptions').classList.toggle('invisible');
-			General.$(idStart + 'SelectHeader').classList.toggle('yui-button-active');
+			// Adjust the size of the Scrollbar.
+			ika.controller.adjustSizes();
 		},
 	},
 	
 	/**
-	 * Events for scrolling the option group of a select field upwards.
+	 * Events for the zoom function.
 	 */
-	selectOptionsScrollUp: {
+	zoomFunction: {
 		/**
-		 * Storage for the interval.
+		 * Zoom in when clicking on the zoom in button.
 		 */
-		interval: null,
-		
-		/**
-		 * Start the scrolling when entering the scroll up field with the mouse.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		mouseover: function(e) {
+		zoomIn: function(e) {
 			// Get the element from the event.
-			e = e || unsafeWindow.event;
+			e = e || win.event;
 			var target = e.target || e.srcElement;
+			
+			// Get the center position of the worldmap.
+			var worldview	= General.$('#worldview');
+			var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
+			var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
+			
+			// Get the zoom factor.
+			factor = GM_getValue('zoom_' + View.name + 'Factor', 100) + ZoomFunction.zoomStep;
+			
+			// If the factor is too big set it to the max allowed and hide the zoom in button.
+			if(factor >= ZoomFunction.maxZoom) {
+				factor = ZoomFunction.maxZoom;
+				this.classList.add('invisible');
+			}
 
-			// Get the element to scroll.
-			var scrollBody	= this.nextSibling;
+			// Show the zoom out button if it is invisible.
+			this.nextSibling.classList.remove('invisible');
 			
-			// Start the interval.
-			EventHandling.selectOptionsScrollUp.interval = setInterval(function() { General.scrollVertical(scrollBody, true, 3); }, 20);
+			// Store the zoom factor.
+			GM_setValue('zoom_' + View.name + 'Factor', factor);
+
+			// Zoom.
+			ika.controller.scaleWorldMap(1, posX, posY);
 		},
 		
 		/**
-		 * Stop the scrolling when leaving the scroll up field with the mouse.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
+		 * Zoom out when clicking on the zoom out button.
 		 */
-		mouseout: function(e) {
+		zoomOut: function(e) {
 			// Get the element from the event.
-			e = e || unsafeWindow.event;
+			e = e || win.event;
 			var target = e.target || e.srcElement;
 			
-			// Clear the interval.
-			clearInterval(EventHandling.selectOptionsScrollUp.interval);
+			// Get the center position of the worldmap.
+			var worldview	= General.$('#worldview');
+			var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
+			var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
+			
+			// Get the zoom factor.
+			factor = GM_getValue('zoom_' + View.name + 'Factor', 100) - ZoomFunction.zoomStep;
+			
+			// If the factor is too small set it to the min allowed and hide the zoom out button.
+			if(factor <= ZoomFunction.minZoom) {
+				factor = ZoomFunction.minZoom;
+				this.classList.add('invisible');
+			}
+
+			// Show the zoom in button if it is invisible.
+			this.previousSibling.classList.remove('invisible');
+			
+			// Store the zoom factor.
+			GM_setValue('zoom_' + View.name + 'Factor', factor);
+
+			// Zoom.
+			ika.controller.scaleWorldMap(-1, posX, posY);
 		},
 	},
 	
 	/**
-	 * Events for scrolling the option group of a select field downwards.
+	 * Events for the option panel.
 	 */
-	selectOptionsScrollDown: {
+	optionPanel: {
 		/**
-		 * Storage for the interval.
+		 * Save the settings in the option panel.
 		 */
-		interval: null,
-		
-		/**
-		 * Start the scrolling when entering the scroll down field with the mouse.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		mouseover: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Get the element to scroll.
-			var scrollBody	= this.previousSibling;
-			
-			// Start the interval.
-			EventHandling.selectOptionsScrollDown.interval = setInterval(function() { General.scrollVertical(scrollBody, false, 3) }, 20);
-		},
-		
-		/**
-		 * Stop the scrolling when leaving the scroll up field with the mouse.
-		 * 
-		 * @param	event	e
-		 *   The calling event.
-		 */
-		mouseout: function(e) {
-			// Get the element from the event.
-			e = e || unsafeWindow.event;
-			var target = e.target || e.srcElement;
-			
-			// Stop the interval.
-			clearInterval(EventHandling.selectOptionsScrollDown.interval);
+		saveSettings: function() {
+			if(General.isMobileVersion()) {
+				OptionPanel.saveSettingsMobile();
+			} else {
+				OptionPanel.saveSettings();
+			}
 		},
 	},
 	
@@ -741,7 +633,7 @@ EventHandling = {
 		 */
 		attrModified: function(e) {
 			// Get the element from the event.
-			e = e || unsafeWindow.event;
+			e = e || win.event;
 			var target = e.target || e.srcElement;
 
 			// If the attribute was changed.
@@ -767,11 +659,11 @@ EnhancedView = {
 	init: function() {
 		// If the version is mobile.
 		if(General.isMobileVersion()) {
-			EnhancedView.initMobile();
+			this.initMobile();
 		
 		// Otherwise; the version is desktop.
 		} else {
-			EnhancedView.initDesktop();
+			this.initDesktop();
 		}
 	},
 	
@@ -781,10 +673,10 @@ EnhancedView = {
 	 */
 	initDesktop: function() {
 		// Wait for a popup.
-		General.$('loadingPreview').addEventListener('DOMAttrModified', EventHandling.loadingPreview.attrModified, false);
+		General.$('#loadingPreview').addEventListener('DOMAttrModified', EventHandling.loadingPreview.attrModified, false);
 		
 		// Init parts which are not shown in popups.
-		EnhancedView.initDesktopStatic();
+		this.initDesktopStatic();
 	},
 	
 	/**
@@ -794,6 +686,9 @@ EnhancedView = {
 		// Move loading circle.
 		if(GM_getValue('module_lcMoveActive', true))	View.moveLoadingCircle();
 		
+		// Hide the Bird animation.
+		if(GM_getValue('module_hideBirdsActive', true))	View.hideBirds();
+
 		// Zoom function.
 		if(GM_getValue('module_zoomActive', true))		ZoomFunction.init();
 	},
@@ -805,9 +700,10 @@ EnhancedView = {
 		// Get the param string.
 		var params = top.location.search;
 
-		// If the view is finances and show income on top is enabled.
-		if(params.search(/view=finances/) > -1 && GM_getValue('module_incomeActive', true)) {
-			IncomeOnTop.mobile();
+		// If the view is finances.
+		if(params.search(/view=finances/) > -1) {
+			if(GM_getValue('module_incomeActive', true))	Balance.incomeOnTopMobile();
+			if(GM_getValue('module_urtShortActive', true))	Balance.shortUpkeepReductionTable();
 		}
 
 		// If the view is game options.
@@ -821,26 +717,34 @@ EnhancedView = {
 	 */
 	getPopup: function() {
 		// Options popup.
-		if(General.$('options_c'))	OptionPanel.desktop();
+		if(General.$('#options_c'))	OptionPanel.desktop();
 		
 		// Finance popup.
-		if(General.$('finances_c') && GM_getValue('module_incomeActive', true))			IncomeOnTop.desktop();
-		
+		if(General.$('#finances_c')) {
+			if(GM_getValue('module_incomeActive', true))								Balance.incomeOnTop();
+			if(GM_getValue('module_urtShortActive', true))								Balance.shortUpkeepReductionTable();
+		}
+
 		// Military view popup.
-		if(General.$('militaryAdvisor_c') && GM_getValue('module_ttAutoActive', true))	Tooltips.autoshowInMilitaryView();
+		if(General.$('#militaryAdvisor_c') && GM_getValue('module_ttAutoActive', true))	Tooltips.autoshowInMilitaryView();
 		
 		// Diplomacy ally view popup.
-		if(General.$('diplomacyAlly_c') && GM_getValue('module_ttAutoActive', true))	Tooltips.autoshowInAllianceView();
+		if(General.$('#diplomacyAlly_c') && GM_getValue('module_ttAutoActive', true))	Tooltips.autoshowInAllianceView();
 		
 		// Diplomacy ally view popup.
-		if(General.$('embassy_c') && GM_getValue('module_ttAutoActive', true))			Tooltips.autoshowInAllianceView();
+		if(General.$('#embassy_c') && GM_getValue('module_ttAutoActive', true))			Tooltips.autoshowInAllianceView();
 	},
 };
 
 /**
- * Functions for the loading circle.
+ * Functions for the general view.
  */
 View = {
+	/**
+	 * Storage for the name of the view.
+	 */
+	name: '',
+
 	/**
 	 * Move loading circle to breadcrumb.
 	 */
@@ -848,7 +752,17 @@ View = {
 		// Add the styles.
 		GM_addStyle(
 				"#js_worldBread		{ margin-left: 16px !important; } \
-				 #loadingPreview	{ -moz-transform: scale(0.5) !important; -webkit-transform: scale(0.5) !important; left: 35px !important; top: 141px !important; }"
+				 #loadingPreview	{ -moz-transform: scale(0.5); msTransform: scale(0.5); -o-transform: scale(0.5); -webkit-transform: scale(0.5); transform: scale(0.5); left: 35px !important; top: 141px !important; }"
+			);
+	},
+	
+	/**
+	 * Hide the bird animation but no other animation.
+	 */
+	hideBirds: function() {
+		// Add the style.
+		GM_addStyle(
+				 ".bird_swarm	{ visibility: hidden !important; }"
 			);
 	},
 };
@@ -862,7 +776,7 @@ Tooltips = {
 	 */
 	autoshowInAllianceView: function() {
 		// Enable toggling on mouseover / mouseout.
-		Tooltips.autoshowGeneral('cityInfo');
+		this.autoshowGeneral('cityInfo');
 	},
 	
 	/**
@@ -870,7 +784,7 @@ Tooltips = {
 	 */
 	autoshowInMilitaryView: function() {
 		// Enable toggling on mouseover / mouseout.
-		Tooltips.autoshowGeneral('spyMilitary');
+		this.autoshowGeneral('spyMilitary');
 	},
 	
 	/**
@@ -881,8 +795,8 @@ Tooltips = {
 	 */
 	autoshowGeneral: function(magnifierClass) {
 		// Get all magnifiers.
-		var magnifier = General.$$(magnifierClass);
-		
+		var magnifier = General.$$('.' + magnifierClass);
+
 		// Set the mousover and mouseout for all magnifiers.
 		for(var i = 0; i < magnifier.length; i++) {
 			var magOnClick = magnifier[i].onclick;
@@ -894,55 +808,51 @@ Tooltips = {
 };
 
 /**
- * Functions for show income on top.
+ * Functions for balance view.
  */
-IncomeOnTop = {
+Balance = {
 	/**
 	 * Shows the actual income also on top of the site. (desktop)
 	 */
-	desktop: function() {
+	incomeOnTop: function() {
 		// Get the table for the summary.
-		var summaryTable = General.$$('table01')[0];
+		var summaryTable = General.$('.table01');
 		
 		// Show the income on top.
-		IncomeOnTop.show(summaryTable);
-		
+		this.showIncomeOnTop(summaryTable);
+
 		// Adjust the size of the Scrollbar.
-		unsafeWindow.ikariam.controller.adjustSizes();
+		ika.controller.adjustSizes();
 	},
 	
 	/**
 	 * Shows the actual income also on top of the site. (mobile)
 	 */
-	mobile: function() {
+	incomeOnTopMobile: function() {
 		// Get the table for the summary.
-		var summaryTable = General.$('balance');
+		var summaryTable = General.$('#balance');
 		
 		// Show the income on top.
-		IncomeOnTop.show(summaryTable);
+		this.showIncomeOnTop(summaryTable);
 	},
 	
 	/**
 	 * Show the actual income on top of the site.
 	 * 
-	 * @param	element
+	 * @param	element	summaryTable
 	 *   The table for the summary.
 	 */
-	show: function(summaryTable) {
+	showIncomeOnTop: function(summaryTable) {
 		// Get the actual income.
-		var income = IncomeOnTop.getIncome();
-		
+		var income = this.getIncome();
+
 		// Create the rows for the income per day and the income per day.
-		incomeRow		= summaryTable.insertRow(1);
-		incomeRow24h	= summaryTable.insertRow(2);
-		
-		// Set the classes of the table rows.
-		incomeRow.className		= 'result alt';
-		incomeRow24h.className	= 'result';
+		incomeRow		= General.addElement('tr', summaryTable, null, new Array('result', 'alt'));
+		incomeRow24h	= General.addElement('tr', summaryTable, null, 'result');
 		
 		// Create the content of the table rows.
-		General.createTableRow(new Array(lText.income.perHour, '', '', General.formatToIkaNumber(income)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow);
-		General.createTableRow(new Array(lText.income.perDay, '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', 'value res', 'value res', 'value res'), incomeRow24h);
+		General.createTableRow(new Array(Language.$('balance_income_perHour'), '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], ['value', 'res']), incomeRow, false);
+		General.createTableRow(new Array(Language.$('balance_income_perDay'), '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', ['value', 'res'], ['value', 'res'], ['value', 'res']), incomeRow24h, false);
 	},
 	
 	/**
@@ -953,8 +863,7 @@ IncomeOnTop = {
 	 */
 	getIncome: function() {
 		// Get the table cell with the actual income.
-		var incomeCell = General.$$('hidden');
-		incomeCell = incomeCell[incomeCell.length - 1];
+		var incomeCell = General.$$('.hidden')[General.$$('.hidden').length - 1];
 		
 		// If the content of the cell is not just the income move one element inwards.
 		while(incomeCell.firstChild.firstChild) {
@@ -965,7 +874,87 @@ IncomeOnTop = {
 		var txt = incomeCell.innerHTML;
 		
 		// Remove the thousand seperators.
-		return parseInt(txt.replace(lText.settings.kiloSep, ''));
+		return General.getInt(txt);
+	},
+	
+	/**
+	 * Shows a short upkeep reduction table.
+	 */
+	shortUpkeepReductionTable: function() {
+		// Get the upkeep redutcion tables.
+		var uRT = General.$$('.upkeepReductionTable');
+		
+		if(uRT.length == 0) {
+			uRT = General.$$('#upkeepReductionTable');
+		}
+		
+		// Create an array for data storage.
+		var row	= new Array();
+				row.reason			= new Array();
+				row.basicUpkeep		= new Array();
+				row.supplyUpkeep	= new Array();
+				row.result			= new Array();
+		
+		// Get the data for the troops and ships redution rows.
+		for(var i = 0; i < 3; i++) {
+			row.reason.push(Language.$('balance_upkeep_reason_' + i));
+			row.basicUpkeep.push(General.getInt(General.$$('.altbottomLine td.hidden, .result td.hidden, .alt.bottomLine td.hidden, .result td.hidden', uRT[0])[i].innerHTML));
+			row.supplyUpkeep.push(General.getInt(General.$$('.altbottomLine td.hidden, .result td.hidden, .alt.bottomLine td.hidden, .result td.hidden', uRT[1])[i].innerHTML));
+			row.result.push(row.basicUpkeep[i] + row.supplyUpkeep[i]);
+		}
+		
+		// Get the start income.
+		var beforeReduction = General.getInt(General.$('td.hidden', uRT[2]).innerHTML);
+		
+		// Get the result income.
+		var income = this.getIncome();
+		
+		// Create the table to show the 
+		var shortTable = General.addElement('table', uRT[0].parentNode, null, new Array('table01', 'border', 'left'), null, uRT[0]);
+		shortTable.id = 'balance';
+		
+		// Create the table head.
+		General.createTableRow(new Array('', Language.$('balance_upkeep_basic'), Language.$('balance_upkeep_supply'), Language.$('balance_upkeep_result')), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), General.addElement('tr', shortTable), true);
+		
+		// Create the start income row.
+		var startRow = General.addElement('tr', shortTable, null, new Array('alt', 'bottomLine'));
+		General.createTableRow(new Array(Language.$('balance_income_start'), '', '', General.formatToIkaNumber(beforeReduction)), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), startRow, false);
+		
+		// Create the troops / ships redution rows.
+		for(var i = 0; i < 3; i++) {
+			var newRow = General.addElement('tr', shortTable, null, (i % 2 == 1) ? new Array('alt', 'bottomLine') : '');
+			General.createTableRow(new Array(row.reason[i], General.formatToIkaNumber(-row.basicUpkeep[i]), General.formatToIkaNumber(-row.supplyUpkeep[i]), General.formatToIkaNumber(-row.result[i])), new Array('city', ['value', 'res'], ['value', 'res'], 'hidden'), newRow, false);
+		}
+		
+		// Create the result row.
+		var resultRow = General.addElement('tr', shortTable, null, 'result');
+		General.createTableRow(new Array('<img alt="Summe" src="skin/layout/sigma.png">', '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], 'hidden'), resultRow, false);
+		
+		// Create the spacing between the tables.
+		General.addElement('hr', uRT[0].parentNode, null, null, null, uRT[0]);
+		
+		// Hide the data rows of the tables and add the show button.
+		for(var i = 0; i < uRT.length; i++) {
+			// Get all rows.
+			var tr = General.$$('tr', uRT[i]);
+			
+			// Hide all rows except the first.
+			for(var k = 1; k < tr.length; k++) {
+				tr[k].classList.add('invisible');
+			}
+			
+			// Add the show button to the first row.
+			var th = General.$('th', tr[0]);
+			var btn = General.addElement('div', th, null, 'maximizeImg', new Array(['cssFloat', 'left']), th.firstChild);
+			
+			// If mobile version.
+			if(General.isMobileVersion()){
+				btn.innerHTML = '+';
+			}
+
+			// Add the event listener.
+			btn.addEventListener('click', EventHandling.upkeepReductionTable.toggle, false);
+		}
 	},
 };
 	
@@ -974,57 +963,55 @@ IncomeOnTop = {
  */
 OptionPanel = {
 	/**
-	 * Adds the tab for GM in the desktop version.
+	 * Adds the tab for the script options in the desktop version.
 	 */
 	desktop: function() {
 		// If the tab already exists return.
-		if(General.$('tabScriptOptions')) {
+		if(General.$('#tabScriptOptions')) {
 			return;
 		}
 
 		// Set the styles.
-		OptionPanel.setStylesDesktop();
+		this.setStylesDesktop();
 
 		// Add the GM tab link to the tab menu.
-		var tabmenu					= General.$$('tabmenu')[0];
-		jsTabGMOptions				= General.addElement('li', null, tabmenu, null);
+		var tabmenu					= General.$('.tabmenu');
+		jsTabGMOptions				= General.addElement('li', tabmenu, null, 'tab');
 		jsTabGMOptions.id			= 'js_tabScriptOptions';
-		jsTabGMOptions.className	= 'tab';
 		jsTabGMOptions.setAttribute('onclick', "switchTab('tabScriptOptions');");
-		jsTabGMOptions.innerHTML	= '<b class="tabScriptOptions"> ' + lText.optionPanel.scripts + ' </b>';
+		jsTabGMOptions.innerHTML	= '<b class="tabScriptOptions"> ' + Language.$('optionPanel_scripts') + ' </b>';
 		
 		// Add the content wrapper for the GM tab to the tab menu.
-		var mainContent				= General.$('tabGameOptions').parentNode;
-		tabGMOptions				= General.addElement('div', null, mainContent, null);
+		var mainContent				= General.$('#tabGameOptions').parentNode;
+		tabGMOptions				= General.addElement('div', mainContent, null, null, new Array(['display', 'none']));
 		tabGMOptions.id				= 'tabScriptOptions';
-		tabGMOptions.style.display	= 'none';
-		OptionPanel.createTabContent(tabGMOptions);
+		this.createTabContent(tabGMOptions);
 	},
 	
 	/**
-	 * Shows the options for GM in the mobile version.
+	 * Shows the options for the script in the mobile version.
 	 */
 	mobile: function() {
 		// Get the mainview.
-		var mainview = General.$('mainview');
+		var mainview = General.$('#mainview');
 		
 		// Create the options wrapper.
-		var wrapper = OptionPanel.createOptionsWrapper(mainview, scriptInfo.name);
+		var wrapper = this.createOptionsWrapper(mainview, scriptInfo.name);
 		
 		// Add the checkboxes for the enabling / disabling of modules.
-		OptionPanel.createModuleContentMobile(wrapper);
+		this.createModuleContentMobile(wrapper);
 		
 		// Add the options for updates.
-		OptionPanel.createUpdateContentMobile(wrapper);
+		this.createUpdateContentMobile(wrapper);
 		
 		// Horizontal row.
-		General.addElement('hr', null, wrapper, null);
+		General.addElement('hr', wrapper);
 
-		// Prepare placeholder for ave hint.
-		General.addElement('p', 'saveHint', wrapper, null);
+		// Prepare placeholder for save hint.
+		General.addElement('p', wrapper, 'saveHint');
 		
 		// Add the button to save the settings.
-		OptionPanel.addSaveButtonMobile(wrapper);
+		this.addSaveButton(wrapper);
 	},
 	
 	/**
@@ -1046,19 +1033,16 @@ OptionPanel = {
 	 */
 	createTabContent: function(tab) {
 		// Create the wrapper for the enabling / disabling of modules.
-		var moduleContentWrapper	= OptionPanel.createOptionsWrapper(tab, lText.optionPanel.module);
-		OptionPanel.createModuleContent(moduleContentWrapper);
+		var moduleContentWrapper	= this.createOptionsWrapper(tab, Language.$('optionPanel_module'));
+		this.createModuleContent(moduleContentWrapper);
 		
 		// Create the wrapper for the update settings.
-		var updateContentWrapper	= OptionPanel.createOptionsWrapper(tab, lText.optionPanel.update);
-		OptionPanel.createUpdateContent(updateContentWrapper);
+		var updateContentWrapper	= this.createOptionsWrapper(tab, Language.$('optionPanel_update'));
+		this.createUpdateContent(updateContentWrapper);
 		
 		// Create the wrapper for the zoom settings.
-		var zoomContentWrapper		= OptionPanel.createOptionsWrapper(tab, lText.optionPanel.zoom);
-		OptionPanel.createZoomContent(zoomContentWrapper);
-
-		var spacer			= General.addElement('p', null, tab, null);
-		spacer.innerHTML	= '&nbsp;';
+		var zoomContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_zoom'));
+		this.createZoomContent(zoomContentWrapper);
 	},
 	
 	/**
@@ -1074,21 +1058,17 @@ OptionPanel = {
 	 */
 	createOptionsWrapper: function(tab, headerText) {
 		// Create the wrapper.
-		var optionsWrapper			= General.addElement('div', null, tab, null);
-		optionsWrapper.className	= 'contentBox01h';
+		var optionsWrapper	= General.addElement('div', tab, null, 'contentBox01h');
 		
 		// Create the header.
-		var optionsHeader		= General.addElement('h3', null, optionsWrapper, null);
-		optionsHeader.className	= 'header';
+		var optionsHeader		= General.addElement('h3', optionsWrapper, null, 'header');
 		optionsHeader.innerHTML	= headerText;
 		
 		// Create the content wrapper.
-		var optionsWrapperContent		= General.addElement('div', null, optionsWrapper, null);
-		optionsWrapperContent.className	= 'content';
+		var optionsWrapperContent	= General.addElement('div', optionsWrapper, null, 'content');
 		
 		// Create the footer.
-		var optionsFooter		= General.addElement('div', null, optionsWrapper, null);
-		optionsFooter.className	= 'footer';
+		General.addElement('div', optionsWrapper, null, 'footer');
 		
 		// Return the content wrapper.
 		return optionsWrapperContent;
@@ -1102,35 +1082,44 @@ OptionPanel = {
 	 */
 	createModuleContent: function(contentWrapper) {
 		// Create options table.
-		var updateTable	= OptionPanel.addOptionsTable(contentWrapper);
+		var updateTable	= this.addOptionsTable(contentWrapper);
 		
 		// Get the ids.
 		var id		= new Array(
-							'update',
-							'incomeOnTop',
-							'zoom',
-							'loadingCircleMove',
-							'tooltipsAuto');
+				'update',
+				'incomeOnTop',
+				'upkeepReduction',
+				'zoom',
+				'loadingCircleMove',
+				'tooltipsAuto',
+				'hideBirds'
+			);
 		
 		// Get the values.
 		var value	= new Array(
-							GM_getValue('module_updateActive', true),
-							GM_getValue('module_incomeActive', true),
-							GM_getValue('module_zoomActive', true),
-							GM_getValue('module_lcMoveActive', true),
-							GM_getValue('module_ttAutoActive', true));
+				GM_getValue('module_updateActive', true),
+				GM_getValue('module_incomeActive', true),
+				GM_getValue('module_urtShortActive', true),
+				GM_getValue('module_zoomActive', true),
+				GM_getValue('module_lcMoveActive', true),
+				GM_getValue('module_ttAutoActive', true),
+				GM_getValue('module_hideBirdsActive', true)
+			);
 		
 		// Get the labels.
 		var label	= new Array(
-							lText.optionPanel.label.updateActive,
-							lText.optionPanel.label.incomeOnTopActive,
-							lText.optionPanel.label.zoomActive,
-							lText.optionPanel.label.lcMoveActive,
-							lText.optionPanel.label.tooltipsAutoActive);
+				Language.$('optionPanel_label_updateActive'),
+				Language.$('optionPanel_label_incomeOnTopActive'),
+				Language.$('optionPanel_label_upkeepReductionActive'),
+				Language.$('optionPanel_label_zoomActive'),
+				Language.$('optionPanel_label_lcMoveActive'),
+				Language.$('optionPanel_label_tooltipsAutoActive'),
+				Language.$('optionPanel_label_hideBirdsActive')
+			);
 		
 		for(var i = 0; i < id.length; i++) {
 			// Create table row.
-			var tr	= OptionPanel.addOptionsTableRow(updateTable, true);
+			var tr	= this.addOptionsTableRow(updateTable, true);
 
 			// Create checkbox.
 			General.addCheckbox(tr.firstChild, id[i], value[i], label[i]);
@@ -1140,7 +1129,7 @@ OptionPanel = {
 		}
 
 		// Add the button to save the settings.
-		OptionPanel.addSaveButton(contentWrapper);
+		this.addSaveButton(contentWrapper);
 	},
 	
 	/**
@@ -1151,37 +1140,42 @@ OptionPanel = {
 	 */
 	createModuleContentMobile: function(contentWrapper) {
 		// Create the header.
-		var moduleHeader		= General.addElement('h3', null, contentWrapper, null);
-		moduleHeader.innerHTML	= lText.optionPanel.module;
+		var moduleHeader		= General.addElement('h3', contentWrapper);
+		moduleHeader.innerHTML	= Language.$('optionPanel_module');
 		
 		// Get the ids.
 		var id		= new Array(
-							'update',
-							'incomeOnTop');
+				'update',
+				'incomeOnTop',
+				'upkeepReduction'
+			);
 		
 		// Get the values.
 		var value	= new Array(
-							GM_getValue('module_updateActive', true),
-							GM_getValue('module_incomeActive', true));
+				GM_getValue('module_updateActive', true),
+				GM_getValue('module_incomeActive', true),
+				GM_getValue('module_urtShortActive', true)
+			);
 		
 		// Get the labels.
 		var label	= new Array(
-							'&nbsp;&nbsp;' + lText.optionPanel.label.updateActive,
-							'&nbsp;&nbsp;' + lText.optionPanel.label.incomeOnTopActive);
+				'&nbsp;&nbsp;' + Language.$('optionPanel_label_updateActive'),
+				'&nbsp;&nbsp;' + Language.$('optionPanel_label_incomeOnTopActive'),
+				'&nbsp;&nbsp;' + Language.$('optionPanel_label_upkeepReductionActive')
+			);
 		
 		// Create the checkboxes and labels.
 		for(var i = 0; i < id.length; i++) {
 			// Create the checkbox wrapper.
-			var p				= General.addElement('p', null, contentWrapper, null);
-			p.style.textAlign	= 'left';
+			var p	= General.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'left']));
 			
 			// Create the checkbox.
-			var cb		= General.addElement('input', id[i] + 'Cb', p, null);
+			var cb		= General.addElement('input', p, id[i] + 'Cb');
 			cb.type		= 'checkbox';
 			cb.checked	= value[i];
 			
 			// Create the checkbox label.
-			var cbLabel			= General.addElement('label', id[i] + 'Label', p, null);
+			var cbLabel			= General.addElement('label', p, id[i] + 'Label');
 			cbLabel.innerHTML	= label[i];
 			cbLabel.htmlFor		= 'script' + scriptInfo.id + id[i] + 'Cb';
 		}
@@ -1195,34 +1189,49 @@ OptionPanel = {
 	 */
 	createUpdateContent: function(contentWrapper) {
 		// Create options table.
-		var updateTable	= OptionPanel.addOptionsTable(contentWrapper);
-		var tr1			= OptionPanel.addOptionsTableRow(updateTable, false);
-		var tr2			= OptionPanel.addOptionsTableRow(updateTable, true);
+		var updateTable	= this.addOptionsTable(contentWrapper);
+		var tr1			= this.addOptionsTableRow(updateTable, false);
+		var tr2			= this.addOptionsTableRow(updateTable, true);
 
 		// Create label.
-		var updateIntervalLabel			= General.addElement('span', null, tr1.firstChild, null);
-		updateIntervalLabel.innerHTML	= lText.optionPanel.label.updateInterval;
+		var updateIntervalLabel			= General.addElement('span', tr1.firstChild);
+		updateIntervalLabel.innerHTML	= Language.$('optionPanel_label_updateInterval');
 
 		// Array for update interval values and names.
 		var opts = new Array();
-		opts['value']	= new Array(3600, 43200, 86400, 259200, 604800, 1209600, 2419200);
-		var interval	= lText.optionPanel.updateIntervals;
-		opts['name']	= new Array(interval.hour, interval.hour12, interval.day, interval.day3, interval.week, interval.week2, interval.week4);
-		
+		opts['value']	= new Array(
+				3600,
+				43200,
+				86400,
+				259200,
+				604800,
+				1209600,
+				2419200
+			);
+		opts['name']	= new Array(
+				Language.$('optionPanel_updateIntervals_hour'),
+				Language.$('optionPanel_updateIntervals_hour12'),
+				Language.$('optionPanel_updateIntervals_day'),
+				Language.$('optionPanel_updateIntervals_day3'),
+				Language.$('optionPanel_updateIntervals_week'),
+				Language.$('optionPanel_updateIntervals_week2'),
+				Language.$('optionPanel_updateIntervals_week4')
+			);
+
 		// Create the update interval select.
-		General.addSelect(tr1.lastChild, 'updateInterval', GM_getValue('updater_updateInterval', 3600), opts, 4);
+		General.addSelect(tr1.lastChild, 'updateInterval', GM_getValue('updater_updateInterval', 3600), opts);
 		
 		// Prepare the table row.
 		tr2.firstChild.classList.add('center');
 		
 		// Add the link for manual updates.
-		var updateLink			= General.addElement('a', null, tr2.firstChild, null);
+		var updateLink			= General.addElement('a', tr2.firstChild);
 		updateLink.href			= '#';
-		updateLink.innerHTML	= lText.optionPanel.label.manualUpdate1 + scriptInfo.name + lText.optionPanel.label.manualUpdate2;
+		updateLink.innerHTML	= Language.$('optionPanel_label_manualUpdate1') + scriptInfo.name + Language.$('optionPanel_label_manualUpdate2');
 		updateLink.addEventListener('click', Updater.doManualUpdate, false);
 
 		// Add the button to save the settings.
-		OptionPanel.addSaveButton(contentWrapper);
+		this.addSaveButton(contentWrapper);
 	},
 	
 	/**
@@ -1233,31 +1242,45 @@ OptionPanel = {
 	 */
 	createUpdateContentMobile: function(contentWrapper) {
 		// Create the header.
-		var updateHeader = General.addElement('h3', null, contentWrapper, null);
-		updateHeader.innerHTML = lText.optionPanel.update;
+		var updateHeader = General.addElement('h3', contentWrapper);
+		updateHeader.innerHTML = Language.$('optionPanel_update');
 		
 		// Create the select wrapper.
-		var p1				= General.addElement('p', null, contentWrapper, null);
-		p1.style.textAlign	= 'center';
+		var p1	= General.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
 
 		// Create the select label.
-		var selectLabel			= General.addElement('label', 'updateLabel', p1, null);
-		selectLabel.innerHTML	= lText.optionPanel.label.updateInterval;
-		selectLabel.htmlFor		= 'script' + scriptInfo.id + 'updateSelect';
+		var selectLabel			= General.addElement('label', p1, 'updateIntervalLabel');
+		selectLabel.innerHTML	= Language.$('optionPanel_label_updateInterval');
+		selectLabel.htmlFor		= 'script' + scriptInfo.id + 'updateIntervalSelect';
 		
 		// Create the select field.
-		var select	= General.addElement('select', 'updateSelect', p1, null);
+		var select	= General.addElement('select', p1, 'updateIntervalSelect');
 		
 		// Array for update interval values and names.
 		var opts = new Array();
-		opts['value']	= new Array(3600, 43200, 86400, 259200, 604800, 1209600, 2419200);
-		var interval	= lText.optionPanel.updateIntervals;
-		opts['name']	= new Array(interval.hour, interval.hour12, interval.day, interval.day3, interval.week, interval.week2, interval.week4);
+		opts.value	= new Array(
+				3600,
+				43200,
+				86400,
+				259200,
+				604800,
+				1209600,
+				2419200
+			);
+		opts.name	= new Array(
+				Language.$('optionPanel_updateIntervals_hour'),
+				Language.$('optionPanel_updateIntervals_hour12'),
+				Language.$('optionPanel_updateIntervals_day'),
+				Language.$('optionPanel_updateIntervals_day3'),
+				Language.$('optionPanel_updateIntervals_week'),
+				Language.$('optionPanel_updateIntervals_week2'),
+				Language.$('optionPanel_updateIntervals_week4')
+			);
 
 		// Create the select options.
 		for(var i = 0; i < opts['name'].length; i++) {
 			// Create new option.
-			var option	= General.addElement('option', null, select, null);
+			var option	= General.addElement('option', select);
 			option.value	= opts['value'][i];
 			option.innerHTML	= opts['name'][i];
 
@@ -1268,13 +1291,12 @@ OptionPanel = {
 		}
 		
 		// Create the update link wrapper.
-		var p2				= General.addElement('p', null, contentWrapper, null);
-		p2.style.textAlign	= 'center';
+		var p2	= General.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
 
 		// Add the link for manual updates.
-		var updateLink			= General.addElement('a', null, p2, null);
+		var updateLink			= General.addElement('a', p2);
 		updateLink.href			= '#';
-		updateLink.innerHTML	= lText.optionPanel.label.manualUpdate1 + scriptInfo.name + lText.optionPanel.label.manualUpdate2;
+		updateLink.innerHTML	= Language.$('optionPanel_label_manualUpdate1') + scriptInfo.name + Language.$('optionPanel_label_manualUpdate2');
 		updateLink.addEventListener('click', Updater.doManualUpdate, false);
 	},
 	
@@ -1286,47 +1308,53 @@ OptionPanel = {
 	 */
 	createZoomContent: function(contentWrapper) {
 		// Create options table.
-		var zoomTable1	= OptionPanel.addOptionsTable(contentWrapper);
-		var tr1			= OptionPanel.addOptionsTableRow(zoomTable1, false);
-		var tr2			= OptionPanel.addOptionsTableRow(zoomTable1, false);
-		var tr3			= OptionPanel.addOptionsTableRow(zoomTable1, false);
-		var zoomTable2	= OptionPanel.addOptionsTable(contentWrapper);
-		var tr4			= OptionPanel.addOptionsTableRow(zoomTable2, true);
+		var zoomTable1	= this.addOptionsTable(contentWrapper);
+		var tr1			= this.addOptionsTableRow(zoomTable1, false);
+		var tr2			= this.addOptionsTableRow(zoomTable1, false);
+		var tr3			= this.addOptionsTableRow(zoomTable1, false);
+		var zoomTable2	= this.addOptionsTable(contentWrapper);
+		var tr4			= this.addOptionsTableRow(zoomTable2, true);
 		
-		// Array for zoom factor values and names.
+		// Arrays for zoom factor values and names.
 		var opts = new Array();
-		opts['value']	= new Array(50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150);
-		opts['name']	= new Array('50%', '60%', '70%', '80%', '90%', '100%', '110%', '120%', '130%', '140%', '150%');
+			opts['value']	= new Array();
+			opts['name']	= new Array();
+		
+		// Load the arrays.
+		for(var i = ZoomFunction.minZoom; i <= ZoomFunction.maxZoom; i = i + ZoomFunction.zoomStep) {
+			opts.value.push(i);
+			opts.name.push(i + '%');
+		}
 		
 		// Create label for zoom world.
-		var zoomWorldLabel			= General.addElement('span', null, tr1.firstChild, null);
-		zoomWorldLabel.innerHTML	= lText.optionPanel.label.zoom.world;
+		var zoomWorldLabel			= General.addElement('span', tr1.firstChild);
+		zoomWorldLabel.innerHTML	= Language.$('optionPanel_label_zoom_world');
 
 		// Create the zoom world select.
-		General.addSelect(tr1.lastChild, 'zoomWorld', GM_getValue('zoom_worldFactor', 100), opts, 4);
+		General.addSelect(tr1.lastChild, 'zoomWorld', GM_getValue('zoom_worldFactor', 100), opts);
 
 		// Create label for zoom island.
-		var zoomIslandLabel			= General.addElement('span', null, tr2.firstChild, null);
-		zoomIslandLabel.innerHTML	= lText.optionPanel.label.zoom.island;
+		var zoomIslandLabel			= General.addElement('span', tr2.firstChild);
+		zoomIslandLabel.innerHTML	= Language.$('optionPanel_label_zoom_island');
 
 		// Create the zoom island select.
-		General.addSelect(tr2.lastChild, 'zoomIsland', GM_getValue('zoom_islandFactor', 100), opts, 4);
+		General.addSelect(tr2.lastChild, 'zoomIsland', GM_getValue('zoom_islandFactor', 100), opts);
 
 		// Create label for zoom town.
-		var zoomTownLabel		= General.addElement('span', null, tr3.firstChild, null);
-		zoomTownLabel.innerHTML	= lText.optionPanel.label.zoom.town;
+		var zoomTownLabel		= General.addElement('span', tr3.firstChild);
+		zoomTownLabel.innerHTML	= Language.$('optionPanel_label_zoom_town');
 
 		// Create the zoom town select.
-		General.addSelect(tr3.lastChild, 'zoomTown', GM_getValue('zoom_townFactor', 100), opts, 4);
+		General.addSelect(tr3.lastChild, 'zoomTown', GM_getValue('zoom_townFactor', 100), opts);
 		
 		// Add class for checkbox.
 		tr4.firstChild.classList.add('left');
 
 		// Create checkbox.
-		General.addCheckbox(tr4.firstChild, 'scaleChildren', GM_getValue('zoom_scaleChildren', true), lText.optionPanel.label.scaleChildren);
+		General.addCheckbox(tr4.firstChild, 'scaleChildren', GM_getValue('zoom_scaleChildren', true), Language.$('optionPanel_label_scaleChildren'));
 		
 		// Add the button to save the settings.
-		OptionPanel.addSaveButton(contentWrapper);
+		this.addSaveButton(contentWrapper);
 	},
 	
 	/**
@@ -1340,8 +1368,8 @@ OptionPanel = {
 	 */
 	addOptionsTable: function(wrapper) {
 		// Create table and tablebody.
-		var table	= General.addElement('table', 'moduleContent', wrapper, null);
-		var tableBody	= General.addElement('tbody', null, table, null);
+		var table	= General.addElement('table', wrapper, 'moduleContent');
+		var tableBody	= General.addElement('tbody', table);
 
 		// Add classes.
 		table.classList.add('table01');
@@ -1363,10 +1391,10 @@ OptionPanel = {
 	 */
 	addOptionsTableRow: function(optionsTableBody, oneCell) {
 		// Create the new table row.
-		var tr	= General.addElement('tr', null, optionsTableBody, null);
+		var tr	= General.addElement('tr', optionsTableBody);
 
 		// Create first cell.
-		var td1	= General.addElement('td', null, tr, null);
+		var td1	= General.addElement('td', tr);
 
 		// If just ond cell.
 		if(oneCell) {
@@ -1376,10 +1404,7 @@ OptionPanel = {
 		// Otherwise.
 		} else {
 			// Create second cell.
-			var td2	= General.addElement('td', null, tr, null);
-			
-			// Add class.
-			td2.classList.add('left');
+			var td2	= General.addElement('td', tr, null, 'left');
 		}
 
 		// Return the table row.
@@ -1391,41 +1416,23 @@ OptionPanel = {
 	 * 
 	 * @param	element	parent
 	 *   The parent element.
+	 * 
 	 * @return	element
 	 *   The save button.
 	 */
 	addSaveButton: function(parent) {
 		// Create the button wrapper.
-		var buttonWrapper		= General.addElement('div', null, parent, null);
-		buttonWrapper.className	= 'centerButton';
+		var buttonWrapper		= General.addElement('div', parent, null, 'centerButton');
 		
 		// Create the button.
-		var saveButton			= General.addElement('input', null, buttonWrapper, null);
+		var saveButton			= General.addElement('input', buttonWrapper, null, 'button');
 		saveButton.type			= 'submit';
-		saveButton.className	= 'button';
-		saveButton.value		= lText.optionPanel.save;
+		saveButton.value		= Language.$('optionPanel_save');
 		
 		// Add a click action to the button.
-		saveButton.addEventListener('click', OptionPanel.saveSettings, false);
+		saveButton.addEventListener('click', EventHandling.optionPanel.saveSettings, false);
 		
 		return saveButton;
-	},
-	
-	/**
-	 * Creates a commit Button and adds it to a parent (mobile).
-	 * 
-	 * @param	element	parent
-	 *   The parent element.
-	 */
-	addSaveButtonMobile: function(parent) {
-		// Create the save button.
-		var saveButton	= OptionPanel.addSaveButton(parent);
-		
-		// Remove the old event listener.
-		saveButton.removeEventListener('click', OptionPanel.saveSettings, false);
-		
-		// Add new event listener.
-		saveButton.addEventListener('click', OptionPanel.saveSettingsMobile, false);
 	},
 	
 	/**
@@ -1433,23 +1440,25 @@ OptionPanel = {
 	 */
 	saveSettings: function() {
 		// Save the module settings.
-		GM_setValue('module_updateActive', General.$('script' + scriptInfo.id + 'updateCbInvisible').checked);
-		GM_setValue('module_incomeActive', General.$('script' + scriptInfo.id + 'incomeOnTopCbInvisible').checked);
-		GM_setValue('module_zoomActive', General.$('script' + scriptInfo.id + 'zoomCbInvisible').checked);
-		GM_setValue('module_lcMoveActive', General.$('script' + scriptInfo.id + 'loadingCircleMoveCbInvisible').checked);
-		GM_setValue('module_ttAutoActive', General.$('script' + scriptInfo.id + 'tooltipsAutoCbInvisible').checked);
+		GM_setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
+		GM_setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
+		GM_setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
+		GM_setValue('module_zoomActive', General.$('#script' + scriptInfo.id + 'zoomCb').checked);
+		GM_setValue('module_lcMoveActive', General.$('#script' + scriptInfo.id + 'loadingCircleMoveCb').checked);
+		GM_setValue('module_ttAutoActive', General.$('#script' + scriptInfo.id + 'tooltipsAutoCb').checked);
+		GM_setValue('module_hideBirdsActive', General.$('#script' + scriptInfo.id + 'hideBirdsCb').checked);
 		
 		// Save the update settings.
-		GM_setValue('updater_updateInterval', parseInt(General.$('script' + scriptInfo.id + 'updateIntervalSelectHiddenField').value));
+		GM_setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
 		
 		// Save the zoom function settings.
-		GM_setValue('zoom_worldFactor', parseInt(General.$('script' + scriptInfo.id + 'zoomWorldSelectHiddenField').value));
-		GM_setValue('zoom_islandFactor', parseInt(General.$('script' + scriptInfo.id + 'zoomIslandSelectHiddenField').value));
-		GM_setValue('zoom_townFactor', parseInt(General.$('script' + scriptInfo.id + 'zoomTownSelectHiddenField').value));
-		GM_setValue('zoom_scaleChildren', General.$('script' + scriptInfo.id + 'scaleChildrenCbInvisible').checked);
-
+		GM_setValue('zoom_worldFactor', General.getInt(General.getSelectValue('zoomWorldSelect')));
+		GM_setValue('zoom_islandFactor', General.getInt(General.getSelectValue('zoomIslandSelect')));
+		GM_setValue('zoom_townFactor', General.getInt(General.getSelectValue('zoomTownSelect')));
+		GM_setValue('zoom_scaleChildren', General.$('#script' + scriptInfo.id + 'scaleChildrenCb').checked);
+		
 		// Show success hint.
-		General.showHint('confirm', lText.general.successful, 5);
+		General.showTooltip('cityAdvisor', 'confirm', Language.$('general_successful'));
 	},
 	
 	/**
@@ -1457,15 +1466,15 @@ OptionPanel = {
 	 */
 	saveSettingsMobile: function() {
 		// Save the module settings.
-		GM_setValue('module_updateActive', General.$('script' + scriptInfo.id + 'updateCb').checked);
-		GM_setValue('module_incomeActive', General.$('script' + scriptInfo.id + 'incomeOnTopCb').checked);
+		GM_setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
+		GM_setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
+		GM_setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
 		
 		// Save the update settings.
-		var select = General.$('script' + scriptInfo.id + 'updateSelect');
-		GM_setValue('updater_updateInterval', parseInt(select.options[select.selectedIndex].value));
+		GM_setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
 		
 		// Show success hint.
-		General.$('script' + scriptInfo.id + 'saveHint').innerHTML	= lText.optionPanel.successful;
+		General.$('#script' + scriptInfo.id + 'saveHint').innerHTML	= Language.$('general_successful');
 
 		// Delete the hint after 3 seconds.
 		setTimeout(OptionPanel.deleteSaveHintMobile, 3000);
@@ -1475,7 +1484,7 @@ OptionPanel = {
 	 * Delete the save hint.
 	 */
 	deleteSaveHintMobile: function() {
-		General.$('script' + scriptInfo.id + 'saveHint').innerHTML	= '';
+		General.$('#script' + scriptInfo.id + 'saveHint').innerHTML	= '';
 	},
 };
 
@@ -1484,24 +1493,133 @@ OptionPanel = {
  */
 ZoomFunction = {
 	/**
-	 * Inits the zooming.
+	 * The minimal zoom factor in percent.
+	 */
+	minZoom: 55,
+	
+	/**
+	 * The maximal zoom factor in percent.
+	 */
+	maxZoom: 150,
+	
+	/**
+	 * The step between two zoom factors in percent.
+	 */
+	zoomStep: 5,
+	
+	/**
+	 * Init the zooming.
 	 */
 	init: function() {
-		// Get the id of the body.
-		var view = document.body.id;
+		// Set the max and min zoom.
+		this.minZoom = Math.round(ika.worldview_scale_min * 100);
+		ika.worldview_scale_max = this.maxZoom / 100;
 		
-		// Get the name of the view depending on the bodies id.
-		switch(view) {
-			case 'worldmap_iso':
-				view = 'world';
+		// Get the scrollDiv depending on the view.
+		if(View.name == 'world') {
+			scrollDiv = General.$('#map1');
+		} else {
+			scrollDiv = General.$('#worldmap');
+		}
+		
+		// Remove the mouse wheel listener.
+		win.Event.removeListener(scrollDiv, 'DOMMouseScroll');
+		win.Event.removeListener(scrollDiv, 'mousewheel');
+
+		// Get the zooming factor.
+		var factorP = GM_getValue('zoom_' + View.name + 'Factor', 100);
+		
+		// If the factor ist smaller than allowed, reset it to the min allowed.
+		if(factorP < this.minZoom) {
+			factorP = this.minZoom;
+			GM_setValue('zoom_' + View.name + 'Factor', factorP);
+		}
+		
+		// If the factor ist bigger than allowed, reset it to the max allowed.
+		if(factorP > this.maxZoom) {
+			factorP = this.maxZoom;
+			GM_setValue('zoom_' + View.name + 'Factor', factorP);
+		}
+
+		// Get the factor as normal number, not as percentage.
+		factor = factorP / 100.0;
+
+		// Zoom.
+		this.zoom(factor);
+
+		// Scale child elements which should be scaled if enabled.
+		if(GM_getValue('zoom_scaleChildren', true))	setTimeout(function() { ZoomFunction.scaleChildren(factor) }, 0);
+
+		// Add the zoom Buttons.
+		this.addZoomButtons(factorP);
+	},
+	
+	/**
+	 * Add the Buttons for zooming to the view (city and island).
+	 */
+	addZoomButtons: function(factorP) {
+		// If it is world view, Show no buttons.
+		if(View.name == 'world') {
+			return;
+		}
+		
+		// Get the help element in the GF toolbar
+		gfToolbar	= General.$('#GF_toolbar');
+		
+		// Create the zoom buttons.
+		zoomWrapper	= General.addElement('div', gfToolbar, 'zoomWrapper');
+		zoomIn		= General.addElement('div', zoomWrapper, 'zoomIn', 'maximizeImg');
+		zoomOut		= General.addElement('div', zoomWrapper, 'zoomOut', 'minimizeImg');
+		
+		// Add the event listener.
+		zoomIn.addEventListener('click', EventHandling.zoomFunction.zoomIn, false);
+		zoomOut.addEventListener('click', EventHandling.zoomFunction.zoomOut, false);
+		
+		// Hide the zoom in button if the max zoom is reached.
+		if(factorP == this.maxZoom) {
+			zoomIn.classList.add('invisible');
+		}
+		
+		// Hide the zoom out button if the min zoom is reached.
+		if(factorP == this.minZoom) {
+			zoomOut.classList.add('invisible');
+		}
+
+		// Add the styles.
+		GM_addStyle(
+				"#script" + scriptInfo.id + "zoomWrapper	{ position: absolute; top: 0px; right: 0px; -moz-transform: scale(0.75); msTransform: scale(0.75); -o-transform: scale(0.75); -webkit-transform: scale(0.75); transform: scale(0.75); } \
+				 #script" + scriptInfo.id + "zoomIn			{ float: left; margin-right: 20px; } \
+				 #script" + scriptInfo.id + "zoomOut		{ margin-left: 20px; }"
+			);
+	},
+	
+	/**
+	 * Zooms the view.
+	 * 
+	 * @param	float	factor
+	 *   The factor which is used.
+	 * @param	String	view
+	 *   The name of the view.
+	 */
+	zoom: function(factor) {
+		// Get the center position of the worldmap.
+		var worldview	= General.$('#worldview');
+		var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
+		var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
+		
+		// Get the game scaling factor depending on the view.
+		switch(View.name) {
+			case 'world':
+				this.zoomWorld(factor);
+				return;
 			  break;
 			
 			case 'island':
-				view = 'island';
+				scale = ika.worldview_scale_island;
 			  break;
 			
-			case 'city':
-				view = 'town';
+			case 'town':
+				scale = ika.worldview_scale_city;
 			  break;
 			
 			default:
@@ -1509,34 +1627,20 @@ ZoomFunction = {
 			  break;
 		}
 		
-		// Get the zooming factor.
-		var factor = GM_getValue('zoom_' + view + 'Factor', 100);
-		
-		// If the factor is 100% return.
-		if(factor == 100) {
-			return;
-		}
-		
-		// Get the factor as normal number, not as percentage.
-		factor /= 100.0;
+		// Get the number of steps to zoom.
+		var stepNumber = Math.round((factor - scale) / .05);
 		
 		// Zoom.
-		ZoomFunction.zoom(factor);
-
-		// Center the view.
-		setTimeout(function() { ZoomFunction.center(factor, view) }, 1000);
-
-		// Scale child elements which should be scaled if enabled.
-		if(GM_getValue('zoom_scaleChildren', true))	setTimeout(function() { ZoomFunction.scaleChildren(factor, view) }, 0);
+		ika.controller.scaleWorldMap(stepNumber, posX, posY);
 	},
 	
 	/**
-	 * Scales the children which should be scaled.
+	 * Zoom the world view.
 	 * 
 	 * @param	float	factor
 	 *   The factor which is used.
 	 */
-	zoom: function(factor) {
+	zoomWorld: function(factor) {
 		// Get the factor the scrollcover must be moved.
 		var translateXY	= (100 - 100 / factor) / 2;
 
@@ -1545,95 +1649,45 @@ ZoomFunction = {
 		
 		// Add the new style.
 		GM_addStyle(
-				"#scrollcover { -moz-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%) !important; -webkit-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%) !important; height: " + heightWidth + "% !important; width: " + heightWidth + "% !important; }"
+				"#scrollcover { -moz-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); msTransform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -o-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -webkit-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); height: " + heightWidth + "% !important; width: " + heightWidth + "% !important; }"
 			);
-	},
-	
-	center: function(factor, view) {
-		// Get the worldmap.
-		var worldmap	= General.$('worldmap');
 		
-		// If the view is world we need to refactor the first child of the worldmap.
-		if(view == 'world') {
-			worldmap = General.$('map1');;
-		}
+		// Get the map.
+		map = General.$('#map1');
 		
-		// Decide what to do depending on the actual view.
-		switch(view) {
-			case 'world':
-				// Set the new offset.
-				newWmTop		= 0;
-				newWmLeft		= 0;
-			  break;
-			
-			case 'island':
-				// Get the window height and width.
-				var windowHeight	= unsafeWindow.innerHeight;
-				var windowWidth		= unsafeWindow.innerWidth;
-				
-				// Get the position to center.
-				var islandView	= General.$('cities');
-				var posY		= islandView.offsetHeight / 2;
-				var posX		= islandView.offsetWidth / 2 - islandView.offsetLeft;
-				
-				// Calculate the new offset.
-				newWmTop		= windowHeight / (2 * factor) - posY;
-				newWmLeft		= windowWidth / (4 * factor * factor) - posX;
-				
-				// If the new offset is out of range, set it to null.
-				newWmTop		= newWmTop < 0 ? newWmTop : 0;
-				newWmLeft		= newWmLeft < 0 ? newWmLeft : 0;
-			  break;
-			
-			case 'town':
-				// Get the window height and width.
-				var windowHeight	= unsafeWindow.innerHeight;
-				var windowWidth		= unsafeWindow.innerWidth;
-				
-				// Get the position to center.
-				var townHall	= General.$('position0');
-				var posY		= townHall.offsetTop;
-				var posX		= townHall.offsetLeft;
-
-				// Calculate the new offset.
-				newWmTop		= windowHeight / (2 * factor) - posY;
-				newWmLeft		= windowWidth / (4 * factor * factor) - posX;
-				
-				// If the new offset is out of range, set it to null.
-				newWmTop		= newWmTop < 0 ? newWmTop : 0;
-				newWmLeft		= newWmLeft < 0 ? newWmLeft : 0;
-			  break;
-			
-			default:
-				return;
-			  break;
-		}
+		// Set the new offset.
+		newWmTop		= 0;
+		newWmLeft		= 0;
 		
-		// Apply the new offset to the worldmap.
-		worldmap.style.top	= newWmTop + 'px';
-		worldmap.style.left	= newWmLeft + 'px';
+		// Apply the new offset to the map.
+		map.style.top	= newWmTop + 'px';
+		map.style.left	= newWmLeft + 'px';
 	},
 	
 	/**
-	 * Scales the children of the worldmap.
+	 * Scales the children of the worldmap / island view.
 	 * 
 	 * @param	float	factor
 	 *   The factor which is used.
 	 * @param	String	view
 	 *   The name of the view.
 	 */
-	scaleChildren: function(factor, view) {
+	scaleChildren: function(factor) {
 		// Which view is used?
-		switch(view) {
+		switch(View.name) {
 			// Worldview.
 			case 'world':
-				GM_addStyle(".wonder, .tradegood, .cities, .ownerstate	{ -moz-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); } \
-							 .cities									{ bottom: 10px !important; }");
+				GM_addStyle(
+						".wonder, .tradegood, .cities, .ownerstate	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); } \
+						 .cities									{ bottom: 10px !important; }"
+					);
 			  break;
 			
 			// Island view.
 			case 'island':
-				GM_addStyle(".scroll_img	{ -moz-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); }");
+				GM_addStyle(
+						".scroll_img	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); }"
+					);
 			  break;
 			
 			// default do nothing.
@@ -1651,10 +1705,10 @@ Updater = {
 	/**
 	 * Stores if the update was instructed by the user.
 	 */
-	manualUpdate: null,
+	manualUpdate: false,
 
 	/**
-	 * Inits the Updater.
+	 * Init the Updater.
 	 */
 	init: function() {
 		// Get the difference between now and the last check.
@@ -1666,10 +1720,10 @@ Updater = {
 		// If the module is active and the last update is enough time before, check for updates.
 		if(GM_getValue('module_updateActive', true) && diff > GM_getValue('updater_updateInterval', 3600) * 1000) {
 			// No manual Update.
-			Updater.manualUpdate = false;
+			this.manualUpdate = false;
 
 			// Check for Updates.
-			Updater.checkForUpdates();
+			this.checkForUpdates();
 			
 			// Set the time for the last update check to now.
 			GM_setValue('updater_lastUpdateCheck', millis + '');
@@ -1693,96 +1747,96 @@ Updater = {
 	},
 
 	/**
-	 * Checks for updates for the Script.
+	 * Check for updates for the Script.
 	 * 
 	 * @return	boolean
 	 *   If there is a newer version.
 	 */
 	checkForUpdates: function() {
 		// Send a request to the userscripts.org server to get the metadata of the script to check if there is a new Update.
-		GM_xmlhttpRequest ({
-			method: 'GET',
-			url: 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.meta.js',
-			headers: {'User-agent': 'Mozilla/5.0', 'Accept': 'text/html'},
-			onload: function(response) {
-				// Extract the metadata from the response.
-				var metadata = Updater.formatMetadata(response.responseText);
-				
-				// If the installed script version is smaller than the metadata script version (= new update available).
-				if(scriptInfo.version < metadata.version) {
-					// Show updata dialogue.
-					Updater.showUpdateInfo(metadata);
+		var test = GM_xmlhttpRequest({
+				method: 'GET',
+				url: 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.meta.js',
+				headers: {'User-agent': 'Mozilla/5.0', 'Accept': 'text/html'},
+				onload: function(response) {
+					// Extract the metadata from the response.
+					var metadata = Updater.formatMetadata(response.responseText);
+					
+					// If the installed script version is smaller than the metadata script version (= new update available).
+					if(scriptInfo.version < metadata.version) {
+						// Show updata dialogue.
+						Updater.showUpdateInfo(metadata);
 
-				// If there is no new update and it was a manual update show hint.
-				} else if(Updater.manualUpdate)	{
-					General.showHint('error', lText.update.noNewExist, 5);
-				}
-			}
-		});
+					// If there is no new update and it was a manual update show hint.
+					} else if(Updater.manualUpdate)	{
+						General.showTooltip('cityAdvisor', 'error', Language.$('update_noNewExist'));
+					}
+				},
+			});
 	},
 	
 	/**
-	 * Shows the update information panel.
+	 * Show the update information panel.
 	 * 
 	 * @param	mixed[]	metadata
 	 *   Array with formated metadata
 	 */
 	showUpdateInfo: function(metadata) {
 		// Get the update history.
-		var updateHistory = Updater.extractUpdateHistory(metadata);
+		var updateHistory = this.extractUpdateHistory(metadata);
 		
 		// Set the Updater styles.
-		Updater.setStyles();
+		this.setStyles();
 		
 		// Create the background and the container.
-		var updateBackground		= General.addElement('div', 'updateBackground', document.body, null);
-		var updatePanelContainer	= General.addElement('div', 'updatePanelContainer', document.body, null);
-		var updatePanel				= General.addElement('div', 'updatePanel', updatePanelContainer, null);
+		var updateBackground		= General.addElement('div', document.body, 'updateBackground');
+		var updatePanelContainer	= General.addElement('div', document.body, 'updatePanelContainer');
+		var updatePanel				= General.addElement('div', updatePanelContainer, 'updatePanel');
 		
 		// Create the update panel header.
-		var updatePanelHeader		= General.addElement('div', 'updatePanelHeader', updatePanel, null);
-		var updatePanelHeaderL		= General.addElement('div', 'updatePanelHeaderL', updatePanelHeader, null);
-		var updatePanelHeaderR		= General.addElement('div', 'updatePanelHeaderR', updatePanelHeaderL, null);
-		var updatePanelHeaderM		= General.addElement('p',	'updatePanelHeaderM', updatePanelHeaderR, null);
+		var updatePanelHeader		= General.addElement('div', updatePanel, 'updatePanelHeader');
+		var updatePanelHeaderL		= General.addElement('div', updatePanelHeader, 'updatePanelHeaderL');
+		var updatePanelHeaderR		= General.addElement('div', updatePanelHeaderL, 'updatePanelHeaderR');
+		var updatePanelHeaderM		= General.addElement('p', updatePanelHeaderR, 'updatePanelHeaderM');
 		
 		// Create the update panel body.
-		var updatePanelBody			= General.addElement('div', 'updatePanelBody', updatePanel, null);
-		var updatePanelBodyL		= General.addElement('div', 'updatePanelBodyL', updatePanelBody, null);
-		var updatePanelBodyR		= General.addElement('div', 'updatePanelBodyR', updatePanelBodyL, null);
-		var updatePanelBodyM		= General.addElement('div', 'updatePanelBodyM', updatePanelBodyR, null);
-		var updatePanelBodyMTop		= General.addElement('p',	'updatePanelBodyMTop', updatePanelBodyM, null);
-		var updatePanelBodyMBottom	= General.addElement('div', 'updatePanelBodyMBottom', updatePanelBodyM, null);
+		var updatePanelBody			= General.addElement('div', updatePanel, 'updatePanelBody');
+		var updatePanelBodyL		= General.addElement('div', updatePanelBody, 'updatePanelBodyL');
+		var updatePanelBodyR		= General.addElement('div', updatePanelBodyL, 'updatePanelBodyR');
+		var updatePanelBodyM		= General.addElement('div', updatePanelBodyR, 'updatePanelBodyM');
+		var updatePanelBodyMTop		= General.addElement('p', updatePanelBodyM, 'updatePanelBodyMTop');
+		var updatePanelBodyMBottom	= General.addElement('div', updatePanelBodyM, 'updatePanelBodyMBottom');
 		
 		// Create the update panel footer.
-		var updatePanelFooter		= General.addElement('div', 'updatePanelFooter', updatePanel, null);
-		var updatePanelFooterL		= General.addElement('div', 'updatePanelFooterL', updatePanelFooter, null);
-		var updatePanelFooterR		= General.addElement('div', 'updatePanelFooterR', updatePanelFooterL, null);
-		var updatePanelFooterM		= General.addElement('div', 'updatePanelFooterM', updatePanelFooterR, null);
+		var updatePanelFooter		= General.addElement('div', updatePanel, 'updatePanelFooter');
+		var updatePanelFooterL		= General.addElement('div', updatePanelFooter, 'updatePanelFooterL');
+		var updatePanelFooterR		= General.addElement('div', updatePanelFooterL, 'updatePanelFooterR');
+		var updatePanelFooterM		= General.addElement('div', updatePanelFooterR, 'updatePanelFooterM');
 		
 		// Create the install button.
-		var updatePanelInstall		= General.addElement('input', 'updatePanelInstall', updatePanel, null);
+		var updatePanelInstall		= General.addElement('input', updatePanel, 'updatePanelInstall');
 		updatePanelInstall.type		= 'button';
-		updatePanelInstall.value	= lText.update.install;
+		updatePanelInstall.value	= Language.$('update_install');
 		
 		// Create the close button.
-		var updatePanelCB			= General.addElement('input', 'updatePanelCB', updatePanel, null);
+		var updatePanelCB			= General.addElement('input', updatePanel, 'updatePanelCB');
 		updatePanelCB.type			= 'button';
-		updatePanelCB.value			= lText.update.close;
+		updatePanelCB.value			= Language.$('update_close');
 		
 		// Insert the texts into header, body and footer.
-		updatePanelHeaderM.innerHTML		= lText.update.header + '<span><a><img id="script' + scriptInfo.id + 'updatePanelClose" src="skin/layout/notes_close.png"></a></span>';
-		updatePanelBodyMTop.innerHTML		= lText.update.text1 + '<a href="http://userscripts.org/scripts/show/' + scriptInfo.id + '" target="_blank" >' + scriptInfo.name + '</a>' + lText.update.text2 + '.<br>' + lText.update.text3 + scriptInfo.version + lText.update.text4 + metadata.version + '.<br>&nbsp;&nbsp;<b><u>' + lText.update.hist + ':</u></b>';
-		updatePanelBodyMBottom.innerHTML	= Updater.formatUpdateHistory(updateHistory);
+		updatePanelHeaderM.innerHTML		= Language.$('update_header') + '<span><a><img id="script' + scriptInfo.id + 'updatePanelClose" src="skin/layout/notes_close.png"></a></span>';
+		updatePanelBodyMTop.innerHTML		= Language.$('update_text1') + '<a href="http://userscripts.org/scripts/show/' + scriptInfo.id + '" target="_blank" >' + scriptInfo.name + '</a>' + Language.$('update_text2') + '.<br>' + Language.$('update_text3') + scriptInfo.version + Language.$('update_text4') + metadata.version + '.<br>&nbsp;&nbsp;<b><u>' + Language.$('update_hist') + ':</u></b>';
+		updatePanelBodyMBottom.innerHTML	= this.formatUpdateHistory(updateHistory);
 		updatePanelFooterM.innerHTML		= scriptInfo.name + ' v' + scriptInfo.version;
 		
 		// Add event listener to the buttons to close / install.
-		General.$('script' + scriptInfo.id + 'updatePanelClose').addEventListener('click', Updater.closeUpdatePanel, false);
-		updatePanelInstall.addEventListener('click', Updater.installScript, false);
-		updatePanelCB.addEventListener('click', Updater.closeUpdatePanel, false);
+		General.$('#script' + scriptInfo.id + 'updatePanelClose').addEventListener('click', this.closeUpdatePanel, false);
+		updatePanelInstall.addEventListener('click', this.installScript, false);
+		updatePanelCB.addEventListener('click', this.closeUpdatePanel, false);
 	},
 	
 	/**
-	 * Sets the styles that are used for the update panel.
+	 * Set the styles that are used for the update panel.
 	 */
 	setStyles: function() {
 		// Add all update styles to the ikariam page.
@@ -1823,10 +1877,11 @@ Updater = {
 	},
 	
 	/**
-	 * Formats the given metadata.
+	 * Format the given metadata.
 	 * 
 	 * @param	String	metadata
 	 *   The metadata to format.
+	 * 
 	 * @return	String[]
 	 *   The formated metadata as array.
 	 */
@@ -1863,10 +1918,11 @@ Updater = {
 	},
 	
 	/**
-	 * Extracts the update history from the metadata.
+	 * Extract the update history from the metadata.
 	 * 
 	 * @param	String[]	metadata
 	 *   Array with the formated metadata.
+	 * 
 	 * @return	mixed[]
 	 *   The extracted update history.
 	 */
@@ -1915,16 +1971,21 @@ Updater = {
 	},
 	
 	/**
-	 * Formats the update history.
+	 * Format the update history.
 	 * 
 	 * @param	mixed[]	updateHistory
 	 *   The update history.
+	 * 
 	 * @return	String
 	 *   The formated update history.
 	 */
 	formatUpdateHistory: function(updateHistory) {
 		// Get the labels for the types.
-		var types = { feature: lText.update.feature,	bugfix: lText.update.bugfix,	other: '' };
+		var types = {
+			feature:	Language.$('update_feature'),
+			bugfix:		Language.$('update_bugfix'),
+			other:		Language.$('update_other'),
+		};
 
 		// Create a var for the formated update history.
 		var formatedUpdateHistory = '';
@@ -1962,6 +2023,7 @@ Updater = {
 	installScript: function() {
 		// Close the update panel.
 		Updater.closeUpdatePanel();
+
 		// Open the install dialogue
 		top.location.href = 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.user.js';
 	},
@@ -1971,9 +2033,10 @@ Updater = {
 	 */
 	closeUpdatePanel: function() {
 		// Remove the update background.
-		document.body.removeChild(General.$('script' + scriptInfo.id + 'updateBackground'));
+		document.body.removeChild(General.$('#script' + scriptInfo.id + 'updateBackground'));
+
 		// Remove the update panel.
-		document.body.removeChild(General.$('script' + scriptInfo.id + 'updatePanelContainer'));
+		document.body.removeChild(General.$('#script' + scriptInfo.id + 'updatePanelContainer'));
 	},
 };
 
@@ -1982,26 +2045,35 @@ Updater = {
  */
 Language = {
 	/**
-	 * Returns country code.
-	 * 
-	 * @return	String
-	 *   The country code.
+	 * The name of the language which is actually set.
 	 */
-	getLang: function() {
+	name: 'english',
+	
+	/**
+	 * The text of the used language.
+	 */
+	text: null,
+	
+	/**
+	 * Init the language and set the used language code.
+	 */
+	init: function() {
 		// Split the host string.
 		var lang = top.location.host.split('.');
 		
-		// Return the country code if it exists.
-		return (lang ? lang[1] : false) || 'en';
+		// Set the language name.
+		this.setLangName(lang ? lang[1] : 'en');
+
+		this.setText();
 	},
 	
 	/**
-	 * Returns the name of the current language.
+	 * Set the name of the used language.
 	 * 
-	 * @return	String
-	 *   The name of the language.
+	 * @param	String	code
+	 *   The laguage code.
 	 */
-	getLanguageName: function() {
+	setLangName: function(code) {
 		// Languages which are already implemented.
 		var implemented = new Array('english', 'german');
 		
@@ -2015,28 +2087,26 @@ Language = {
 			pe: 'spanish',		ph: 'filipino',		pk: 'urdu',			pl: 'polish',		pt: 'portuguese',	ro: 'romanian',
 			rs: 'serbian',		ru: 'russian',		se: 'swedish',		si: 'slovene',		sk: 'slovak',		tr: 'turkish',
 			tw: 'chinese',		ua: 'ukranian',		us: 'english',		ve: 'spanish',		vn: 'vietnamese',	yu: 'bosnian'
-		}[Language.getLang()];
+		}[code];
 		
-		// Loof up if implemented contains the language.
+		// Look up if implemented contains the language.
 		for(var i = 0; i < implemented.length; i++) {
-			// If the language is implemented return the name of it.
+			// If the language is implemented set the name to it and return.
 			if(implemented[i] == languageName) {
-				return languageName;
+				this.name = languageName;
+				return;
 			}
 		}
-		
-		// If the language is not implemented return english.
-		return 'english';
+
+		// If the language is not implemented, set the language to english.
+		this.name = 'english';
 	},
 	
 	/*
-	 * Returns the text for the Script.
-	 * 
-	 * @return	mixed[]
-	 *   The script text.
+	 * Set the text for the script.
 	 */
-	getText: function() {
-		var text = {
+	setText: function() {
+		this.text = {
 			// English text.
 			'english': {
 				settings: {
@@ -2048,9 +2118,22 @@ Language = {
 					successful:	'Your order has been carried out.',
 					error:		'There was an error in your request.',
 				},
-				income: {
-					perHour:	'Income per hour',
-					perDay:		'Income per day',
+				balance: {
+					income: {
+						perHour:	'Income per hour',
+						perDay:		'Income per day',
+						start:		'Income without reduction',
+					},
+					upkeep: {
+						reason: {
+							0:		'Troops',
+							1:		'Ships',
+							2:		'Troops &amp; Ships',
+						},
+						basic:		'Basic Costs',
+						supply:		'Supply Costs',
+						result:		'Total Costs',
+					},
 				},
 				optionPanel: {
 					scripts:	'Scripts',
@@ -2059,20 +2142,22 @@ Language = {
 					zoom:		'Zoom function',
 					save:		'Save settings!',
 					label: {
-						updateActive:		'Search for updates automatically',
-						incomeOnTopActive:	'Show income on top in bilance view',
-						zoomActive:			'Activate zoom in world view, island view, town view',
-						lcMoveActive:		'Move loading circle to position bar',
-						tooltipsAutoActive:	'Show tooltips in alliance mebers view and military advisor automatically',
-						updateInterval:		'Interval to search for updates:',
-						manualUpdate1:		'Search for updates for "',
-						manualUpdate2:		'"!',
+						updateActive:			'Search for updates automatically',
+						incomeOnTopActive:		'Show income on top in Balance view',
+						upkeepReductionActive:	'Show a short version of the upkeep reduction',
+						zoomActive:				'Activate zoom in world view, island view, town view',
+						lcMoveActive:			'Move loading circle to position bar',
+						tooltipsAutoActive:		'Show tooltips in alliance mebers view and military advisor automatically',
+						hideBirdsActive:		'Hide the bird swarm.',
+						updateInterval:			'Interval to search for updates:',
+						manualUpdate1:			'Search for updates for "',
+						manualUpdate2:			'"!',
 						zoom: {
 							world:	'Zoom world view:',
 							island:	'Zoom island view:',
 							town:	'Zoom town view:',
 						},
-						scaleChildren:		'Let banners and symbols in normal size when zooming world view or island view',
+						scaleChildren:			'Let banners and symbols in normal size when zooming world view or island view',
 					},
 					updateIntervals: {
 						hour:	'1 hour',
@@ -2093,6 +2178,7 @@ Language = {
 					hist:		'Version History',
 					feature:	'Feature(s)',
 					bugfix:		'Bugfix(es)',
+					other:		'',
 					install:	'Install',
 					close:		'Close',
 					noNewExist:	'There is no new version available!',
@@ -2109,9 +2195,22 @@ Language = {
 					successful:	'Dein Befehl wurde ausgeführt.',
 					error:		'Es gab einen Fehler in deiner Anfrage!',
 				},
-				income: {
-					perHour:	'Einkommen pro Stunde',
-					perDay:		'Einkommen pro Tag',
+				balance: {
+					income: {
+						perHour:	'Einkommen pro Stunde',
+						perDay:		'Einkommen pro Tag',
+						start:		'Einkommen ohne Abz&uuml;ge',
+					},
+					upkeep: {
+						reason: {
+							0:		'Truppen',
+							1:		'Schiffe',
+							2:		'Truppen &amp; Schiffe',
+						},
+						basic:		'Grundkosten',
+						supply:		'Versorgungskosten',
+						result:		'Gesamtkosten',
+					},
 				},
 				optionPanel: {
 					scripts:	'Scripte',
@@ -2120,20 +2219,22 @@ Language = {
 					zoom:		'Zoom Funktion',
 					save:		'Einstellungen speichern!',
 					label: {
-						updateActive:		'Automatisch nach Updates suchen',
-						incomeOnTopActive:	'Einkommen in der Bilanz auch oben anzeigen',
-						zoomActive:			'Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren',
-						lcMoveActive:		'Ladekreis in Positionsleiste verschieben',
-						tooltipsAutoActive:	'Tooltips in Allianzmitgliederliste und Milit&auml;rberater automatisch anzeigen',
-						updateInterval:		'In folgenden Zeitabst&auml;nden nach Updates suchen:',
-						manualUpdate1:		'Nach Updates f&uuml;r "',
-						manualUpdate2:		'" suchen!',
+						updateActive:			'Automatisch nach Updates suchen',
+						incomeOnTopActive:		'Einkommen in der Bilanz auch oben anzeigen',
+						upkeepReductionActive:	'Eine gekürzte Version der Einkommensreduktion anzeigen',
+						zoomActive:				'Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren',
+						lcMoveActive:			'Ladekreis in Positionsleiste verschieben',
+						tooltipsAutoActive:		'Tooltips in Allianzmitgliederliste und Milit&auml;rberater automatisch anzeigen',
+						hideBirdsActive:		'Den Vogelschwarm nicht anzeigen.',
+						updateInterval:			'In folgenden Zeitabst&auml;nden nach Updates suchen:',
+						manualUpdate1:			'Nach Updates f&uuml;r "',
+						manualUpdate2:			'" suchen!',
 						zoom: {
 							world:	'Zoom in der Weltkarte:',
 							island:	'Zoom in der Inselansicht:',
 							town:	'Zoom in der Stadtansicht:',
 						},
-						scaleChildren:		'Beschriftungen und Hinweissymbole beim Zoomen in der Weltkarte und Inselansicht in Normalgr&ouml;&szlig;e belassen',
+						scaleChildren:			'Beschriftungen und Hinweissymbole beim Zoomen in der Weltkarte und Inselansicht in Normalgr&ouml;&szlig;e belassen',
 					},
 					updateIntervals: {
 						hour:	'1 Stunde',
@@ -2154,25 +2255,91 @@ Language = {
 					hist:		'Versionshistorie',
 					feature:	'Neuerung(en)',
 					bugfix:		'Bugfix(e)',
+					other:		'',
 					install:	'Installieren',
 					close:		'Schließen',
 					noNewExist:	'Keine neue Version verfügbar!',
 				},
 			},
-		}[Language.getLanguageName()];
+		}[this.name];
+	},
+	
+	/**
+	 * Return the name of the actually used language.
+	 * 
+	 * @return	String
+	 *   The country code.
+	 */
+	getLangName: function() {
+		return this.name;
+	},
+	
+	/**
+	 * Synonymous function for Language.getText().
+	 * 
+	 * @param	String	name
+	 *   The name of the placeholder.
+	 * 
+	 * @return	mixed
+	 *   The text.
+	 */
+	$: function(name) {
+		return this.getText(name);
+	},
+	
+	/**
+	 * Return the name of the actually used language.
+	 * 
+	 * @param	String	name
+	 *   The name of the placeholder.
+	 * 
+	 * @return	mixed
+	 *   The text.
+	 */
+	getText: function(name) {
+		// Set the text to the placeholder.
+		var erg = name;
+		
+		// Split the placeholder.
+		var parts = name.split('_');
+		
+		// If the splitting was successful.
+		if(parts) {
+			// Set txt to the "next level".
+			var txt = this.text[parts[0]];
+			
+			// Loop over all parts.
+			for(var i = 1; i < parts.length; i++) {
+				// If the "next level" exists, set txt to it.
+				if(txt && typeof txt[parts[i]] != 'undefined') {
+					txt = txt[parts[i]];
+				} else {
+					txt = erg;
+					break;
+				}
+			}
+			
+			// If the text type is not an object, a function or undefined.
+			if(typeof txt != 'object' && typeof txt != 'function' && typeof txt != 'undefined') {
+				erg = txt;
+			}
+		}
 		
 		// Return the text.
-		return text;
+		return erg;
 	},
 };
-
-// Set the texts wich are shown on the page.
-lText = Language.getText();
 
 /**
  * The main function of the script.
  */
 function main() {
+	// Init the script.
+	General.init();
+	
+	// Init the language.
+	Language.init();
+
 	// Set the general styles for the script.
 	General.setStyles();
 
@@ -2184,4 +2351,4 @@ function main() {
 }
 
 // Call the main function of the script.
-main();
+setTimeout(main, 0);
