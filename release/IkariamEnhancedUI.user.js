@@ -3,18 +3,30 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			5.00
+// @version			6.00
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @history			5.00	Feature: Possibility to hide only the bird swarm animation. (desktop)
-// @history			5.00	Feature: Easier upkeep reduction table. (mobile & desktop)
-// @history			5.00	Feature: Enhanced zoom function using the Ikariam zoom function. (desktop)
-// @history			5.00	Feature: Due to the use of Ikariam functions the code could be reduced.
-// @history			5.00	Feature: Code enhancements for shorter code.
+// @resource		languageGerman	http://ikascripts.seite.com/scriptres/74221/v6.00/languageGerman.json
+// @resource		languageEnglish	http://ikascripts.seite.com/scriptres/74221/v6.00/languageEnglish.json
+// 
+// @history			6.00	Feature: Resizing banners when zooming is possible in city view, too.
+// @history			6.00	Feature: The zoom buttons are available in world view, too.
+// @history			6.00	Feature: Zooming with the mouse scroll is possible again (now with key, standard is ctrl).
+// @history			6.00	Feature: Changes in the option panel due to the new zooming function features.
+// @history			6.00	Bugfix: If resizing is enabled, zooming with the buttons will resize the banners, too.
+// @history			6.00	Bugfix: The chat will not cause to much executions of script functions.
+// @history			6.00	The language texts are integrated as resources, so that there is shorter code.
+// @history			6.00	Replace the GM_* functions by myGM.* to expand them easy and add new.
+// 
+// @history			5.00	Feature: Possibility to hide only the bird swarm animation.
+// @history			5.00	Feature: Easier upkeep reduction table.
+// @history			5.00	Feature: Enhanced zoom function using the Ikariam zoom function.
+// @history			5.00	Due to the use of Ikariam functions the code could be reduced.
+// @history			5.00	Code enhancements for shorter code.
 // 
 // @history			4.02	Bugfix: Not all occurrences of hidden were changed.
 // 
@@ -44,7 +56,7 @@
 // @history			2.05	Bugfix: Problem with negative numbers and 0.4.2.4 fixed.
 //
 // @history			2.04	Feature: Own script updater.
-// @history			2.04	Bugfix: Remove everything what refered to other scripts.
+// @history			2.04	Bugfix:	Remove everything what refered to other scripts.
 //
 // @history			2.03	Feature: New script updater.
 //
@@ -69,7 +81,7 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'5.00',
+	version:	'6.00',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -129,10 +141,166 @@ const con		= conTmp;
 *********************************************/
 
 /**
+ * myGM for more functions than the GM_* functions. (use myGM.* instead of GM_*)
+ */
+myGM = {
+	/**
+	 * Storage for the style sheets which will be added by the script.
+	 */
+	styleSheets: new Array(),
+	
+	/**
+	 * Store a value specified by a key.
+	 * 
+	 * @param	String	key
+	 *   The key of the value.
+	 * @param	mixed	value
+	 *   The value to store.
+	 */
+	setValue: function(key, value) {
+		// Store the value.
+		GM_setValue(key, value);
+	},
+	
+	/**
+	 * Get a value from the local storage and return it.
+	 * 
+	 * @param	String	key
+	 *   The key of the value.
+	 * @param	mixed	defaultValue
+	 *   The value which is set if the value is not set.
+	 * 
+	 * @return	mixed
+	 *   The stored value.
+	 */
+	getValue: function(key, defaultValue) {
+		// Get the value.
+		return GM_getValue(key, defaultValue);
+	},
+	
+	/**
+	 * Delete a value specified by a key.
+	 * 
+	 * @param	String	key
+	 *   The key of the value.
+	 */
+	deleteValue: function(key) {
+		// Delete the value.
+		GM_deleteValue(key);
+	},
+	
+	/**
+	 * Returns an array with the keys of all values stored by the script.
+	 * 
+	 * @return	mixed[]
+	 *   The array with all keys.
+	 */
+	listValues: function() {
+		// Store the key(s) to the array.
+		return GM_listValues();
+	},
+	
+	/**
+	 * Adds a style element to the head of the page and return it.
+	 * 
+	 * @param	String	styleRules
+	 *   The style rules to be set.
+	 * @param	String	id
+	 *   An id for the style set, to have the possibility to delete it. (optional, if none is set, the stylesheet is not stored)
+	 * 
+	 * @return	boolean
+	 *    If the stylesheet was stored with the id.
+	 */
+	addStyle: function(styleRules, id) {
+		// If the element was stored is saved here.
+		storedWithId = false;
+		
+		// Create a new style element and set the style rules.
+		var style = General.addElement('style', document.head);
+		style.type	= 'text/css';
+		style.innerHTML	= styleRules;
+		
+		// If an id is set and there is no other style sheet with that id, store it.
+		if(id && !this.styleSheets[id]) {
+			this.styleSheets[id] = style;
+			storedWithId = true;
+		}
+		
+		// Return if the stylesheet was stored with an id.
+		return storedWithId;
+	},
+	
+	/**
+	 * Removes a style element set by the script.
+	 * 
+	 * @param	String	id
+	 *   The id of the stylesheet to delete.
+	 * 
+	 * @return	boolean
+	 *    If the stylesheet could be deleted.
+	 */
+	removeStyle: function(id) {
+		// Stores if the stylesheet could be removed.
+		var removed = false;
+		
+		// If there is an id set and a stylesheet with the id exists.
+		if(id && this.styleSheets[id]) {
+			// Remove the stylesheet from the page.
+			document.head.removeChild(this.styleSheets[id]);
+			
+			// Remove the stylesheet from the array. 
+			delete	this.styleSheets[id];
+			
+			// Set removed to true.
+			removed = true;
+		}
+		
+		// Return if the stylesheet could be removed.
+		return removed;
+	},
+	
+	/**
+	 * Returns the content of a resource parsed with JSON.parse.
+	 * 
+	 * @param	String	name
+	 *   The name of the ressource to parse.
+	 */
+	getResourceParsed: function(name) {
+		// Store the ressource text to txt.
+		var txt = GM_getResourceText(name);
+		
+		// Function for safer parsing.
+		var safeParse = function(key, value) {
+							// If the value is a function, return just the string, so it is not executable.
+							if(typeof value === 'function' || Object.prototype.toString.apply(value) === '[object function]') {
+								return value.toString();
+							}
+							
+							// Return the value.
+							return value;
+						};
+		
+		// Return the parsed text.
+		return win.JSON.parse(txt, safeParse);
+	},
+	
+	/**
+	 * Makes a cross-site XMLHttpRequest.
+	 * 
+	 * @param	mixed[]	args
+	 *   The arguments the request needs. (specified here: http://wiki.greasespot.net/GM_xmlhttpRequest)
+	 */
+	xhr: function(args) {
+		// Sent the request and return the result.
+		GM_xmlhttpRequest(args);
+	},
+};
+
+/**
  * General functions.
  */
 General = {
-		/**
+	/**
 	 * Init the script.
 	 */
 	init: function() {
@@ -200,7 +368,7 @@ General = {
 	 */
 	setStyles: function() {
 		// Add the general used styles.
-		GM_addStyle(
+		myGM.addStyle(
 				".bottomLine					{ border-bottom: 1px dotted #CCA569; } \
 				 .minimizeImg, .maximizeImg		{ background: url('skin/interface/window_control_sprite.png') no-repeat scroll 0 0 transparent; cursor: pointer; display: block; height: 18px; width: 18px; } \
 				 .minimizeImg					{ background-position: -144px 0; } \
@@ -548,28 +716,19 @@ EventHandling = {
 			e = e || win.event;
 			var target = e.target || e.srcElement;
 			
-			// Get the center position of the worldmap.
-			var worldview	= General.$('#worldview');
-			var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
-			var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
-			
 			// Get the zoom factor.
-			factor = GM_getValue('zoom_' + View.name + 'Factor', 100) + ZoomFunction.zoomStep;
+			factor = myGM.getValue('zoom_' + View.name + 'Factor', 100) + ZoomFunction.zoomStep;
 			
 			// If the factor is too big set it to the max allowed and hide the zoom in button.
 			if(factor >= ZoomFunction.maxZoom) {
-				factor = ZoomFunction.maxZoom;
 				this.classList.add('invisible');
 			}
 
 			// Show the zoom out button if it is invisible.
-			this.nextSibling.classList.remove('invisible');
-			
-			// Store the zoom factor.
-			GM_setValue('zoom_' + View.name + 'Factor', factor);
+			General.$('#script' + scriptInfo.id + 'zoomOut').classList.remove('invisible');
 
 			// Zoom.
-			ika.controller.scaleWorldMap(1, posX, posY);
+			ZoomFunction.zoom(factor);
 		},
 		
 		/**
@@ -580,28 +739,76 @@ EventHandling = {
 			e = e || win.event;
 			var target = e.target || e.srcElement;
 			
-			// Get the center position of the worldmap.
-			var worldview	= General.$('#worldview');
-			var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
-			var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
-			
 			// Get the zoom factor.
-			factor = GM_getValue('zoom_' + View.name + 'Factor', 100) - ZoomFunction.zoomStep;
+			factor = myGM.getValue('zoom_' + View.name + 'Factor', 100) - ZoomFunction.zoomStep;
 			
 			// If the factor is too small set it to the min allowed and hide the zoom out button.
 			if(factor <= ZoomFunction.minZoom) {
-				factor = ZoomFunction.minZoom;
 				this.classList.add('invisible');
 			}
 
 			// Show the zoom in button if it is invisible.
-			this.previousSibling.classList.remove('invisible');
-			
-			// Store the zoom factor.
-			GM_setValue('zoom_' + View.name + 'Factor', factor);
+			General.$('#script' + scriptInfo.id + 'zoomIn').classList.remove('invisible');
 
 			// Zoom.
-			ika.controller.scaleWorldMap(-1, posX, posY);
+			ZoomFunction.zoom(factor);
+		},
+		
+		/**
+		 * Zoom if the mouse is scrolled.
+		 */
+		mouseScroll: function(e) {
+			// Get the element from the event.
+			e = e || win.event;
+			var target = e.target || e.srcElement;
+			
+			// Check if the required keys are pressed.
+			var keysPressed = myGM.getValue('zoom_ctrlPressed', true) ? !!e.ctrlKey : true
+								&& myGM.getValue('zoom_altPressed', false) ? !!e.altKey : true
+								&& myGM.getValue('zoom_shiftPressed', false) ? !!e.shiftKey : true;
+			
+			// If the required keys are pressed.
+			if(keysPressed) {
+				// If the scrolling is horizontally return.
+				if (e.axis !== undefined && e.axis === e.HORIZONTAL_AXIS) {
+					return;
+				}
+				
+				// Strorage for the number of steps to scroll.
+				var stepNumber = 0;
+				
+				// Get the number of steps to scroll.
+				if (e.wheelDelta) {
+					stepNumber = e.wheelDelta / 120;
+				}
+				
+				if (e.detail) {
+					stepNumber = -e.detail / 3;
+				}
+
+				if (e.wheelDeltaY !== undefined) {
+					stepNumber = e.wheelDeltaY / 120;
+				}
+				
+				// If the number is between -1 and 0, set it to -1.
+				if(stepNumber < 0) {
+					stepNumber = stepNumber > -1 ? -1 : Math.round(stepNumber);
+					
+				// If the number is between 0 and 1, set it to 1.
+				} else {
+					stepNumber = stepNumber < 1 ? 1 : Math.round(stepNumber);
+				}
+				
+				// Zoom the view.
+				ZoomFunction.zoom(myGM.getValue('zoom_' + View.name + 'Factor', 100) + ZoomFunction.zoomStep * stepNumber);
+				
+				// Stop the default event.
+				if(e.preventDefault) {
+					e.preventDefault();
+				} else {
+					return false;
+				}
+			}
 		},
 	},
 	
@@ -684,13 +891,13 @@ EnhancedView = {
 	 */
 	initDesktopStatic: function() {
 		// Move loading circle.
-		if(GM_getValue('module_lcMoveActive', true))	View.moveLoadingCircle();
+		if(myGM.getValue('module_lcMoveActive', true))	View.moveLoadingCircle();
 		
 		// Hide the Bird animation.
-		if(GM_getValue('module_hideBirdsActive', true))	View.hideBirds();
+		if(myGM.getValue('module_hideBirdsActive', true))	View.hideBirds();
 
 		// Zoom function.
-		if(GM_getValue('module_zoomActive', true))		ZoomFunction.init();
+		if(myGM.getValue('module_zoomActive', true))		ZoomFunction.init();
 	},
 	
 	/**
@@ -702,8 +909,8 @@ EnhancedView = {
 
 		// If the view is finances.
 		if(params.search(/view=finances/) > -1) {
-			if(GM_getValue('module_incomeActive', true))	Balance.incomeOnTopMobile();
-			if(GM_getValue('module_urtShortActive', true))	Balance.shortUpkeepReductionTable();
+			if(myGM.getValue('module_incomeActive', true))	Balance.incomeOnTopMobile();
+			if(myGM.getValue('module_urtShortActive', true))	Balance.shortUpkeepReductionTable();
 		}
 
 		// If the view is game options.
@@ -716,23 +923,38 @@ EnhancedView = {
 	 * Calls the script module depending on the popup.
 	 */
 	getPopup: function() {
+		// If the script was already executet on this popup.
+		if(General.$('#script' + scriptInfo.id + 'alreadyExecuted'))		return;
+		
+		// Get the popup.
+		popup = General.$('.templateView');
+		
+		// Get the popup id.
+		popupId = popup ? popup.id : '';
+		
+		// If a popup exists, add the hint, that the popup script was executed.
+		if(popup) {
+			alreadyExecuted			= General.addElement('input', General.$('.mainContent', popup), 'alreadyExecuted');
+			alreadyExecuted.type	= 'hidden';
+		}
+		
 		// Options popup.
-		if(General.$('#options_c'))	OptionPanel.desktop();
+		if(popupId == 'options_c')		OptionPanel.desktop();
 		
 		// Finance popup.
-		if(General.$('#finances_c')) {
-			if(GM_getValue('module_incomeActive', true))								Balance.incomeOnTop();
-			if(GM_getValue('module_urtShortActive', true))								Balance.shortUpkeepReductionTable();
+		if(popupId == 'finances_c') {
+			if(myGM.getValue('module_incomeActive', true))									Balance.incomeOnTop();
+			if(myGM.getValue('module_urtShortActive', true))								Balance.shortUpkeepReductionTable();
 		}
 
 		// Military view popup.
-		if(General.$('#militaryAdvisor_c') && GM_getValue('module_ttAutoActive', true))	Tooltips.autoshowInMilitaryView();
+		if(popupId == 'militaryAdvisor_c' && myGM.getValue('module_ttAutoActive', true))	Tooltips.autoshowInMilitaryView();
 		
 		// Diplomacy ally view popup.
-		if(General.$('#diplomacyAlly_c') && GM_getValue('module_ttAutoActive', true))	Tooltips.autoshowInAllianceView();
+		if(popupId == 'diplomacyAlly_c' && myGM.getValue('module_ttAutoActive', true))		Tooltips.autoshowInAllianceView();
 		
 		// Diplomacy ally view popup.
-		if(General.$('#embassy_c') && GM_getValue('module_ttAutoActive', true))			Tooltips.autoshowInAllianceView();
+		if(popupId == 'embassy_c' && myGM.getValue('module_ttAutoActive', true))			Tooltips.autoshowInAllianceView();
 	},
 };
 
@@ -750,7 +972,7 @@ View = {
 	 */
 	moveLoadingCircle: function() {
 		// Add the styles.
-		GM_addStyle(
+		myGM.addStyle(
 				"#js_worldBread		{ margin-left: 16px !important; } \
 				 #loadingPreview	{ -moz-transform: scale(0.5); msTransform: scale(0.5); -o-transform: scale(0.5); -webkit-transform: scale(0.5); transform: scale(0.5); left: 35px !important; top: 141px !important; }"
 			);
@@ -761,7 +983,7 @@ View = {
 	 */
 	hideBirds: function() {
 		// Add the style.
-		GM_addStyle(
+		myGM.addStyle(
 				 ".bird_swarm	{ visibility: hidden !important; }"
 			);
 	},
@@ -955,6 +1177,9 @@ Balance = {
 			// Add the event listener.
 			btn.addEventListener('click', EventHandling.upkeepReductionTable.toggle, false);
 		}
+		
+		// Adjust the size of the Scrollbar.
+		ika.controller.adjustSizes();
 	},
 };
 	
@@ -1019,7 +1244,7 @@ OptionPanel = {
 	 */
 	setStylesDesktop: function() {
 		// Add all styles to the ikariam page.
-		GM_addStyle(
+		myGM.addStyle(
 				"#js_tabGameOptions, #js_tabAccountOptions, #js_tabFacebookOptions, #js_tabOpenIDOptions, #js_tabScriptOptions	{ width: 130px !important; margin-left: 5px !important; border-radius: 5px 5px 0px 0px } \
 				 .cbWrapper			{ margin: 0 0 0 10px; }"
 			);
@@ -1097,13 +1322,13 @@ OptionPanel = {
 		
 		// Get the values.
 		var value	= new Array(
-				GM_getValue('module_updateActive', true),
-				GM_getValue('module_incomeActive', true),
-				GM_getValue('module_urtShortActive', true),
-				GM_getValue('module_zoomActive', true),
-				GM_getValue('module_lcMoveActive', true),
-				GM_getValue('module_ttAutoActive', true),
-				GM_getValue('module_hideBirdsActive', true)
+				myGM.getValue('module_updateActive', true),
+				myGM.getValue('module_incomeActive', true),
+				myGM.getValue('module_urtShortActive', true),
+				myGM.getValue('module_zoomActive', true),
+				myGM.getValue('module_lcMoveActive', true),
+				myGM.getValue('module_ttAutoActive', true),
+				myGM.getValue('module_hideBirdsActive', true)
 			);
 		
 		// Get the labels.
@@ -1152,9 +1377,9 @@ OptionPanel = {
 		
 		// Get the values.
 		var value	= new Array(
-				GM_getValue('module_updateActive', true),
-				GM_getValue('module_incomeActive', true),
-				GM_getValue('module_urtShortActive', true)
+				myGM.getValue('module_updateActive', true),
+				myGM.getValue('module_incomeActive', true),
+				myGM.getValue('module_urtShortActive', true)
 			);
 		
 		// Get the labels.
@@ -1219,7 +1444,7 @@ OptionPanel = {
 			);
 
 		// Create the update interval select.
-		General.addSelect(tr1.lastChild, 'updateInterval', GM_getValue('updater_updateInterval', 3600), opts);
+		General.addSelect(tr1.lastChild, 'updateInterval', myGM.getValue('updater_updateInterval', 3600), opts);
 		
 		// Prepare the table row.
 		tr2.firstChild.classList.add('center');
@@ -1285,7 +1510,7 @@ OptionPanel = {
 			option.innerHTML	= opts['name'][i];
 
 			// If the option is the actual option, select it.
-			if(opts['value'][i] == GM_getValue('updater_updateInterval', 3600)) {
+			if(opts['value'][i] == myGM.getValue('updater_updateInterval', 3600)) {
 				option.selected	= true;
 			}
 		}
@@ -1301,19 +1526,30 @@ OptionPanel = {
 	},
 	
 	/**
-	 * Creates the content of the zoom part.
+	 * Create the content of the zoom part.
 	 * 
 	 * @param	element	contentWrapper
 	 *   The wrapper where the content should be added.
 	 */
 	createZoomContent: function(contentWrapper) {
-		// Create options table.
-		var zoomTable1	= this.addOptionsTable(contentWrapper);
-		var tr1			= this.addOptionsTableRow(zoomTable1, false);
-		var tr2			= this.addOptionsTableRow(zoomTable1, false);
-		var tr3			= this.addOptionsTableRow(zoomTable1, false);
-		var zoomTable2	= this.addOptionsTable(contentWrapper);
-		var tr4			= this.addOptionsTableRow(zoomTable2, true);
+		// Create the options tables.
+		var zoomTableFactor			= this.addOptionsTable(contentWrapper);
+		var zoomTableScaleChildren	= this.addOptionsTable(contentWrapper);
+		var zoomTableAccessKeys		= this.addOptionsTable(contentWrapper);
+		
+		// Add the description to the scale children table row.
+		var scDescriptionTr			= this.addOptionsTableRow(zoomTableScaleChildren, true);
+		scDescriptionTr.classList.add('content');
+		scDescriptionTr.firstChild.classList.add('left');
+		var scDescriptionP			= General.addElement('p', scDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
+		scDescriptionP.innerHTML	= Language.$('optionPanel_label_description_scaleChildren');
+		
+		// Add the description to the access key table.
+		var akDescriptionTr			= this.addOptionsTableRow(zoomTableAccessKeys, true);
+		akDescriptionTr.classList.add('content');
+		akDescriptionTr.firstChild.classList.add('left');
+		var akDescriptionP			= General.addElement('p', akDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
+		akDescriptionP.innerHTML	= Language.$('optionPanel_label_description_accessKeys');
 		
 		// Arrays for zoom factor values and names.
 		var opts = new Array();
@@ -1326,39 +1562,55 @@ OptionPanel = {
 			opts.name.push(i + '%');
 		}
 		
-		// Create label for zoom world.
-		var zoomWorldLabel			= General.addElement('span', tr1.firstChild);
-		zoomWorldLabel.innerHTML	= Language.$('optionPanel_label_zoom_world');
-
-		// Create the zoom world select.
-		General.addSelect(tr1.lastChild, 'zoomWorld', GM_getValue('zoom_worldFactor', 100), opts);
-
-		// Create label for zoom island.
-		var zoomIslandLabel			= General.addElement('span', tr2.firstChild);
-		zoomIslandLabel.innerHTML	= Language.$('optionPanel_label_zoom_island');
-
-		// Create the zoom island select.
-		General.addSelect(tr2.lastChild, 'zoomIsland', GM_getValue('zoom_islandFactor', 100), opts);
-
-		// Create label for zoom town.
-		var zoomTownLabel		= General.addElement('span', tr3.firstChild);
-		zoomTownLabel.innerHTML	= Language.$('optionPanel_label_zoom_town');
-
-		// Create the zoom town select.
-		General.addSelect(tr3.lastChild, 'zoomTown', GM_getValue('zoom_townFactor', 100), opts);
+		// The view names.
+		var viewName	= new Array(
+				['world', 'island', 'town'],
+				['World', 'Island', 'Town']
+			);
 		
-		// Add class for checkbox.
-		tr4.firstChild.classList.add('left');
+		// The view names with first letter capital.
+		var accessKey	= new Array(
+				['ctrl', 'alt', 'shift'],
+				['Ctrl', 'Alt', 'Shift']
+			);
+		
+		// Loop over all views.
+		for(var i = 0; i < viewName[0].length; i++) {
+			// Create the table row for the zoom factor.
+			var zoomFactorTr = this.addOptionsTableRow(zoomTableFactor, false);
+			
+			// Create the zoom factor label.
+			var zoomFactorLabel			= General.addElement('span', zoomFactorTr.firstChild);
+			zoomFactorLabel.innerHTML	= Language.$('optionPanel_label_' + viewName[0][i] + '_zoomFactor');
 
-		// Create checkbox.
-		General.addCheckbox(tr4.firstChild, 'scaleChildren', GM_getValue('zoom_scaleChildren', true), Language.$('optionPanel_label_scaleChildren'));
+			// Create the zoom factor select.
+			General.addSelect(zoomFactorTr.lastChild, 'zoom' + viewName[1][i], myGM.getValue('zoom_' + viewName[0][i] + 'Factor', 100), opts);
+			
+			// Create the table row for the zoom factor.
+			var scaleChildrenTr = this.addOptionsTableRow(zoomTableScaleChildren, true);
+			
+			// Add class for checkbox.
+			scaleChildrenTr.firstChild.classList.add('left');
+			
+			// Create checkbox.
+			General.addCheckbox(scaleChildrenTr.firstChild, 'zoomScaleChildren' + viewName[1][i], myGM.getValue('zoom_'  + viewName[0][i] + 'ScaleChildren', true), Language.$('optionPanel_label_' + viewName[0][i] + '_scaleChildren'));
+			
+			// Create the table row for the zoom factor.
+			var accessKeyTr = this.addOptionsTableRow(zoomTableAccessKeys, true);
+			
+			// Add class for checkbox.
+			accessKeyTr.firstChild.classList.add('left');
+			
+			// Create checkbox.
+			General.addCheckbox(accessKeyTr.firstChild, 'zoom' + accessKey[1][i] + 'Pressed', myGM.getValue('zoom_'  + accessKey[0][i] + 'Pressed', accessKey[0][i] == 'ctrl'), Language.$('general_' + accessKey[0][i]));
+		}
 		
 		// Add the button to save the settings.
 		this.addSaveButton(contentWrapper);
 	},
 	
 	/**
-	 * Adds a new options table.
+	 * Add a new options table.
 	 * 
 	 * @param	element	wrapper
 	 *   The wrapper where the table should be added.
@@ -1404,7 +1656,7 @@ OptionPanel = {
 		// Otherwise.
 		} else {
 			// Create second cell.
-			var td2	= General.addElement('td', tr, null, 'left');
+			General.addElement('td', tr, null, 'left');
 		}
 
 		// Return the table row.
@@ -1440,22 +1692,27 @@ OptionPanel = {
 	 */
 	saveSettings: function() {
 		// Save the module settings.
-		GM_setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
-		GM_setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
-		GM_setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
-		GM_setValue('module_zoomActive', General.$('#script' + scriptInfo.id + 'zoomCb').checked);
-		GM_setValue('module_lcMoveActive', General.$('#script' + scriptInfo.id + 'loadingCircleMoveCb').checked);
-		GM_setValue('module_ttAutoActive', General.$('#script' + scriptInfo.id + 'tooltipsAutoCb').checked);
-		GM_setValue('module_hideBirdsActive', General.$('#script' + scriptInfo.id + 'hideBirdsCb').checked);
+		myGM.setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
+		myGM.setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
+		myGM.setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
+		myGM.setValue('module_zoomActive', General.$('#script' + scriptInfo.id + 'zoomCb').checked);
+		myGM.setValue('module_lcMoveActive', General.$('#script' + scriptInfo.id + 'loadingCircleMoveCb').checked);
+		myGM.setValue('module_ttAutoActive', General.$('#script' + scriptInfo.id + 'tooltipsAutoCb').checked);
+		myGM.setValue('module_hideBirdsActive', General.$('#script' + scriptInfo.id + 'hideBirdsCb').checked);
 		
 		// Save the update settings.
-		GM_setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
+		myGM.setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
 		
 		// Save the zoom function settings.
-		GM_setValue('zoom_worldFactor', General.getInt(General.getSelectValue('zoomWorldSelect')));
-		GM_setValue('zoom_islandFactor', General.getInt(General.getSelectValue('zoomIslandSelect')));
-		GM_setValue('zoom_townFactor', General.getInt(General.getSelectValue('zoomTownSelect')));
-		GM_setValue('zoom_scaleChildren', General.$('#script' + scriptInfo.id + 'scaleChildrenCb').checked);
+		myGM.setValue('zoom_worldFactor', General.getInt(General.getSelectValue('zoomWorldSelect')));
+		myGM.setValue('zoom_islandFactor', General.getInt(General.getSelectValue('zoomIslandSelect')));
+		myGM.setValue('zoom_townFactor', General.getInt(General.getSelectValue('zoomTownSelect')));
+		myGM.setValue('zoom_worldScaleChildren', General.$('#script' + scriptInfo.id + 'zoomScaleChildrenWorldCb').checked);
+		myGM.setValue('zoom_islandScaleChildren', General.$('#script' + scriptInfo.id + 'zoomScaleChildrenIslandCb').checked);
+		myGM.setValue('zoom_townScaleChildren', General.$('#script' + scriptInfo.id + 'zoomScaleChildrenTownCb').checked);
+		myGM.setValue('zoom_ctrlPressed', General.$('#script' + scriptInfo.id + 'zoomCtrlPressedCb').checked);
+		myGM.setValue('zoom_altPressed', General.$('#script' + scriptInfo.id + 'zoomAltPressedCb').checked);
+		myGM.setValue('zoom_shiftPressed', General.$('#script' + scriptInfo.id + 'zoomShiftPressedCb').checked);
 		
 		// Show success hint.
 		General.showTooltip('cityAdvisor', 'confirm', Language.$('general_successful'));
@@ -1466,12 +1723,12 @@ OptionPanel = {
 	 */
 	saveSettingsMobile: function() {
 		// Save the module settings.
-		GM_setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
-		GM_setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
-		GM_setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
+		myGM.setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
+		myGM.setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
+		myGM.setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
 		
 		// Save the update settings.
-		GM_setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
+		myGM.setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
 		
 		// Show success hint.
 		General.$('#script' + scriptInfo.id + 'saveHint').innerHTML	= Language.$('general_successful');
@@ -1511,107 +1768,113 @@ ZoomFunction = {
 	 * Init the zooming.
 	 */
 	init: function() {
+		// Get the min zoom.
+		var minZoom = Math.round(ika.worldview_scale_min * 100);
+		minZoom = minZoom + ((minZoom % 5 == 0) ? 0 : (5 - minZoom % 5));
+
 		// Set the max and min zoom.
-		this.minZoom = Math.round(ika.worldview_scale_min * 100);
+		this.minZoom = minZoom;
+		ika.worldview_scale_min = minZoom / 100;
 		ika.worldview_scale_max = this.maxZoom / 100;
 		
-		// Get the scrollDiv depending on the view.
-		if(View.name == 'world') {
-			scrollDiv = General.$('#map1');
-		} else {
-			scrollDiv = General.$('#worldmap');
-		}
+		// Change the mousewheel listener, so that it is possible to cheack if there are also keys pressed.
+		this.changeMouseWheelListener();
 		
-		// Remove the mouse wheel listener.
-		win.Event.removeListener(scrollDiv, 'DOMMouseScroll');
-		win.Event.removeListener(scrollDiv, 'mousewheel');
-
 		// Get the zooming factor.
-		var factorP = GM_getValue('zoom_' + View.name + 'Factor', 100);
-		
-		// If the factor ist smaller than allowed, reset it to the min allowed.
-		if(factorP < this.minZoom) {
-			factorP = this.minZoom;
-			GM_setValue('zoom_' + View.name + 'Factor', factorP);
-		}
-		
-		// If the factor ist bigger than allowed, reset it to the max allowed.
-		if(factorP > this.maxZoom) {
-			factorP = this.maxZoom;
-			GM_setValue('zoom_' + View.name + 'Factor', factorP);
-		}
-
-		// Get the factor as normal number, not as percentage.
-		factor = factorP / 100.0;
+		var factor = myGM.getValue('zoom_' + View.name + 'Factor', 100);
 
 		// Zoom.
-		this.zoom(factor);
-
-		// Scale child elements which should be scaled if enabled.
-		if(GM_getValue('zoom_scaleChildren', true))	setTimeout(function() { ZoomFunction.scaleChildren(factor) }, 0);
+		factor = this.zoom(factor);
 
 		// Add the zoom Buttons.
-		this.addZoomButtons(factorP);
+		this.addZoomButtons(factor);
 	},
 	
 	/**
-	 * Add the Buttons for zooming to the view (city and island).
+	 * Add the Buttons for zooming to the view.
 	 */
-	addZoomButtons: function(factorP) {
-		// If it is world view, Show no buttons.
-		if(View.name == 'world') {
-			return;
-		}
-		
+	addZoomButtons: function(factor) {
 		// Get the help element in the GF toolbar
 		gfToolbar	= General.$('#GF_toolbar');
 		
 		// Create the zoom buttons.
-		zoomWrapper	= General.addElement('div', gfToolbar, 'zoomWrapper');
-		zoomIn		= General.addElement('div', zoomWrapper, 'zoomIn', 'maximizeImg');
-		zoomOut		= General.addElement('div', zoomWrapper, 'zoomOut', 'minimizeImg');
+		var zoomWrapper	= General.addElement('div', gfToolbar, 'zoomWrapper');
+		var zoomIn		= General.addElement('div', zoomWrapper, 'zoomIn', 'maximizeImg');
+		var zoomFactor	= General.addElement('div', zoomWrapper, 'zoomFactor');
+		var zoomOut		= General.addElement('div', zoomWrapper, 'zoomOut', 'minimizeImg');
+		
+		// Show the zoom factor.
+		zoomFactor.innerHTML = factor + '%';
 		
 		// Add the event listener.
 		zoomIn.addEventListener('click', EventHandling.zoomFunction.zoomIn, false);
 		zoomOut.addEventListener('click', EventHandling.zoomFunction.zoomOut, false);
 		
 		// Hide the zoom in button if the max zoom is reached.
-		if(factorP == this.maxZoom) {
+		if(factor >= this.maxZoom) {
 			zoomIn.classList.add('invisible');
 		}
 		
 		// Hide the zoom out button if the min zoom is reached.
-		if(factorP == this.minZoom) {
+		if(factor <= this.minZoom) {
 			zoomOut.classList.add('invisible');
 		}
 
 		// Add the styles.
-		GM_addStyle(
-				"#script" + scriptInfo.id + "zoomWrapper	{ position: absolute; top: 0px; right: 0px; -moz-transform: scale(0.75); msTransform: scale(0.75); -o-transform: scale(0.75); -webkit-transform: scale(0.75); transform: scale(0.75); } \
-				 #script" + scriptInfo.id + "zoomIn			{ float: left; margin-right: 20px; } \
-				 #script" + scriptInfo.id + "zoomOut		{ margin-left: 20px; }"
+		myGM.addStyle(
+				"#script" + scriptInfo.id + "zoomWrapper	{ position: absolute; top: 2px; right: 0px; width: 72px; -moz-transform: scale(0.75); msTransform: scale(0.75); -o-transform: scale(0.75); -webkit-transform: scale(0.75); transform: scale(0.75); } \
+				 #script" + scriptInfo.id + "zoomIn			{ position: absolute; } \
+				 #script" + scriptInfo.id + "zoomFactor		{ position: absolute; left: 20px; width: 35px; text-align: center; } \
+				 #script" + scriptInfo.id + "zoomOut		{ position: absolute; left: 58px; }"
 			);
+	},
+	
+	/**
+	 * Changes the mouse wheel listener so that it could be used with access keys.
+	 */
+	changeMouseWheelListener: function() {
+		// Get the scrollDiv depending on the view.
+		if(View.name == 'world') {
+			scrollDiv = General.$('#map1');
+		} else {
+			scrollDiv = General.$('#worldmap');
+		}
+
+		// Remove the old mouse wheel listener.
+		win.Event.removeListener(scrollDiv, 'DOMMouseScroll');
+		win.Event.removeListener(scrollDiv, 'mousewheel');
+		
+		// Add the new mouse wheel listener.
+		scrollDiv.addEventListener('DOMMouseScroll', EventHandling.zoomFunction.mouseScroll, false);
+		scrollDiv.addEventListener('mousewheel', EventHandling.zoomFunction.mouseScroll, false);
 	},
 	
 	/**
 	 * Zooms the view.
 	 * 
-	 * @param	float	factor
+	 * @param	int		factor
 	 *   The factor which is used.
-	 * @param	String	view
-	 *   The name of the view.
 	 */
 	zoom: function(factor) {
-		// Get the center position of the worldmap.
-		var worldview	= General.$('#worldview');
-		var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
-		var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
+		// If the factor is bigger / smaller than allowed, set it to the max / min allowed.
+		factor = factor > this.maxZoom ? this.maxZoom : (factor < this.minZoom ? this.minZoom : factor);
+		
+		// Store the zoom factor.
+		myGM.setValue('zoom_' + View.name + 'Factor', factor);
+		
+		// Update the zoom factor which is shown to the user.
+		var zoomFactorDiv = General.$('#script' + scriptInfo.id + 'zoomFactor');
+		
+		if(zoomFactorDiv) {
+			zoomFactorDiv.innerHTML = factor + '%';
+		}
+
+		// Get the factor as normal number, not as percentage.
+		factorNew = factor / 100.0;
 		
 		// Get the game scaling factor depending on the view.
 		switch(View.name) {
 			case 'world':
-				this.zoomWorld(factor);
-				return;
 			  break;
 			
 			case 'island':
@@ -1627,11 +1890,29 @@ ZoomFunction = {
 			  break;
 		}
 		
-		// Get the number of steps to zoom.
-		var stepNumber = Math.round((factor - scale) / .05);
+		// It is the world view, zoom it.
+		if(View.name == 'world') {
+			this.zoomWorld(factorNew);
+
+		// Otherwise call the ikariam zoom function.
+		} else {
+			// Get the number of steps to zoom.
+			var stepNumber = Math.round((factorNew - scale) / .05);
+			
+			// Get the center position of the worldmap.
+			var worldview	= General.$('#worldview');
+			var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
+			var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
+			
+			// Zoom.
+			ika.controller.scaleWorldMap(stepNumber, posX, posY);
+		}
 		
-		// Zoom.
-		ika.controller.scaleWorldMap(stepNumber, posX, posY);
+		// Scale child elements if enabled.
+		if(myGM.getValue('zoom_' + View.name + 'ScaleChildren', true))	ZoomFunction.scaleChildren(factorNew);
+		
+		// Return the factor in percent.
+		return factor;
 	},
 	
 	/**
@@ -1647,9 +1928,13 @@ ZoomFunction = {
 		// Get the new height and width of the scrollcover.
 		var heightWidth	= 100 / factor;
 		
+		// Remove the old style.
+		myGM.removeStyle('zoomWorld');
+
 		// Add the new style.
-		GM_addStyle(
-				"#scrollcover { -moz-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); msTransform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -o-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -webkit-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); height: " + heightWidth + "% !important; width: " + heightWidth + "% !important; }"
+		myGM.addStyle(
+				"#scrollcover { -moz-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); msTransform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -o-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -webkit-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); height: " + heightWidth + "% !important; width: " + heightWidth + "% !important; }",
+				'zoomWorld'
 			);
 		
 		// Get the map.
@@ -1673,24 +1958,37 @@ ZoomFunction = {
 	 *   The name of the view.
 	 */
 	scaleChildren: function(factor) {
+		// Remove the old style.
+		myGM.removeStyle('scaleChildren');
+
 		// Which view is used?
 		switch(View.name) {
 			// Worldview.
 			case 'world':
-				GM_addStyle(
+				myGM.addStyle(
 						".wonder, .tradegood, .cities, .ownerstate	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); } \
-						 .cities									{ bottom: 10px !important; }"
+						 .cities									{ bottom: 10px !important; }",
+						'scaleChildren'
 					);
 			  break;
 			
 			// Island view.
 			case 'island':
-				GM_addStyle(
-						".scroll_img	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); }"
+				myGM.addStyle(
+						".scroll_img	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); }",
+						'scaleChildren'
 					);
 			  break;
 			
-			// default do nothing.
+			// Town view.
+			case 'town':
+				myGM.addStyle(
+						".timetofinish	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); }",
+						'scaleChildren'
+					);
+			  break;
+			
+			// Default: do nothing.
 			default:
 				return;
 			  break;
@@ -1712,13 +2010,13 @@ Updater = {
 	 */
 	init: function() {
 		// Get the difference between now and the last check.
-		var lastCheck	= GM_getValue('updater_lastUpdateCheck', 0);
+		var lastCheck	= myGM.getValue('updater_lastUpdateCheck', 0);
 		var now			= new Date();
 		var millis		= now.getTime();
 		var diff		= millis - lastCheck;
 		
 		// If the module is active and the last update is enough time before, check for updates.
-		if(GM_getValue('module_updateActive', true) && diff > GM_getValue('updater_updateInterval', 3600) * 1000) {
+		if(myGM.getValue('module_updateActive', true) && diff > myGM.getValue('updater_updateInterval', 3600) * 1000) {
 			// No manual Update.
 			this.manualUpdate = false;
 
@@ -1726,7 +2024,7 @@ Updater = {
 			this.checkForUpdates();
 			
 			// Set the time for the last update check to now.
-			GM_setValue('updater_lastUpdateCheck', millis + '');
+			myGM.setValue('updater_lastUpdateCheck', millis + '');
 		}
 	},
 	
@@ -1743,7 +2041,7 @@ Updater = {
 		// Set the time for the last update check to now.
 		var now			= new Date();
 		var millis		= now.getTime();
-		GM_setValue('updater_lastUpdateCheck', millis + '');
+		myGM.setValue('updater_lastUpdateCheck', millis + '');
 	},
 
 	/**
@@ -1754,7 +2052,7 @@ Updater = {
 	 */
 	checkForUpdates: function() {
 		// Send a request to the userscripts.org server to get the metadata of the script to check if there is a new Update.
-		var test = GM_xmlhttpRequest({
+		myGM.xhr({
 				method: 'GET',
 				url: 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.meta.js',
 				headers: {'User-agent': 'Mozilla/5.0', 'Accept': 'text/html'},
@@ -1766,7 +2064,7 @@ Updater = {
 					if(scriptInfo.version < metadata.version) {
 						// Show updata dialogue.
 						Updater.showUpdateInfo(metadata);
-
+						
 					// If there is no new update and it was a manual update show hint.
 					} else if(Updater.manualUpdate)	{
 						General.showTooltip('cityAdvisor', 'error', Language.$('update_noNewExist'));
@@ -1840,7 +2138,7 @@ Updater = {
 	 */
 	setStyles: function() {
 		// Add all update styles to the ikariam page.
-		GM_addStyle(
+		myGM.addStyle(
 				"#script" + scriptInfo.id + "updateBackground			{ z-index: 1000000000000; position: fixed; visibility: visible; top: 0px; left: 0px; width: 100%; height: 100%; padding: 0; background-color: #000; opacity: .7; } \
 				 #script" + scriptInfo.id + "updatePanelContainer		{ z-index: 1000000000001; position: fixed; visibility: visible; top: 100px; left: 50%; width: 500px; height: 370px; margin-left: -250px; padding: 0; text-align: left; color: #542C0F; font: 12px Arial,Helvetica,sans-serif; } \
 				 #script" + scriptInfo.id + "updatePanel				{ position: relative; top: 0px; left: 0px; background-color: transparent; border: 0 none; overflow: hidden; } \
@@ -2063,7 +2361,8 @@ Language = {
 		
 		// Set the language name.
 		this.setLangName(lang ? lang[1] : 'en');
-
+		
+		// Set the text in the used language.
 		this.setText();
 	},
 	
@@ -2075,18 +2374,18 @@ Language = {
 	 */
 	setLangName: function(code) {
 		// Languages which are already implemented.
-		var implemented = new Array('english', 'german');
+		var implemented = new Array('English', 'German');
 		
 		// All languages.
 		var languageName = {
-			ae: 'arabic',		ar: 'spanish',		ba: 'bosnian',		bg: 'bulgarian',	br: 'portuguese',	by: 'russian',
-			cl: 'spanish',		cn: 'chinese',		co: 'spanish',		cz: 'czech',		de: 'german',		dk: 'danish',
-			ee: 'estonian',		en: 'english',		es: 'spanish',		fi: 'finish',		fr: 'french',		gr: 'greek',
-			hk: 'chinese',		hr: 'bosnian',		hu: 'hungarian',	id: 'indonesian',	il: 'hebrew',		it: 'italian',
-			kr: 'korean',		lt: 'lithuanian',	lv: 'latvian',		mx: 'spanish',		nl: 'dutch',		no: 'norwegian',
-			pe: 'spanish',		ph: 'filipino',		pk: 'urdu',			pl: 'polish',		pt: 'portuguese',	ro: 'romanian',
-			rs: 'serbian',		ru: 'russian',		se: 'swedish',		si: 'slovene',		sk: 'slovak',		tr: 'turkish',
-			tw: 'chinese',		ua: 'ukranian',		us: 'english',		ve: 'spanish',		vn: 'vietnamese',	yu: 'bosnian'
+			ae: 'Arabic',		ar: 'Spanish',		ba: 'Bosnian',		bg: 'Bulgarian',	br: 'Portuguese',	by: 'Russian',
+			cl: 'Spanish',		cn: 'Chinese',		co: 'Spanish',		cz: 'Czech',		de: 'German',		dk: 'Danish',
+			ee: 'Estonian',		en: 'English',		es: 'Spanish',		fi: 'Finish',		fr: 'French',		gr: 'Greek',
+			hk: 'Chinese',		hr: 'Bosnian',		hu: 'Hungarian',	id: 'Indonesian',	il: 'Hebrew',		it: 'Italian',
+			kr: 'Korean',		lt: 'Lithuanian',	lv: 'Latvian',		mx: 'Spanish',		nl: 'Dutch',		no: 'Norwegian',
+			pe: 'Spanish',		ph: 'Filipino',		pk: 'Urdu',			pl: 'Polish',		pt: 'Portuguese',	ro: 'Romanian',
+			rs: 'Serbian',		ru: 'Russian',		se: 'Swedish',		si: 'Slovene',		sk: 'Slovak',		tr: 'Turkish',
+			tw: 'Chinese',		ua: 'Ukranian',		us: 'English',		ve: 'Spanish',		vn: 'Vietnamese',	yu: 'Bosnian'
 		}[code];
 		
 		// Look up if implemented contains the language.
@@ -2099,169 +2398,14 @@ Language = {
 		}
 
 		// If the language is not implemented, set the language to english.
-		this.name = 'english';
+		this.name = 'English';
 	},
 	
 	/*
 	 * Set the text for the script.
 	 */
 	setText: function() {
-		this.text = {
-			// English text.
-			'english': {
-				settings: {
-					kiloSep:	',',
-					decSep:		'.',
-					left2right:	true,
-				},
-				general: {
-					successful:	'Your order has been carried out.',
-					error:		'There was an error in your request.',
-				},
-				balance: {
-					income: {
-						perHour:	'Income per hour',
-						perDay:		'Income per day',
-						start:		'Income without reduction',
-					},
-					upkeep: {
-						reason: {
-							0:		'Troops',
-							1:		'Ships',
-							2:		'Troops &amp; Ships',
-						},
-						basic:		'Basic Costs',
-						supply:		'Supply Costs',
-						result:		'Total Costs',
-					},
-				},
-				optionPanel: {
-					scripts:	'Scripts',
-					update:		'Update',
-					module:		'Modules',
-					zoom:		'Zoom function',
-					save:		'Save settings!',
-					label: {
-						updateActive:			'Search for updates automatically',
-						incomeOnTopActive:		'Show income on top in Balance view',
-						upkeepReductionActive:	'Show a short version of the upkeep reduction',
-						zoomActive:				'Activate zoom in world view, island view, town view',
-						lcMoveActive:			'Move loading circle to position bar',
-						tooltipsAutoActive:		'Show tooltips in alliance mebers view and military advisor automatically',
-						hideBirdsActive:		'Hide the bird swarm.',
-						updateInterval:			'Interval to search for updates:',
-						manualUpdate1:			'Search for updates for "',
-						manualUpdate2:			'"!',
-						zoom: {
-							world:	'Zoom world view:',
-							island:	'Zoom island view:',
-							town:	'Zoom town view:',
-						},
-						scaleChildren:			'Let banners and symbols in normal size when zooming world view or island view',
-					},
-					updateIntervals: {
-						hour:	'1 hour',
-						hour12:	'12 hours',
-						day:	'1 day',
-						day3:	'3 days',
-						week:	'1 week',
-						week2:	'2 weeks',
-						week4:	'4 weeks',
-					},
-				},
-				update: {
-					header:		'Update available',
-					text1:		'There is an update for ',
-					text2:		' available',
-					text3:		'At the moment there is version ',
-					text4:		' installed. The newest version is ',
-					hist:		'Version History',
-					feature:	'Feature(s)',
-					bugfix:		'Bugfix(es)',
-					other:		'',
-					install:	'Install',
-					close:		'Close',
-					noNewExist:	'There is no new version available!',
-				},
-			},
-			// German text.
-			'german': {
-				settings: {
-					kiloSep:	'.',
-					decSep:		',',
-					left2right:	true,
-				},
-				general: {
-					successful:	'Dein Befehl wurde ausgeführt.',
-					error:		'Es gab einen Fehler in deiner Anfrage!',
-				},
-				balance: {
-					income: {
-						perHour:	'Einkommen pro Stunde',
-						perDay:		'Einkommen pro Tag',
-						start:		'Einkommen ohne Abz&uuml;ge',
-					},
-					upkeep: {
-						reason: {
-							0:		'Truppen',
-							1:		'Schiffe',
-							2:		'Truppen &amp; Schiffe',
-						},
-						basic:		'Grundkosten',
-						supply:		'Versorgungskosten',
-						result:		'Gesamtkosten',
-					},
-				},
-				optionPanel: {
-					scripts:	'Scripte',
-					update:		'Aktualisierungen',
-					module:		'Module',
-					zoom:		'Zoom Funktion',
-					save:		'Einstellungen speichern!',
-					label: {
-						updateActive:			'Automatisch nach Updates suchen',
-						incomeOnTopActive:		'Einkommen in der Bilanz auch oben anzeigen',
-						upkeepReductionActive:	'Eine gekürzte Version der Einkommensreduktion anzeigen',
-						zoomActive:				'Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren',
-						lcMoveActive:			'Ladekreis in Positionsleiste verschieben',
-						tooltipsAutoActive:		'Tooltips in Allianzmitgliederliste und Milit&auml;rberater automatisch anzeigen',
-						hideBirdsActive:		'Den Vogelschwarm nicht anzeigen.',
-						updateInterval:			'In folgenden Zeitabst&auml;nden nach Updates suchen:',
-						manualUpdate1:			'Nach Updates f&uuml;r "',
-						manualUpdate2:			'" suchen!',
-						zoom: {
-							world:	'Zoom in der Weltkarte:',
-							island:	'Zoom in der Inselansicht:',
-							town:	'Zoom in der Stadtansicht:',
-						},
-						scaleChildren:			'Beschriftungen und Hinweissymbole beim Zoomen in der Weltkarte und Inselansicht in Normalgr&ouml;&szlig;e belassen',
-					},
-					updateIntervals: {
-						hour:	'1 Stunde',
-						hour12:	'12 Stunden',
-						day:	'1 Tag',
-						day3:	'3 Tage',
-						week:	'1 Woche',
-						week2:	'2 Wochen',
-						week4:	'4 Wochen',
-					},
-				},
-				update: {
-					header:		'Aktualisierung verf&uuml;gbar',
-					text1:		'Es ist ein Update f&uuml;r ',
-					text2:		' verf&uuml;gbar',
-					text3:		'Zur Zeit ist Version ',
-					text4:		' installiert. Die neueste Version ist ',
-					hist:		'Versionshistorie',
-					feature:	'Neuerung(en)',
-					bugfix:		'Bugfix(e)',
-					other:		'',
-					install:	'Installieren',
-					close:		'Schließen',
-					noNewExist:	'Keine neue Version verfügbar!',
-				},
-			},
-		}[this.name];
+		this.text = myGM.getResourceParsed('language' + this.name);
 	},
 	
 	/**
@@ -2339,10 +2483,10 @@ function main() {
 	
 	// Init the language.
 	Language.init();
-
+	
 	// Set the general styles for the script.
 	General.setStyles();
-
+	
 	// Call the function to check for updates.
 	Updater.init();
 	

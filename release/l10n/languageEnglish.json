@@ -1,0 +1,89 @@
+{
+	"settings": {
+		"kiloSep":	",",
+		"decSep":	".",
+		"left2right":	true
+	},
+	"general": {
+		"successful":	"Your order has been carried out.",
+		"error":	"There was an error in your request.",
+		"ctrl":		"Ctrl",
+		"alt":		"Alt",
+		"shift":	"Shift"
+	},
+	"balance": {
+		"income": {
+			"perHour":	"Income per hour",
+			"perDay":	"Income per day",
+			"start":	"Income without reduction"
+		},
+		"upkeep": {
+			"reason": {
+				"0":	"Troops",
+				"1":	"Ships",
+				"2":	"Troops &amp; Ships"
+			},
+			"basic":	"Basic Costs",
+			"supply":	"Supply Costs",
+			"result":	"Total Costs"
+		}
+	},
+	"optionPanel": {
+		"scripts":	"Scripts",
+		"update":	"Update",
+		"module":	"Modules",
+		"zoom":		"Zoom function",
+		"save":		"Save settings!",
+		"label": {
+			"updateActive":			"Search for updates automatically",
+			"incomeOnTopActive":		"Show income on top in Balance view",
+			"upkeepReductionActive":	"Show a short version of the upkeep reduction",
+			"zoomActive":			"Activate zoom in world view, island view, town view",
+			"lcMoveActive":			"Move loading circle to position bar",
+			"tooltipsAutoActive":		"Show tooltips in alliance mebers view and military advisor automatically",
+			"hideBirdsActive":		"Hide the bird swarm.",
+			"updateInterval":		"Interval to search for updates:",
+			"manualUpdate1":		"Search for updates for \"",
+			"manualUpdate2":		"\"!",
+			"world": {
+				"zoomFactor":			"Zoom worldmap:",
+				"scaleChildren":		"Worldmap"
+			},
+			"island": {
+				"zoomFactor":			"Zoom island view:",
+				"scaleChildren":		"Island view"
+			},
+			"town": {
+				"zoomFactor":			"Zoom town view:",
+				"scaleChildren":		"Town view"
+			},
+			"description": {
+				"scaleChildren":		"Let banners and symbols in normal size when zooming when zooming in this view:",
+				"accessKeys":			"This keys must be pressed to zoom with the mouse:"
+			}
+		},
+		"updateIntervals": {
+			"hour":		"1 hour",
+			"hour12":	"12 hours",
+			"day":		"1 day",
+			"day3":		"3 days",
+			"week":		"1 week",
+			"week2":	"2 weeks",
+			"week4":	"4 weeks"
+		}
+	},
+	"update": {
+		"header":	"Update available",
+		"text1":	"There is an update for ",
+		"text2":	" available",
+		"text3":	"At the moment there is version ",
+		"text4":	" installed. The newest version is ",
+		"hist":		"Version History",
+		"feature":	"Feature(s)",
+		"bugfix":	"Bugfix(es)",
+		"other":	"",
+		"install":	"Install",
+		"close":	"Close",
+		"noNewExist":	"There is no new version available!"
+	}
+}
