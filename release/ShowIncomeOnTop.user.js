@@ -1,16 +1,22 @@
 // ==UserScript==
 // @name			Show Income On Top
-// @version			1.0.0
+// @version			1.01
 // @namespace		http://*.ikariam.*/*
 // @description		Shows the actual income also on top of the site.
 // @author			TOBBE
+// @require			http://userscripts.org/scripts/source/57756.user.js
 // @include			http://*.ikariam.*/index.php?view=finances
 // @exclude			http://board.ikariam.*/*
 // @exclude			http://support.ikariam.*/*
 // @exclude			http://support.*.ikariam.*/*
-// @history			1.0.0	First Version.
+// @history			1.01	Update check added.
+// @history			1.00	First Version.
 // ==/UserScript==
 
+// Update check
+ScriptUpdater.forceNotice(74221, 1.01);
+
+// Script
 var hidden = document.getElementsByClassName('hidden');
 
 var income = hidden[hidden.length - 1].innerHTML;
@@ -37,7 +43,7 @@ cell4.appendChild(cell4Text);
 cell1.className = "sigma";
 cell2.className = "value res";
 cell3.className = "value res";
-cell4.className = "value res";
+cell4.className = "hidden";
 
 incomeRow.appendChild(cell1);
 incomeRow.appendChild(cell2);
