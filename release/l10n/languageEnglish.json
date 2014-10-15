@@ -69,11 +69,12 @@
 		}
 	},
 	"optionPanel": {
-		"scripts":	"Scripts",
-		"update":	"Update",
-		"module":	"Modules",
-		"zoom":		"Zoom function",
-		"save":		"Save settings!",
+		"scripts":		"Scripts",
+		"update":		"Update",
+		"module":		"Modules",
+		"resInfoMissingRes":	"Resource Information / Missing Resources",
+		"zoom":			"Zoom function",
+		"save":			"Save settings!",
 		"label": {
 			"updateActive":			"Search for updates automatically",
 			"incomeOnTopActive":		"Show income on top in Balance view",
@@ -85,6 +86,7 @@
 			"tooltipsAutoActive":		"Show tooltips in alliance mebers view and military advisor automatically",
 			"hideBirdsActive":		"Hide the bird swarm.",
 			"nctAdvisorActive":		"Don't center town information in the town advisor",
+			"niceAllyPageActive":		"Show the external allypages better formatted",
 			"memberInfoActive":		"Enable the possibility to save highscore data of alliance members",
 			"updateInterval":		"Interval to search for updates:",
 			"manualUpdate1":		"Search for updates for \"",
@@ -123,12 +125,26 @@
 		"noReset":	"No reset so far."
 	},
 	"resourceInfo": {
+		"label": {
+			"hourlyIncomeStyle":	"Style of the hourly income in town view:"
+		},
+		"align": {
+			"right":		"Right align",
+			"left":			"Left align",
+			"rightWithSeparation":	"Right align with separation"
+		},
 		"dailyIncome": {
 			"wood":		"Daily production building material:",
 			"wine":		"Daily production wine:",
 			"marble":	"Daily production marble:",
 			"glass":	"Daily production crystal glass:",
 			"sulfur":	"Daily production sulphur:"
+		}
+	},
+	"missingRes": {
+		"label": {
+			"showPositive":	"Show also the remaining resources after an upgrade",
+			"showColoured":	"Show the remaining resources coloured"
 		}
 	}
 }

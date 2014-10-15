@@ -69,22 +69,24 @@
 		}
 	},
 	"optionPanel": {
-		"scripts":	"Skripti",
-		"update":	"Atjauninājumi",
-		"module":	"Moduļi",
-		"zoom":		"Zoom funkcija",
-		"save":		"Saglabāt iestatījumus!",
+		"scripts":		"Skripti",
+		"update":		"Atjauninājumi",
+		"module":		"Moduļi",
+		"resInfoMissingRes":	"Informācija par resursiem / Trūkstošie resursi",
+		"zoom":			"Zoom funkcija",
+		"save":			"Saglabāt iestatījumus!",
 		"label": {
 			"updateActive":			"Meklēt atjauninājumus automātiski",
 			"incomeOnTopActive":		"Rādīt ienākumus bilances pārskata augšdaļā",
 			"upkeepReductionActive":	"Rādīt apgādes samazinājumu īso versiju",
-			"upkeepReductionActive":	"Show a short version of the upkeep reduction",
 			"missingResActive":		"Rādīt trūkstošos resursus celtniecības skatā",
+			"resourceInfoActive":		"Rādīt ikstundas resursu produkciju pilsētas skatā",
 			"zoomActive":			"Aktivizēt zoom funkciju pasaules skatā, salas skatā, pilsētas skatā",
 			"lcMoveActive":			"Pārvietot uz augšējo joslu apli, kas parādās pie procesu apstrādes",
 			"tooltipsAutoActive":		"Rādīt uznirstošos lodziņus alianses biedru skatā un karaspēka padomdevējā automātiski",
 			"hideBirdsActive":		"Paslēpt putnu baru.",
 			"nctAdvisorActive":		"Necentrēt pilsētas informāciju pilsētas padomdevējā",
+			"niceAllyPageActive":		"Rādīt labāk noformētas ārējās alianšu lapas",
 			"memberInfoActive":		"Ieslēgt iespēju saglabāt TOP listes datus par alianses biedriem",
 			"updateInterval":		"Intervāls starp atjauninājumu meklēšanu:",
 			"manualUpdate1":		"Meklēt atjauninājumus \"",
@@ -123,12 +125,26 @@
 		"noReset":	"Pagaidām nav veikta tīrīšana."
 	},
 	"resourceInfo": {
+		"label": {
+			"hourlyIncomeStyle":	"Ik stundas ienākumu noformējums pilsētas skatā:"
+		},
+		"align": {
+			"right":		"Centrēt pa labi",
+			"left":			"Centrēt pa kreisi",
+			"rightWithSeparation":	"Centrēt pa labi ar sadalījumu"
+		},
 		"dailyIncome": {
 			"wood":		"Ikdienas kokmateriālu produkcija:",
 			"wine":		"Ikdienas vīna produkcija:",
 			"marble":	"Ikdienas marmora produkcija:",
 			"glass":	"Ikdienas kristāla produkcija:",
 			"sulfur":	"Ikdienas sēra produkcija:"
+		}
+	},
+	"missingRes": {
+		"label": {
+			"showPositive":	"Rādīt atlikušos resursus arī pēc uzlabojuma",
+			"showColoured":	"Rādīt atlikušos resursus ar izkrāsojumu"
 		}
 	}
 }

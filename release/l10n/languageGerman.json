@@ -69,11 +69,12 @@
 		}
 	},
 	"optionPanel": {
-		"scripts":	"Scripte",
-		"update":	"Aktualisierungen",
-		"module":	"Module",
-		"zoom":		"Zoom Funktion",
-		"save":		"Einstellungen speichern!",
+		"scripts":		"Scripte",
+		"update":		"Aktualisierungen",
+		"module":		"Module",
+		"resInfoMissingRes":	"Einkommen in Stadtansicht / Fehlende Ressourcen",
+		"zoom":			"Zoom Funktion",
+		"save":			"Einstellungen speichern!",
 		"label": {
 			"updateActive":			"Automatisch nach Updates suchen",
 			"incomeOnTopActive":		"Einkommen in der Bilanz auch oben anzeigen",
@@ -83,8 +84,9 @@
 			"zoomActive":			"Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren",
 			"lcMoveActive":			"Ladekreis in Positionsleiste verschieben",
 			"tooltipsAutoActive":		"Tooltips in Allianzmitgliederliste und Milit�rberater automatisch anzeigen",
-			"hideBirdsActive":		"Den Vogelschwarm nicht anzeigen.",
+			"hideBirdsActive":		"Den Vogelschwarm nicht anzeigen",
 			"nctAdvisorActive":		"St�dteinformationen im St�dteberater vertikal nicht zentrieren",
+			"niceAllyPageActive":		"Externe Allianzseiten sch�ner formatiert anzeigen",
 			"memberInfoActive":		"Speichern von Highscorest�nden von Allianzmitgliedern erm�glichen",
 			"updateInterval":		"In folgenden Zeitabst�nden nach Updates suchen:",
 			"manualUpdate1":		"Nach Updates f�r \"",
@@ -123,12 +125,26 @@
 		"noReset":	"Bisher nicht zur�ckgesetzt."
 	},
 	"resourceInfo": {
+		"label": {
+			"hourlyIncomeStyle":	"Darstellung des Einkommens in der Stadtansicht:"
+		},
+		"align": {
+			"right":		"Rechtsb�ndig",
+			"left":			"Linksb�ndig",
+			"rightWithSeparation":	"Rechtsb�ndig & Separator"
+		},
 		"dailyIncome": {
 			"wood":		"Tagesproduktion Baumaterial:",
 			"wine":		"Tagesproduktion Wein:",
 			"marble":	"Tagesproduktion Marmor:",
 			"glass":	"Tagesproduktion Kristallglas:",
 			"sulfur":	"Tagesproduktion Schwefel:"
+		}
+	},
+	"missingRes": {
+		"label": {
+			"showPositive":	"Auch die nach einem Upgrade noch verbleibenden Ressourcen anzeigen",
+			"showColoured":	"Die verbleibenden Ressourcen farbig anzeigen"
 		}
 	}
 }

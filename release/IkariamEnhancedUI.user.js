@@ -3,23 +3,30 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			8.00
+// @version			8.01
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @resource		languageGerman	http://resources.ikascripts.de/74221/v8.00/languageGerman.json
-// @resource		languageEnglish	http://resources.ikascripts.de/74221/v8.00/languageEnglish.json
-// @resource		languageLatvian	http://resources.ikascripts.de/74221/v8.00/languageLatvian.json
+// @resource		languageGerman	http://resources.ikascripts.de/74221/v8.01/languageGerman.json
+// @resource		languageEnglish	http://resources.ikascripts.de/74221/v8.01/languageEnglish.json
+// @resource		languageLatvian	http://resources.ikascripts.de/74221/v8.01/languageLatvian.json
 // 
 // @bug				Opera	Zooming with the mouse is only possible with "Alt" or without any key. No fix possible as I know.
+// @bug				Opera	No update checks and different language settings are possible due to missing comands.
+// @bug				Opera	No updating of the missing resources is possible due to a missing modification listener.
 // @bug				Chrome	No good solution for zooming with mouse. Default Ikariam scroll zoom function can not be changed.
 // @bug				Chrome	Some smaller graphical bugs caused by a second execution of Ikariam functions by the script.
 // @bug				Chrome	Latvian special chars are not shown correct.
 // @bug				All		The selected island is not centered in world view.
 // @bug				All		If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			8.01	Feature: Different styles for income in town view. (desktop)
+// @history			8.01	Feature: Remaining resources after upgrade. (desktop)
+// @history			8.01	Feature: Improved style for external alliance pages. (desktop)
+// @history			8.01	Feature: Refresh the missing / remaining resources in construction view automatically. (desktop)
 // 
 // @history			8.00	Feature: Show the missing resources in construction view. (desktop)
 // @history			8.00	Feature: Show the hourly income directly in town view and add the daily production as popup. (desktop)
@@ -112,7 +119,7 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'8.00',
+	version:	'8.01',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -125,7 +132,7 @@ const scriptInfo = {
 const languageInfo = {
 	implemented:	new Array('English', 'German', 'Latvian'),
 	useResource:	true,
-	defaultText:	{"default":{"update":{"notPossible":{"header":"No Update possible","text1":"It is not possible to check for updates for ","text2":". Please check manually for Updates for the script. The actual installed version is ","text3":". This message will appear again in four weeks."},"possible":{"header":"Update available","text1":"There is an update for ","text2":" available.","text3":"At the moment there is version ","text4":" installed. The newest version is ","history":"Version History","type":{"feature":"Feature(s)","bugfix":"Bugfix(es)","other":""},"button":{"install":"Install","hide":"Hide"}},"noNewExists":{"header":"No Update available","text1":"There is no new version for ","text2":" available. The newest version ","text3":" is installed."}},"notification":{"header":"Script notification","button":{"confirm":"OK","abort":"Abort"}}},"settings":{"kiloSep":",","decSep":".","left2right":true},"general":{"successful":"Your order has been carried out.","error":"There was an error in your request.","ctrl":"Ctrl","alt":"Alt","shift":"Shift"},"balance":{"income":{"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep":{"reason":{"0":"Troops","1":"Ships","2":"Troops &amp; Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"optionPanel":{"scripts":"Scripts","update":"Update","module":"Modules","zoom":"Zoom function","save":"Save settings!","label":{"updateActive":"Search for updates automatically","incomeOnTopActive":"Show income on top in Balance view","upkeepReductionActive":"Show a short version of the upkeep reduction","missingResActive":"Show missing resources in construction view","resourceInfoActive":"Show the hourly income directly in town view","zoomActive":"Activate zoom in world view, island view, town view","lcMoveActive":"Move loading circle to position bar","tooltipsAutoActive":"Show tooltips in alliance mebers view and military advisor automatically","hideBirdsActive":"Hide the bird swarm.","nctAdvisorActive":"Don't center town information in the town advisor","memberInfoActive":"Enable the possibility to save highscore data of alliance members","updateInterval":"Interval to search for updates:","manualUpdate1":"Search for updates for \"","manualUpdate2":"\"!","world":{"zoomFactor":"Zoom worldmap:","scaleChildren":"Worldmap"},"island":{"zoomFactor":"Zoom island view:","scaleChildren":"Island view"},"town":{"zoomFactor":"Zoom town view:","scaleChildren":"Town view"},"description":{"scaleChildren":"Let banners and symbols in normal size when zooming when zooming in this view:","accessKeys":"This keys must be pressed to zoom with the mouse:"}},"updateIntervals":{"hour":"1 hour","hour12":"12 hours","day":"1 day","day3":"3 days","week":"1 week","week2":"2 weeks","week4":"4 weeks"}},"memberInfo":{"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset:","noReset":"No reset so far."},"resourceInfo":{"dailyIncome":{"wood":"Daily production building material:","wine":"Daily production wine:","marble":"Daily production marble:","glass":"Daily production crystal glass:","sulfur":"Daily production sulphur:"}}},
+	defaultText:	{"default":{"update":{"notPossible":{"header":"No Update possible","text1":"It is not possible to check for updates for ","text2":". Please check manually for Updates for the script. The actual installed version is ","text3":". This message will appear again in four weeks."},"possible":{"header":"Update available","text1":"There is an update for ","text2":" available.","text3":"At the moment there is version ","text4":" installed. The newest version is ","history":"Version History","type":{"feature":"Feature(s)","bugfix":"Bugfix(es)","other":""},"button":{"install":"Install","hide":"Hide"}},"noNewExists":{"header":"No Update available","text1":"There is no new version for ","text2":" available. The newest version ","text3":" is installed."}},"notification":{"header":"Script notification","button":{"confirm":"OK","abort":"Abort"}}},"settings":{"kiloSep":",","decSep":".","left2right":true},"general":{"successful":"Your order has been carried out.","error":"There was an error in your request.","ctrl":"Ctrl","alt":"Alt","shift":"Shift"},"balance":{"income":{"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep":{"reason":{"0":"Troops","1":"Ships","2":"Troops &amp; Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"optionPanel":{"scripts":"Scripts","update":"Update","module":"Modules","resInfoMissingRes":"Resource Information / Missing Resources","zoom":"Zoom function","save":"Save settings!","label":{"updateActive":"Search for updates automatically","incomeOnTopActive":"Show income on top in Balance view","upkeepReductionActive":"Show a short version of the upkeep reduction","missingResActive":"Show missing resources in construction view","resourceInfoActive":"Show the hourly income directly in town view","zoomActive":"Activate zoom in world view, island view, town view","lcMoveActive":"Move loading circle to position bar","tooltipsAutoActive":"Show tooltips in alliance mebers view and military advisor automatically","hideBirdsActive":"Hide the bird swarm.","nctAdvisorActive":"Don't center town information in the town advisor","niceAllyPageActive":"Show the external allypages better formatted","memberInfoActive":"Enable the possibility to save highscore data of alliance members","updateInterval":"Interval to search for updates:","manualUpdate1":"Search for updates for \"","manualUpdate2":"\"!","world":{"zoomFactor":"Zoom worldmap:","scaleChildren":"Worldmap"},"island":{"zoomFactor":"Zoom island view:","scaleChildren":"Island view"},"town":{"zoomFactor":"Zoom town view:","scaleChildren":"Town view"},"description":{"scaleChildren":"Let banners and symbols in normal size when zooming when zooming in this view:","accessKeys":"This keys must be pressed to zoom with the mouse:"}},"updateIntervals":{"hour":"1 hour","hour12":"12 hours","day":"1 day","day3":"3 days","week":"1 week","week2":"2 weeks","week4":"4 weeks"}},"memberInfo":{"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset:","noReset":"No reset so far."},"resourceInfo":{"label":{"hourlyIncomeStyle":"Style of the hourly income in town view:"},"align":{"right":"Right align","left":"Left align","rightWithSeparation":"Right align with separation"},"dailyIncome":{"wood":"Daily production building material:","wine":"Daily production wine:","marble":"Daily production marble:","glass":"Daily production crystal glass:","sulfur":"Daily production sulphur:"}},"missingRes":{"label":{"showPositive":"Show also the remaining resources after an upgrade","showColoured":"Show the remaining resources coloured"}}},
 };
 
 /**********************************************************
@@ -394,6 +401,9 @@ myGM = {
 	 *   The stored value.
 	 */
 	getValue: function(key, defaultValue) {
+		// Put the default value to JSON.
+		defaultValue = win.JSON.stringify(defaultValue);
+		
 		// Storage for the value.
 		var value = defaultValue;
 		
@@ -1471,9 +1481,15 @@ General = {
 			txt = '<span class="red bold negative">' + txt + '</span>';
 		}
 		
-		// If the number is positive and it is enabled, write it in red.
-		if(num > 0 && !!(addColor == true || (addColor && addColor.positive == true))) {
-			txt = '<span class="green bold">' + (usePlusSign ? '+' : '') + txt + '</span>';
+		// If the number is positive.
+		if(num > 0) {
+			// Add the plus sign if wanted.
+			txt = (usePlusSign ? '+' : '') + txt;
+			
+			// Color the text green if wanted.
+			if(!!(addColor == true || (addColor && addColor.positive == true))) {
+				txt = '<span class="green bold">' + txt + '</span>';
+			}
 		}
 		
 		// Return the formated number.
@@ -1549,13 +1565,13 @@ General = {
 		var select	= myGM.addElement('select', wrapper, id + 'Select', 'dropdown');
 		
 		// Add the Options.
-		for(var i = 0; i < opts['name'].length; i++) {
+		for(var i = 0; i < opts.length; i++) {
 			// Create an option.
 			var option			= myGM.addElement('option', select);
 
 			// Set the value and the name.
-			option.value		= opts['value'][i];
-			option.innerHTML	= opts['name'][i];
+			option.value		= opts[i]['value'];
+			option.innerHTML	= opts[i]['name'];
 
 			// If the option is selected, set selected to true.
 			if(option.value == selected) {
@@ -1841,6 +1857,30 @@ EventHandling = {
 	},
 	
 	/**
+	 * Events for missing resources.
+	 */
+	missingResources: {
+		/**
+		 * 
+		 */
+		resourcesUpdated: function(e) {
+			// Get the element from the event.
+			e = e || win.event;
+			var target = e.target || e.srcElement;
+			
+			// If the popup is colsed, remove the action listener.
+			if(!myGM.$('#buildingUpgrade')) {
+				myGM.$('#cityResources').removeEventListener('DOMSubtreeModified', EventHandling.missingResources.resourcesUpdated, false);
+			
+			// Otherwise: check the reason for firing and update the resources if necessary.
+			} else {
+				// Timeout to have access to GM_ funtions.
+				setTimeout(function() { MissingResources.show(true, true); }, 0);
+			}
+		},
+	},
+	
+	/**
 	 * Events for loading preview.
 	 */
 	loadingPreview: {
@@ -1908,17 +1948,20 @@ EnhancedView = {
 		// Hide the Bird animation.
 		if(myGM.getValue('module_hideBirdsActive', true))		View.hideBirds();
 		
-		// Hide the Bird animation.
-		if(myGM.getValue('module_nctAdvisorActive', true))		View.noCenterTownAdvisor();
-		
 		// Init the Zoom function.
 		if(myGM.getValue('module_zoomActive', true))			ZoomFunction.init();
-		
-		// Init the function for showing the missing resources.
-		if(myGM.getValue('module_missingResActive', true))		MissingResources.init();
 
 		// Init the function for showing the resource information.
 		if(myGM.getValue('module_resourceInfoActive', true))	ResourceInfo.init();
+		
+		// Init the function for showing the missing resources.
+		if(myGM.getValue('module_missingResActive', true))		MissingResources.init();
+		
+		// Don't center town advisor.
+		if(myGM.getValue('module_nctAdvisorActive', true))		View.noCenterTownAdvisor();
+		
+		// Init the function for showing the missing resources.
+		if(myGM.getValue('module_niceAllyPageActive', true))	View.niceAllyPage();
 		
 		// Init the function for showing the missing resources.
 		if(myGM.getValue('module_memberInfoActive', false))		MemberInfo.init();
@@ -2032,6 +2075,17 @@ View = {
 	noCenterTownAdvisor: function() {
 		myGM.addStyle(
 				"#inboxCity td	{ vertical-align: top !important; }"
+			);
+	},
+	
+	/**
+	 * Format the allypage better.
+	 */
+	niceAllyPage: function() {
+		// Add the style.
+		myGM.addStyle(
+				"#allyPage_c .allypage	{ padding: 4px 12px; text-align: left; }",
+				'niceAllyPage', true
 			);
 	},
 };
@@ -2310,6 +2364,10 @@ OptionPanel = {
 		var updateContentWrapper	= this.createOptionsWrapper(tab, Language.$('optionPanel_update'));
 		this.createUpdateContent(updateContentWrapper);
 		
+		// Create the wrapper for the resource information / missing resources.
+		var rimrContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_resInfoMissingRes'));
+		this.createResInfoMissingResContent(rimrContentWrapper);
+		
 		// Create the wrapper for the zoom settings.
 		var zoomContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_zoom'));
 		this.createZoomContent(zoomContentWrapper);
@@ -2365,10 +2423,12 @@ OptionPanel = {
 				{ id: 'loadingCircleMove',		value: myGM.getValue('module_lcMoveActive', true),			label: Language.$('optionPanel_label_lcMoveActive'),			hrAfter: false	},
 				{ id: 'tooltipsAuto',			value: myGM.getValue('module_ttAutoActive', true),			label: Language.$('optionPanel_label_tooltipsAutoActive'),		hrAfter: false	},
 				{ id: 'hideBirds',				value: myGM.getValue('module_hideBirdsActive', true),		label: Language.$('optionPanel_label_hideBirdsActive'),			hrAfter: false	},
-				{ id: 'noCenterTownAdvisor',	value: myGM.getValue('module_nctAdvisorActive', true),		label: Language.$('optionPanel_label_nctAdvisorActive'),		hrAfter: true	},
+				{ id: 'noCenterTownAdvisor',	value: myGM.getValue('module_nctAdvisorActive', true),		label: Language.$('optionPanel_label_nctAdvisorActive'),		hrAfter: false	},
+				{ id: 'niceAllyPage',			value: myGM.getValue('module_niceAllyPageActive', true),	label: Language.$('optionPanel_label_niceAllyPageActive'),		hrAfter: true	},
 				{ id: 'memberInformation',		value: myGM.getValue('module_memberInfoActive', false),		label: Language.$('optionPanel_label_memberInfoActive'),		hrAfter: false	}
 			);
 		
+		// Create the checkboxes.
 		for(var i = 0; i < cbData.length; i++) {
 			// Create table row.
 			var tr	= this.addOptionsTableRow(updateTable, true);
@@ -2454,24 +2514,14 @@ OptionPanel = {
 		updateIntervalLabel.innerHTML	= Language.$('optionPanel_label_updateInterval');
 
 		// Array for update interval values and names.
-		var opts = new Array();
-		opts['value']	= new Array(
-				3600,
-				43200,
-				86400,
-				259200,
-				604800,
-				1209600,
-				2419200
-			);
-		opts['name']	= new Array(
-				Language.$('optionPanel_updateIntervals_hour'),
-				Language.$('optionPanel_updateIntervals_hour12'),
-				Language.$('optionPanel_updateIntervals_day'),
-				Language.$('optionPanel_updateIntervals_day3'),
-				Language.$('optionPanel_updateIntervals_week'),
-				Language.$('optionPanel_updateIntervals_week2'),
-				Language.$('optionPanel_updateIntervals_week4')
+		opts = new Array(
+				{ value: 3600,		name: Language.$('optionPanel_updateIntervals_hour')	},
+				{ value: 43200,		name: Language.$('optionPanel_updateIntervals_hour12')	},
+				{ value: 86400,		name: Language.$('optionPanel_updateIntervals_day')		},
+				{ value: 259200,	name: Language.$('optionPanel_updateIntervals_day3')	},
+				{ value: 604800,	name: Language.$('optionPanel_updateIntervals_week')	},
+				{ value: 1209600,	name: Language.$('optionPanel_updateIntervals_week2')	},
+				{ value: 2419200,	name: Language.$('optionPanel_updateIntervals_week4')	}
 			);
 
 		// Create the update interval select.
@@ -2557,6 +2607,53 @@ OptionPanel = {
 	},
 	
 	/**
+	 * Create the content of the resource information / missing resources part.
+	 * 
+	 * @param	element	contentWrapper
+	 *   The wrapper where the content should be added.
+	 */
+	createResInfoMissingResContent: function(contentWrapper) {
+		// Create options table.
+		var resInfoMissingResTable	= this.addOptionsTable(contentWrapper);
+		var tr1						= this.addOptionsTableRow(resInfoMissingResTable, false);
+
+		// Create label.
+		var hourlyIncomeStyleLabel			= myGM.addElement('span', tr1.firstChild);
+		hourlyIncomeStyleLabel.innerHTML	= Language.$('resourceInfo_label_hourlyIncomeStyle');
+
+		// Array for update interval values and names.
+		opts = new Array(
+				{ value: 'alignRight',		name: Language.$('resourceInfo_align_right')					},
+				{ value: 'alignLeft',		name: Language.$('resourceInfo_align_left')					},
+				{ value: 'withSeparation',	name: Language.$('resourceInfo_align_rightWithSeparation')	}
+			);
+		
+		// Create the hourly income style select.
+		General.addSelect(tr1.lastChild, 'hourlyIncomeStyle', myGM.getValue('resourceInfo_hourlyIncomeStyle', 'alignRight'), opts);
+		
+		// Get the checkbox data.
+		var cbData	= new Array(
+				{ id: 'showPositive',	value: myGM.getValue('missingRes_showPositive', true),	label: Language.$('missingRes_label_showPositive'),	},
+				{ id: 'showColoured',	value: myGM.getValue('missingRes_showColoured', true),	label: Language.$('missingRes_label_showColoured'),	}
+			);
+		
+		// Create the checkboxes.
+		for(var i = 0; i < cbData.length; i++) {
+			// Create table row.
+			var tr	= this.addOptionsTableRow(resInfoMissingResTable, true);
+
+			// Create checkbox.
+			General.addCheckbox(tr.firstChild, cbData[i]['id'], cbData[i]['value'], cbData[i]['label']);
+			
+			// Add class for checkbox.
+			tr.firstChild.classList.add('left');
+		}
+
+		// Add the button to save the settings.
+		this.addSaveButton(contentWrapper);
+	},
+	
+	/**
 	 * Create the content of the zoom part.
 	 * 
 	 * @param	element	contentWrapper
@@ -2584,13 +2681,10 @@ OptionPanel = {
 		
 		// Arrays for zoom factor values and names.
 		var opts = new Array();
-			opts['value']	= new Array();
-			opts['name']	= new Array();
 		
 		// Load the arrays.
 		for(var i = ZoomFunction.minZoom; i <= ZoomFunction.maxZoom; i = i + ZoomFunction.zoomStep) {
-			opts.value.push(i);
-			opts.name.push(i + '%');
+			opts.push({ value: i, name: i + '%' });
 		}
 		
 		// The view names.
@@ -2720,31 +2814,37 @@ OptionPanel = {
 	 */
 	saveSettings: function() {
 		// Save the module settings.
-		myGM.setValue('module_updateActive', myGM.$('#' + myGM.prefix + 'updateCb').checked);
-		myGM.setValue('module_incomeActive', myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
-		myGM.setValue('module_urtShortActive', myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
-		myGM.setValue('module_zoomActive', myGM.$('#' + myGM.prefix + 'zoomCb').checked);
-		myGM.setValue('module_lcMoveActive', myGM.$('#' + myGM.prefix + 'loadingCircleMoveCb').checked);
-		myGM.setValue('module_ttAutoActive', myGM.$('#' + myGM.prefix + 'tooltipsAutoCb').checked);
-		myGM.setValue('module_hideBirdsActive', myGM.$('#' + myGM.prefix + 'hideBirdsCb').checked);
-		myGM.setValue('module_nctAdvisorActive', myGM.$('#' + myGM.prefix + 'noCenterTownAdvisorCb').checked);
-		myGM.setValue('module_missingResActive', myGM.$('#' + myGM.prefix + 'missingResourcesCb').checked);
-		myGM.setValue('module_resourceInfoActive', myGM.$('#' + myGM.prefix + 'resourceInformationCb').checked);
-		myGM.setValue('module_memberInfoActive', myGM.$('#' + myGM.prefix + 'memberInformationCb').checked);
+		myGM.setValue('module_updateActive',		myGM.$('#' + myGM.prefix + 'updateCb').checked);
+		myGM.setValue('module_incomeActive',		myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
+		myGM.setValue('module_urtShortActive',		myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
+		myGM.setValue('module_zoomActive',			myGM.$('#' + myGM.prefix + 'zoomCb').checked);
+		myGM.setValue('module_lcMoveActive',		myGM.$('#' + myGM.prefix + 'loadingCircleMoveCb').checked);
+		myGM.setValue('module_ttAutoActive',		myGM.$('#' + myGM.prefix + 'tooltipsAutoCb').checked);
+		myGM.setValue('module_hideBirdsActive',		myGM.$('#' + myGM.prefix + 'hideBirdsCb').checked);
+		myGM.setValue('module_nctAdvisorActive',	myGM.$('#' + myGM.prefix + 'noCenterTownAdvisorCb').checked);
+		myGM.setValue('module_missingResActive',	myGM.$('#' + myGM.prefix + 'missingResourcesCb').checked);
+		myGM.setValue('module_resourceInfoActive',	myGM.$('#' + myGM.prefix + 'resourceInformationCb').checked);
+		myGM.setValue('module_memberInfoActive',	myGM.$('#' + myGM.prefix + 'memberInformationCb').checked);
+		myGM.setValue('module_niceAllyPageActive',	myGM.$('#' + myGM.prefix + 'niceAllyPageCb').checked);
 		
 		// Save the update settings.
-		myGM.setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
+		myGM.setValue('updater_updateInterval',		General.getInt(General.getSelectValue('updateIntervalSelect')));
+		
+		// Save the resource information / missing resources settings.
+		myGM.setValue('resourceInfo_hourlyIncomeStyle',	General.getSelectValue('hourlyIncomeStyleSelect'));
+		myGM.setValue('missingRes_showPositive',		myGM.$('#' + myGM.prefix + 'showPositiveCb').checked);
+		myGM.setValue('missingRes_showColoured',		myGM.$('#' + myGM.prefix + 'showColouredCb').checked);
 		
 		// Save the zoom function settings.
-		myGM.setValue('zoom_worldFactor', General.getInt(General.getSelectValue('zoomWorldSelect')));
-		myGM.setValue('zoom_islandFactor', General.getInt(General.getSelectValue('zoomIslandSelect')));
-		myGM.setValue('zoom_townFactor', General.getInt(General.getSelectValue('zoomTownSelect')));
-		myGM.setValue('zoom_worldScaleChildren', myGM.$('#' + myGM.prefix + 'zoomScaleChildrenWorldCb').checked);
-		myGM.setValue('zoom_islandScaleChildren', myGM.$('#' + myGM.prefix + 'zoomScaleChildrenIslandCb').checked);
-		myGM.setValue('zoom_townScaleChildren', myGM.$('#' + myGM.prefix + 'zoomScaleChildrenTownCb').checked);
-		myGM.setValue('zoom_ctrlPressed', myGM.$('#' + myGM.prefix + 'zoomCtrlPressedCb').checked);
-		myGM.setValue('zoom_altPressed', myGM.$('#' + myGM.prefix + 'zoomAltPressedCb').checked);
-		myGM.setValue('zoom_shiftPressed', myGM.$('#' + myGM.prefix + 'zoomShiftPressedCb').checked);
+		myGM.setValue('zoom_worldFactor',			General.getInt(General.getSelectValue('zoomWorldSelect')));
+		myGM.setValue('zoom_islandFactor',			General.getInt(General.getSelectValue('zoomIslandSelect')));
+		myGM.setValue('zoom_townFactor',			General.getInt(General.getSelectValue('zoomTownSelect')));
+		myGM.setValue('zoom_worldScaleChildren',	myGM.$('#' + myGM.prefix + 'zoomScaleChildrenWorldCb').checked);
+		myGM.setValue('zoom_islandScaleChildren',	myGM.$('#' + myGM.prefix + 'zoomScaleChildrenIslandCb').checked);
+		myGM.setValue('zoom_townScaleChildren',		myGM.$('#' + myGM.prefix + 'zoomScaleChildrenTownCb').checked);
+		myGM.setValue('zoom_ctrlPressed',			myGM.$('#' + myGM.prefix + 'zoomCtrlPressedCb').checked);
+		myGM.setValue('zoom_altPressed',			myGM.$('#' + myGM.prefix + 'zoomAltPressedCb').checked);
+		myGM.setValue('zoom_shiftPressed',			myGM.$('#' + myGM.prefix + 'zoomShiftPressedCb').checked);
 		
 		// Show success hint.
 		General.showTooltip('cityAdvisor', 'confirm', Language.$('general_successful'));
@@ -2755,12 +2855,12 @@ OptionPanel = {
 	 */
 	saveSettingsMobile: function() {
 		// Save the module settings.
-		myGM.setValue('module_updateActive', myGM.$('#' + myGM.prefix + 'updateCb').checked);
-		myGM.setValue('module_incomeActive', myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
-		myGM.setValue('module_urtShortActive', myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
+		myGM.setValue('module_updateActive',	myGM.$('#' + myGM.prefix + 'updateCb').checked);
+		myGM.setValue('module_incomeActive',	myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
+		myGM.setValue('module_urtShortActive',	myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
 		
 		// Save the update settings.
-		myGM.setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
+		myGM.setValue('updater_updateInterval',	General.getInt(General.getSelectValue('updateIntervalSelect')));
 		
 		// Show success hint.
 		myGM.$('#' + myGM.prefix + 'saveHint').innerHTML	= Language.$('general_successful');
@@ -3066,6 +3166,9 @@ MissingResources = {
 	showInSidebar: function() {
 		// Show the resources.
 		this.show(true);
+		
+		// Add an event listener to update the shown resources.
+		myGM.$('#cityResources').addEventListener('DOMSubtreeModified', EventHandling.missingResources.resourcesUpdated, false);
 	},
 	
 	/**
@@ -3074,7 +3177,7 @@ MissingResources = {
 	 * @param	boolean	isSidebar
 	 *   If the place where to show is the sidebar.
 	 */
-	show: function(isSidebar) {
+	show: function(isSidebar, update) {
 		// Store the current resources.
 		var current = Array();
 		current.push(ika.model.currentResources.resource);	// Wood.
@@ -3099,13 +3202,13 @@ MissingResources = {
 				// If the node exist, show the missing resources.
 				if(node) {
 					// Get the missing resource number.
-					var missing = current[k] - General.getInt(node.lastChild.nodeValue);
+					var missing = current[k] - (update ? General.getInt(node.lastChild.previousSibling.nodeValue) : General.getInt(node.lastChild.nodeValue));
 					
 					// If there are resources missing.
-					if(missing < 0) {
+					if(missing < 0 || (myGM.getValue('missingRes_showPositive', true) && isSidebar)) {
 						// Show the missing resource info.
-						var show = myGM.addElement('span', node, null, 'missingResources', null, true);
-						show.innerHTML = (isSidebar ? '' : ' (') + '-' + General.formatToIkaNumber(missing * -1) + (isSidebar ? '' : ')');
+						var show = update ? myGM.$('#' + myGM.prefix + 'missingResources' + resourceName[k]) : myGM.addElement('span', node, 'missingResources' + resourceName[k], 'missingResources', null, true);
+						show.innerHTML = (isSidebar ? '' : ' (') + General.formatToIkaNumber(missing, myGM.getValue('missingRes_showColoured', true), true) + (isSidebar ? '' : ')');
 					}
 				}
 			}
@@ -3136,13 +3239,39 @@ ResourceInfo = {
 	 * Sets the styles that are required for the resource info.
 	 */
 	setStyles: function() {
-		// Add all styles to the ikariam page.
-		myGM.addStyle(
-				"#resources_wood, #resources_wine, #resources_marble, #resources_glass, #resources_sulfur						{ line-height: 13px !important; text-align: right; } \
-				 #js_GlobalMenu_wood, #js_GlobalMenu_wine, #js_GlobalMenu_marble, #js_GlobalMenu_crystal, #js_GlobalMenu_sulfur	{ padding-right: 4px; } \
-				 ." + myGM.prefix + "hourlyIncomeResource																		{ font-size: 11px; padding-right: 4px; }",
-				'resoureInfo', true
-			);
+		var mode = myGM.getValue('resourceInfo_hourlyIncomeStyle', 'alignRight');
+		
+		switch(mode) {
+			case 'alignRight':
+				// Add all styles to the ikariam page.
+				myGM.addStyle(
+						"#resources_wood, #resources_wine, #resources_marble, #resources_glass, #resources_sulfur						{ line-height: 13px !important; text-align: right; } \
+						 #js_GlobalMenu_wood, #js_GlobalMenu_wine, #js_GlobalMenu_marble, #js_GlobalMenu_crystal, #js_GlobalMenu_sulfur	{ padding-right: 4px; } \
+						 ." + myGM.prefix + "hourlyIncomeResource																		{ font-size: 11px; padding-right: 4px; }",
+						'resoureInfo', true
+					);
+				break;
+			
+			case 'alignLeft':
+				// Add all styles to the ikariam page.
+				myGM.addStyle(
+						"#resources_wood, #resources_wine, #resources_marble, #resources_glass, #resources_sulfur						{ line-height: 13px !important; } \
+						 ." + myGM.prefix + "hourlyIncomeResource																		{ font-size: 11px; }",
+						'resoureInfo', true
+					);
+				break;
+			
+			case 'withSeparation':
+				// Add all styles to the ikariam page.
+				myGM.addStyle(
+						"#resources_wood, #resources_wine, #resources_marble, #resources_glass, #resources_sulfur						{ line-height: 13px !important; text-align: right; } \
+						 #resources_wood, #resources_wine, #resources_marble, #resources_glass											{ border-right: 1px dotted #542C0F; } \
+						 #js_GlobalMenu_wood, #js_GlobalMenu_wine, #js_GlobalMenu_marble, #js_GlobalMenu_crystal, #js_GlobalMenu_sulfur	{ padding-right: 4px; } \
+						 ." + myGM.prefix + "hourlyIncomeResource																		{ font-size: 11px; padding-right: 4px; }",
+						'resoureInfo', true
+					);
+				break;
+		}
 	},
 	
 	/**
