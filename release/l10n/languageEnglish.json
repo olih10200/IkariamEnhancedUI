@@ -2,174 +2,262 @@
 	"default": {
 		"update": {
 			"notPossible": {
-				"header":	"Keine Aktualisierung m�glich",
-				"text1":	"Es ist nicht m�glich, nach Updates f�r ",
-				"text2":	" zu suchen. Bitte pr�fe selbst auf Updates f�r das Script. Die Momentan installierte Version ist ",
-				"text3":	". Diese Nachricht wird in vier Wochen wieder angezeigt."
+				"header":	"No Update possible",
+				"text1":	"It is not possible to check for updates for ",
+				"text2":	". Please check manually for Updates for the script. The actual installed version is ",
+				"text3":	". This message will appear again in four weeks."
 			},
 			"possible": {
-				"header":	"Aktualisierung verf�gbar",
-				"text1":	"Es ist ein Update f�r ",
-				"text2":	" verf�gbar.",
-				"text3":	"Zur Zeit ist Version ",
-				"text4":	" installiert. Die neueste Version ist ",
-				"history":	"Versionshistorie",
+				"header":	"Update available",
+				"text1":	"There is an update for ",
+				"text2":	" available.",
+				"text3":	"At the moment there is version ",
+				"text4":	" installed. The newest version is ",
+				"history":	"Version History",
 				"type": {
-					"feature":	"Neuerung(en)",
-					"bugfix":	"Bugfix(e)",
+					"feature":	"Feature(s)",
+					"bugfix":	"Bugfix(es)",
 					"other":	""
 				},
 				"button": {
-					"install":	"Installieren",
-					"hide":		"Verbergen"
+					"install":	"Install",
+					"hide":		"Hide"
 				}
 			},
 			"noNewExists": {
-				"header":	"Kein Update verf�gbar",
-				"text1":	"Es ist kein Update f�r ",
-				"text2":	" verf�gbar. Die neueste Version ",
-				"text3":	" ist installiert."
+				"header":	"No Update available",
+				"text1":	"There is no new version for ",
+				"text2":	" available. The newest version ",
+				"text3":	" is installed."
 			}
 		},
 		"notification": {
-			"header":	"Informtionen",
+			"header":	"Script notification",
 			"button": {
 				"confirm":	"OK",
-				"abort":	"Abbrechen"
+				"abort":	"Abort"
 			}
 		}
 	},
 	"settings": {
-		"kiloSep":	".",
-		"decSep":	",",
+		"kiloSep":		",",
+		"decSep":		".",
 		"left2right":	true
 	},
 	"general": {
-		"successful":	"Dein Befehl wurde ausgef�hrt.",
-		"error":	"Es gab einen Fehler in deiner Anfrage!",
-		"ctrl":		"Strg",
-		"alt":		"Alt",
-		"shift":	"Umschalt",
-		"yes":		"Ja",
-		"no":		"Nein"
+		"successful":	"Your order has been carried out.",
+		"error":		"There was an error in your request.",
+		"ctrl":			"Ctrl",
+		"alt":			"Alt",
+		"shift":		"Shift",
+		"yes":			"Yes",
+		"no":			"No",
+		"show":			"Show",
+		"hide":			"Hide"
 	},
 	"balance": {
 		"income": {
-			"perHour":	"Einkommen pro Stunde",
-			"perDay":	"Einkommen pro Tag",
-			"start":	"Einkommen ohne Abz�ge"
+			"perHour":	"Income per hour",
+			"perDay":	"Income per day",
+			"start":	"Income without reduction"
 		},
 		"upkeep": {
 			"reason": {
-				"0":	"Truppen",
-				"1":	"Schiffe",
-				"2":	"Truppen &amp; Schiffe"
+				"0":	"Troops",
+				"1":	"Ships",
+				"2":	"Troops & Ships"
 			},
-			"basic":	"Grundkosten",
-			"supply":	"Versorgungskosten",
-			"result":	"Gesamtkosten"
+			"basic":	"Basic Costs",
+			"supply":	"Supply Costs",
+			"result":	"Total Costs"
 		}
 	},
 	"optionPanel": {
-		"scripts":		"Scripte",
-		"update":		"Aktualisierungen",
-		"module":		"Module",
-		"resInfoMissingRes":	"Einkommen in Stadtansicht / Fehlende Ressourcen",
-		"zoom":			"Zoom Funktion",
-		"messageSignature":	"Nachrichtensignatur",
-		"save":			"Einstellungen speichern!",
-		"label": {
-			"updateActive":			"Automatisch nach Updates suchen",
-			"incomeOnTopActive":		"Einkommen in der Bilanz auch oben anzeigen",
-			"upkeepReductionActive":	"Eine gek�rzte Version der Einkommensreduktion anzeigen",
-			"missingResActive":		"Fehlende Ressourcen anzeigen",
-			"resourceInfoActive":		"Tageseinkommen in der Stadtansicht anzeigen",
-			"zoomActive":			"Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren",
-			"messageSignatureActive":	"Nachrichtensignaturen aktivieren",
-			"easyCircularMsgActive":	"Button f�r schnelleres Versenden von Allianzrundmails anzeigen",
-			"replaceUrlsActive":		"Links in Nachrichten anklickbar machen",
-			"colonizingLinksActive":	"Informationen �ber kolonisierende St�dte anzeigen",
-			"lcMoveActive":			"Ladekreis in Positionsleiste verschieben",
-			"tooltipsAutoActive":		"Tooltips in Allianzmitgliederliste und Milit�rberater automatisch anzeigen",
-			"directMilitaryTtActive":	"Informationen �ber Ladungen / Flotten in der Milit�ransicht ohne Tooltip anzeigen",
-			"hideBirdsActive":		"Den Vogelschwarm nicht anzeigen",
-			"nctAdvisorActive":		"St�dteinformationen im St�dteberater vertikal nicht zentrieren",
-			"niceAllyPageActive":		"Externe Allianzseiten sch�ner formatiert anzeigen",
-			"memberInfoActive":		"Speichern von Highscorest�nden von Allianzmitgliedern erm�glichen",
-			"updateInterval":		"In folgenden Zeitabst�nden nach Updates suchen:",
-			"manualUpdate1":		"Nach Updates f�r \"",
-			"manualUpdate2":		"\" suchen!",
-			"useServerSignature":		"Lokale Signatur verwenden",
-			"placementTop":			"Signatur oberhalb von Zitaten einf�gen",
-			"signatureText": {
-				"global":		"Globale Signatur, die auf allen Welten verwendet werden kann:",
-				"server":		"Lokale Signatur, die nur auf dieser Welt verwendet wird:"
+		"scripts":		"Scripts",
+		"save":			"Save settings!",
+		"section": {
+			"module": {
+				"title":	"Modules",
+				"label": {
+					"updateActive":				"Search for updates automatically",
+					"incomeOnTopActive":		"Show income on top in Balance view",
+					"upkeepReductionActive":	"Show a short version of the upkeep reduction",
+					"missingResActive":			"Show missing resources in construction view",
+					"resourceInfoActive":		"Show the hourly income directly in town view",
+					"capacityInfoActive":		"Show info bar for warehouse capacity",
+					"easyAccessActive":			"Link resource number to town hall / mines",
+					"zoomActive":				"Activate zoom in world view, island view, town view",
+					"messageSignatureActive":	"Enable message signatures",
+					"easyCircularMsgActive":	"Show button for faster sending of circular messages",
+					"replaceUrlsActive":		"Make links in messages clickable",
+					"colonizingLinksActive":	"Show information about colonizing cities",
+					"lcMoveActive":				"Move loading circle to position bar",
+					"tooltipsAutoActive":		"Show tooltips in alliance mebers view and military advisor automatically",
+					"directMilitaryTtActive":	"Show information about cargo / fleets in military view without tooltips",
+					"unitInfoActive":			"Show troop info",
+					"hideBirdsActive":			"Hide the bird swarm.",
+					"nctAdvisorActive":			"Don't center town information in the town advisor",
+					"niceAllyPageActive":		"Show the external allypages better formatted",
+					"memberInfoActive":			"Enable the possibility to save highscore data of alliance members"
+				}
 			},
-			"world": {
-				"zoomFactor":		"Zoom in der Weltkarte:",
-				"scaleChildren":	"Weltkarte"
+			"update": {
+				"title":	"Update",
+				"label": {
+					"interval": {
+						"description": "Interval to search for updates:",
+						"option": {
+							"hour":		"1 hour",
+							"hour12":	"12 hours",
+							"day":		"1 day",
+							"day3":		"3 days",
+							"week":		"1 week",
+							"week2":	"2 weeks",
+							"week4":	"4 weeks"
+						}
+					},
+					"manual": {
+						"text1":	"Search for updates for ",
+						"text2":	"!"
+					}
+				}
 			},
-			"island": {
-				"zoomFactor":		"Zoom in der Inselansicht:",
-				"scaleChildren":	"Inselansicht"
+			"resInfoMissingRes": {
+				"title":	"Resource Information / Missing Resources",
+				"label": {
+					"hourlyIncomeStyle":	"Style of the hourly income in town view:",
+					"align": {
+						"right":				"Right align",
+						"left":					"Left align",
+						"rightWithSeparation":	"Right align with separation"
+					},
+					"capacityOrientationStyle":	"Orientation of the bar",
+					"orientation": {
+						"vertical":			"Vertical",
+						"horizontal":		"Horizontal",
+						"horizontalFull":	"Horizontal, full length"
+					},
+					"hasBorder":		"Has border",
+					"showBranchRes":	"Show resources in trading post",
+					"showPositive":		"Show also the remaining resources after an upgrade",
+					"showColoured":		"Show the remaining resources coloured"
+				}
 			},
-			"town": {
-				"zoomFactor":		"Zoom in der Stadtansicht:",
-				"scaleChildren":	"Stadtansicht"
+			"zoom": {
+				"title":	"Zoom function",
+				"label": {
+					"zoomFactor": {
+						"world":	"Zoom worldmap:",
+						"island":	"Zoom island view:",
+						"town":		"Zoom town view:"
+					},
+					"scaleChildren": {
+						"description":	"Let banners and symbols in normal size when zooming when zooming in this view:",
+						"world":		"Worldmap",
+						"island":		"Island view",
+						"town":			"Town view"
+					},
+					"accessKeys":	"This keys must be pressed to zoom with the mouse:"
+				}
 			},
-			"description": {
-				"scaleChildren":	"Beschriftungen und Symbole beim Zoomen in folgenden Ansichten in Normalgr��e belassen:",
-				"accessKeys":		"Folgende Tasten m�ssen gedr�ckt sein, um mit der Maus zoomen zu k�nnen:"
+			"messageSignature": {
+				"title":	"Message signature",
+				"label": {
+					"useServerSignature":	"Use local signature",
+					"placementTop":			"Insert signature above cited messages",
+					"signatureText": {
+						"global":	"Global signature, which could be used on every world:",
+						"server":	"Local signature, which only could be used on this world:"
+					}
+				}
 			}
-		},
-		"updateIntervals": {
-			"hour":		"1 Stunde",
-			"hour12":	"12 Stunden",
-			"day":		"1 Tag",
-			"day3":		"3 Tage",
-			"week":		"1 Woche",
-			"week2":	"2 Wochen",
-			"week4":	"4 Wochen"
 		}
 	},
 	"memberInfo": {
-		"show":		"Alli Infos",
-		"reset":	"Zur�cksetzen",
-		"lastReset":	"Zeit seit dem letzten Zur�cksetzen:",
-		"noReset":	"Bisher nicht zur�ckgesetzt."
+		"show":			"Alliance info",
+		"reset":		"Reset",
+		"lastReset":	"Time since the last reset:",
+		"noReset":		"No reset so far."
 	},
-	"resourceInfo": {
-		"label": {
-			"hourlyIncomeStyle":	"Darstellung des Einkommens in der Stadtansicht:"
+	"unitInfo": {
+		"button": "Troop information",
+		"header": "Troops in ",
+		"units": {
+			"label":	"Units in ",
+			"own":		"Own units",
+			"friends":	"Allied units",
+			"enemies":	"Enemy units"
 		},
-		"align": {
-			"right":		"Rechtsb�ndig",
-			"left":			"Linksb�ndig",
-			"rightWithSeparation":	"Rechtsb�ndig & Separator"
-		},
-		"dailyIncome": {
-			"wood":		"Tagesproduktion Baumaterial:",
-			"wine":		"Tagesproduktion Wein:",
-			"marble":	"Tagesproduktion Marmor:",
-			"glass":	"Tagesproduktion Kristallglas:",
-			"sulfur":	"Tagesproduktion Schwefel:"
+		"ships": {
+			"label":	"Ships in ",
+			"own":		"Own ships",
+			"friends":	"Allied ships",
+			"enemies":	"Enemy ships"
 		}
 	},
-	"missingRes": {
-		"label": {
-			"showPositive":	"Auch die nach einem Upgrade noch verbleibenden Ressourcen anzeigen",
-			"showColoured":	"Die verbleibenden Ressourcen farbig anzeigen"
+	"resourceInfo": {
+		"dailyIncome": {
+			"wood":		"Daily production building material:",
+			"wine":		"Daily production wine:",
+			"marble":	"Daily production marble:",
+			"glass":	"Daily production crystal glass:",
+			"sulfur":	"Daily production sulphur:"
 		}
 	},
 	"easyCircularMsg": {
-		"getLink":	"Link f�r Allianzrundmail abspeichern",
-		"send":		"Rundmail senden"
+		"getLink":	"Save link for circular message",
+		"send":		"Send circular message"
 	},
 	"replacedUrl": {
 		"notification": {
-			"header":	"Achtung!",
-			"text1":	"Du bist dabei, den Link ",
-			"text2":	" zu �ffnen. Das �ffnen dieses Links erfolgt auf eigenes Risiko. Trotzdem fortfahren?"
+			"header":	"Attention!",
+			"text1":	"You're going to open the link ",
+			"text2":	". This happens on your own risk. Proceed?"
+		}
+	},
+	"zoomFunction": {
+		"zoomIn":		"Zoom in",
+		"zoomFactor":	"Zoom factor",
+		"zoomOut":		"Zoom out"
+	},
+	"name": {
+		"resource": {
+			"gold":		"Gold",
+			"wood":		"Building Material",
+			"wine":		"Wine",
+			"marble":	"Marble",
+			"glass":	"Crystal Glass",
+			"sulfur":	"Sulphur"
+		},
+		"unit": {
+			"swordsman":	"Swordsman",
+			"phalanx":		"Hoplite",
+			"archer":		"Archer",
+			"marksman":		"Sulphur Carabineer",
+			"mortar":		"Mortar",
+			"slinger":		"Slinger",
+			"catapult":		"Catapult",
+			"ram":			"Battering Ram",
+			"steamgiant":	"Steam Giant",
+			"bombardier":	"Balloon-Bombardier",
+			"cook":			"Cook",
+			"medic":		"Doctor",
+			"girocopter":	"Gyrocopter",
+			"spearman":		"Spearman"
+		},
+		"ship": {
+			"ballista":			"Ballista Ship",
+			"catapult":			"Catapult Ship",
+			"flamethrower":		"Fire Ship",
+			"mortar":			"Mortar Ship",
+			"ram":				"Ram Ship",
+			"steamboat":		"Steam Ram",
+			"rocketship":		"Rocket Ship",
+			"submarine":		"Diving Boat",
+			"paddlespeedship":	"Paddle Speedboat",
+			"ballooncarrier":	"Balloon Carrier",
+			"tender":			"Tender",
+			"transport":		"Merchant Ship"
 		}
 	}
 }
