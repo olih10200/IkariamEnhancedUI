@@ -1,11 +1,51 @@
 {
+	"default": {
+		"update": {
+			"notPossible": {
+				"header":	"Keine Aktualisierung m&ouml;glich",
+				"text1":	"Es ist nicht m&ouml;glich, nach Updates f&uuml;r ",
+				"text2":	" zu suchen. Bitte pr&uuml;fe selbst auf Updates f&uuml;r das Script. Die Momentan installierte Version ist ",
+				"text3":	". Diese Nachricht wird in vier Wochen wieder angezeigt."
+			},
+			"possible": {
+				"header":	"Aktualisierung verf&uuml;gbar",
+				"text1":	"Es ist ein Update f&uuml;r ",
+				"text2":	" verf&uuml;gbar.",
+				"text3":	"Zur Zeit ist Version ",
+				"text4":	" installiert. Die neueste Version ist ",
+				"history":	"Versionshistorie",
+				"type": {
+					"feature":	"Neuerung(en)",
+					"bugfix":	"Bugfix(e)",
+					"other":	""
+				},
+				"button": {
+					"install":	"Installieren",
+					"hide":		"Verbergen"
+				}
+			},
+			"noNewExists": {
+				"header":	"Kein Update verf&uuml;gbar",
+				"text1":	"Es ist kein Update f&uuml;r ",
+				"text2":	" verf&uuml;gbar. Die neueste Version ",
+				"text3":	" ist installiert."
+			}
+		},
+		"notification": {
+			"header":	"Informtionen",
+			"button": {
+				"confirm":	"OK",
+				"abort":	"Abbrechen"
+			}
+		}
+	},
 	"settings": {
 		"kiloSep":	".",
 		"decSep":	",",
 		"left2right":	true
 	},
 	"general": {
-		"successful":	"Dein Befehl wurde ausgeführt.",
+		"successful":	"Dein Befehl wurde ausgef&uuml;hrt.",
 		"error":	"Es gab einen Fehler in deiner Anfrage!",
 		"ctrl":		"Strg",
 		"alt":		"Alt",
@@ -37,7 +77,7 @@
 		"label": {
 			"updateActive":			"Automatisch nach Updates suchen",
 			"incomeOnTopActive":		"Einkommen in der Bilanz auch oben anzeigen",
-			"upkeepReductionActive":	"Eine gekürzte Version der Einkommensreduktion anzeigen",
+			"upkeepReductionActive":	"Eine gek&uuml;rzte Version der Einkommensreduktion anzeigen",
 			"zoomActive":			"Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren",
 			"lcMoveActive":			"Ladekreis in Positionsleiste verschieben",
 			"tooltipsAutoActive":		"Tooltips in Allianzmitgliederliste und Milit&auml;rberater automatisch anzeigen",
@@ -59,7 +99,7 @@
 			},
 			"description": {
 				"scaleChildren":	"Beschriftungen und Symbole beim Zoomen in folgenden Ansichten in Normalgr&ouml;&szlig;e belassen:",
-				"accessKeys":		"Folgende Tasten m&uuml;ssen gedrückt sein, um mit der Maus zoomen zu k&ouml;nnen:"
+				"accessKeys":		"Folgende Tasten m&uuml;ssen gedr&uuml;ckt sein, um mit der Maus zoomen zu k&ouml;nnen:"
 			}
 		},
 		"updateIntervals": {
@@ -71,19 +111,5 @@
 			"week2":	"2 Wochen",
 			"week4":	"4 Wochen"
 		}
-	},
-	"update": {
-		"header":	"Aktualisierung verf&uuml;gbar",
-		"text1":	"Es ist ein Update f&uuml;r ",
-		"text2":	" verf&uuml;gbar",
-		"text3":	"Zur Zeit ist Version ",
-		"text4":	" installiert. Die neueste Version ist ",
-		"hist":		"Versionshistorie",
-		"feature":	"Neuerung(en)",
-		"bugfix":	"Bugfix(e)",
-		"other":	"",
-		"install":	"Installieren",
-		"close":	"Schließen",
-		"noNewExist":	"Keine neue Version verfügbar!"
 	}
 }

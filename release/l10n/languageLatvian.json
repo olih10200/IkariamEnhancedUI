@@ -1,0 +1,115 @@
+{
+	"default": {
+		"update": {
+			"notPossible": {
+				"header":	"Nav iespējams atjaunināt",
+				"text1":	"Nav iespējams pārbaudīt atjauninājumu pieejamību ",
+				"text2":	". Lūdzu, pārbaudiet manuāli skripta atjauninājumus. Pašlaik ir uzstādīta versija ",
+				"text3":	". Šis paziņojums atkal parādīsies pēc četrām nedēļām."
+			},
+			"possible": {
+				"header":	"Ir pieejams atjauninājums",
+				"text1":	"Ir pieejams ",
+				"text2":	" atjauninājums.",
+				"text3":	"Pašlaik ir uzstādīta versija ",
+				"text4":	". Jaunākā versija ir ",
+				"history":	"Versijas vēsture:",
+				"type": {
+					"feature":	"Jaunumi",
+					"bugfix":	"Kļūdu labojumi",
+					"other":	""
+				},
+				"button": {
+					"install":	"Instalēt",
+					"hide":		"Paslēpt"
+				}
+			},
+			"noNewExists": {
+				"header":	"Nav pieejams atjauninājums",
+				"text1":	"Nav pieejama jauna versija ",
+				"text2":	". Jaunākā versija ",
+				"text3":	" ir jau uzstādīta."
+			}
+		},
+		"notification": {
+			"header":	"Skripta paziņojumi",
+			"button": {
+				"confirm":	"OK",
+				"abort":	"Atcelt"
+			}
+		}
+	},
+	"settings": {
+		"kiloSep":	",",
+		"decSep":	".",
+		"left2right":	true
+	},
+	"general": {
+		"successful":	"Jūsu rīkojums ir izpildīts.",
+		"error":	"Jūsu veiktajā pieprasījumā radās kļūda.",
+		"ctrl":		"Ctrl",
+		"alt":		"Alt",
+		"shift":	"Shift"
+	},	
+	"balance": {	
+		"income": {	
+			"perHour":	"Ienākumi stundā",
+			"perDay":	"Ienākumi dienā",
+			"start":	"Ienākumi bez samazinājumiem"
+		},
+		"upkeep": {
+			"reason": {
+				"0":	"Kareivji",
+				"1":	"Kara kuģi",
+				"2":	"Kareivji &amp; Kara kuģi"
+			},
+			"basic":	"Pamata izmaksas",
+			"supply":	"Apgādes izmaksas",
+			"result":	"Kopējās izmaksas"
+		}
+	},
+	"optionPanel": {
+		"scripts":	"Skripti",
+		"update":	"Atjauninājumi",
+		"module":	"Moduļi",
+		"zoom":		"Zoom funkcija",
+		"save":		"Saglabāt iestatījumus!",
+		"label": {
+			"updateActive":			"Meklēt atjauninājumus automātiski",
+			"incomeOnTopActive":		"Rādīt ienākumus bilances pārskata augšdaļā",
+			"upkeepReductionActive":	"Rādīt apgādes samazinājumu īso versiju",
+			"zoomActive":			"Aktivizēt zoom funkciju pasaules skatā, salas skatā, pilsētas skatā",
+			"lcMoveActive":			"Pārvietot uz augšējo joslu apli, kas parādās pie procesu apstrādes",
+			"tooltipsAutoActive":		"Rādīt uznirstošos lodziņus alianses biedru skatā un karaspēka padomdevējā automātiski",
+			"hideBirdsActive":		"Paslēpt putnu baru.",
+			"updateInterval":		"Intervāls starp atjauninājumu meklēšanu:",
+			"manualUpdate1":		"Meklēt atjauninājumus \"",
+			"manualUpdate2":		"\"!",
+			"world": {
+				"zoomFactor":		"Zoom pasaules skatā:",
+				"scaleChildren":	"Pasaules skats"
+			},
+			"island": {
+				"zoomFactor":		"Zoom salas skatā:",
+				"scaleChildren":	"Salas skats"
+			},
+			"town": {
+				"zoomFactor":		"Zoom pilsētas skatā:",
+				"scaleChildren":	"Pilsētas skats"
+			},
+			"description": {
+				"scaleChildren":	"Atstāt banerus un simbolus normālā izmērā, kad izmanto zoom funkciju šajā skatā:",
+				"accessKeys":		"Lai veiktu zoom funkciju ar peli, ir jāpietur taustiņš:"
+			}
+		},
+		"updateIntervals": {
+			"hour":		"1 stunda",
+			"hour12":	"12 stundas",
+			"day":		"1 diena",
+			"day3":		"3 dienas",
+			"week":		"1 nedēļa",
+			"week2":	"2 nedēļas",
+			"week4":	"4 nedēļas"
+		}
+	}
+}

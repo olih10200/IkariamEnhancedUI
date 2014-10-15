@@ -1,4 +1,44 @@
 {
+	"default": {
+		"update": {
+			"notPossible": {
+				"header":	"No Update possible",
+				"text1":	"It is not possible to check for updates for ",
+				"text2":	". Please check manually for Updates for the script. The actual installed version is ",
+				"text3":	". This message will appear again in four weeks."
+			},
+			"possible": {
+				"header":	"Update available",
+				"text1":	"There is an update for ",
+				"text2":	" available.",
+				"text3":	"At the moment there is version ",
+				"text4":	" installed. The newest version is ",
+				"history":	"Version History",
+				"type": {
+					"feature":	"Feature(s)",
+					"bugfix":	"Bugfix(es)",
+					"other":	""
+				},
+				"button": {
+					"install":	"Install",
+					"hide":		"Hide"
+				}
+			},
+			"noNewExists": {
+				"header":	"No Update available",
+				"text1":	"There is no new version for ",
+				"text2":	" available. The newest version ",
+				"text3":	" is installed."
+			}
+		},
+		"notification": {
+			"header":	"Script notification",
+			"button": {
+				"confirm":	"OK",
+				"abort":	"Abort"
+			}
+		}
+	},
 	"settings": {
 		"kiloSep":	",",
 		"decSep":	".",
@@ -71,19 +111,5 @@
 			"week2":	"2 weeks",
 			"week4":	"4 weeks"
 		}
-	},
-	"update": {
-		"header":	"Update available",
-		"text1":	"There is an update for ",
-		"text2":	" available",
-		"text3":	"At the moment there is version ",
-		"text4":	" installed. The newest version is ",
-		"hist":		"Version History",
-		"feature":	"Feature(s)",
-		"bugfix":	"Bugfix(es)",
-		"other":	"",
-		"install":	"Install",
-		"close":	"Close",
-		"noNewExist":	"There is no new version available!"
 	}
 }

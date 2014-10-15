@@ -3,28 +3,42 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			6.00
+// @version			7.00
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @resource		languageGerman	http://ikascripts.seite.com/scriptres/74221/v6.00/languageGerman.json
-// @resource		languageEnglish	http://ikascripts.seite.com/scriptres/74221/v6.00/languageEnglish.json
+// @resource		languageGerman	http://resources.ika-scripts.co.cc/74221/v7.00/languageGerman.json
+// @resource		languageEnglish	http://resources.ika-scripts.co.cc/74221/v7.00/languageEnglish.json
+// @resource		languageLatvian	http://resources.ika-scripts.co.cc/74221/v7.00/languageLatvian.json
 // 
-// @history			6.00	Feature: Resizing banners when zooming is possible in city view, too.
-// @history			6.00	Feature: The zoom buttons are available in world view, too.
-// @history			6.00	Feature: Zooming with the mouse scroll is possible again (now with key, standard is ctrl).
-// @history			6.00	Feature: Changes in the option panel due to the new zooming function features.
-// @history			6.00	Bugfix: If resizing is enabled, zooming with the buttons will resize the banners, too.
-// @history			6.00	Bugfix: The chat will not cause to much executions of script functions.
+// @bug				Opera	Zooming with the mouse is only possible with "Alt" or without any key. No fix possible as I know.
+// @bug				Chrome	No good solution for zooming with mouse. Default Ikariam scroll zoom function can not be changed.
+// @bug				Chrome	Some smaller graphical bugs caused by a second execution of Ikariam functions by the script.
+// @bug				Chrome	Latvian special chars are not shown correct.
+// @bug				All		The selected island is not centered in world view.
+// @bug				All		If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			7.00	Feature: Cross-browser compatibility. (Firefox, Chrome, Opera)
+// @history			7.00	Feature: Latvian translation - thanks to Draxo. (mobile & desktop)
+// @history			7.00	Feature: Possibility to hide the update hint for a new script version. (mobile & desktop)
+// @history			7.00	Bugfix: Resizing the owner state in world view was broken. (desktop)
+// @history			7.00	Some changes in the code for easier copying of functions which should be used by more than one script.
+// 
+// @history			6.00	Feature: Resizing banners when zooming is possible in city view, too. (desktop)
+// @history			6.00	Feature: The zoom buttons are available in world view, too. (desktop)
+// @history			6.00	Feature: Zooming with the mouse scroll is possible again (now with key, standard is ctrl). (desktop)
+// @history			6.00	Feature: Changes in the option panel due to the new zooming function features. (desktop)
+// @history			6.00	Bugfix: If resizing is enabled, zooming with the buttons will resize the banners, too. (desktop)
+// @history			6.00	Bugfix: The chat will not cause to much executions of script functions. (desktop)
 // @history			6.00	The language texts are integrated as resources, so that there is shorter code.
 // @history			6.00	Replace the GM_* functions by myGM.* to expand them easy and add new.
 // 
-// @history			5.00	Feature: Possibility to hide only the bird swarm animation.
-// @history			5.00	Feature: Easier upkeep reduction table.
-// @history			5.00	Feature: Enhanced zoom function using the Ikariam zoom function.
+// @history			5.00	Feature: Possibility to hide only the bird swarm animation. (desktop)
+// @history			5.00	Feature: Easier upkeep reduction table. (mobile & desktop)
+// @history			5.00	Feature: Enhanced zoom function using the Ikariam zoom function. (desktop)
 // @history			5.00	Due to the use of Ikariam functions the code could be reduced.
 // @history			5.00	Code enhancements for shorter code.
 // 
@@ -56,7 +70,7 @@
 // @history			2.05	Bugfix: Problem with negative numbers and 0.4.2.4 fixed.
 //
 // @history			2.04	Feature: Own script updater.
-// @history			2.04	Bugfix:	Remove everything what refered to other scripts.
+// @history			2.04	Bugfix: Remove everything what refered to other scripts.
 //
 // @history			2.03	Feature: New script updater.
 //
@@ -74,14 +88,18 @@
 // ==/UserScript==
 
 /******************************************************************************************************************
+*******************************************************************************************************************
+***                                                                                                             ***
 *** The update function which is used in the script was developed by PhasmaExMachina and adapted by me (Tobbe). ***
+***                                                                                                             ***
+*******************************************************************************************************************
 ******************************************************************************************************************/
 
 /**
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'6.00',
+	version:	'7.00',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -89,21 +107,32 @@ const scriptInfo = {
 };
 
 /**
- * Sets unsafeWindow to win for easier access.
+ * Information about the language.
  */
-var win = unsafeWindow;
+const languageInfo = {
+	implemented:	new Array('English', 'German', 'Latvian'),
+	defaultText:	{"default":{"update":{"notPossible":{"header":"No Update possible","text1":"It is not possible to check for updates for ","text2":". Please check manually for Updates for the script. The actual installed version is ","text3":". This message will appear again in four weeks."},"possible":{"header":"Update available","text1":"There is an update for ","text2":" available.","text3":"At the moment there is version ","text4":" installed. The newest version is ","history":"Version History","type":{"feature":"Feature(s)","bugfix":"Bugfix(es)","other":""},"button":{"install":"Install","hide":"Hide"}},"noNewExists":{"header":"No Update available","text1":"There is no new version for ","text2":" available. The newest version ","text3":" is installed."}},"notification":{"header":"Script notification","button":{"confirm":"OK","abort":"Abort"}}},"settings":{"kiloSep":",","decSep":".","left2right":true},"general":{"successful":"Your order has been carried out.","error":"There was an error in your request.","ctrl":"Ctrl","alt":"Alt","shift":"Shift"},"balance":{"income":{"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep":{"reason":{"0":"Troops","1":"Ships","2":"Troops &amp; Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"optionPanel":{"scripts":"Scripts","update":"Update","module":"Modules","zoom":"Zoom function","save":"Save settings!","label":{"updateActive":"Search for updates automatically","incomeOnTopActive":"Show income on top in Balance view","upkeepReductionActive":"Show a short version of the upkeep reduction","zoomActive":"Activate zoom in world view, island view, town view","lcMoveActive":"Move loading circle to position bar","tooltipsAutoActive":"Show tooltips in alliance mebers view and military advisor automatically","hideBirdsActive":"Hide the bird swarm.","updateInterval":"Interval to search for updates:","manualUpdate1":"Search for updates for \"","manualUpdate2":"\"!","world":{"zoomFactor":"Zoom worldmap:","scaleChildren":"Worldmap"},"island":{"zoomFactor":"Zoom island view:","scaleChildren":"Island view"},"town":{"zoomFactor":"Zoom town view:","scaleChildren":"Town view"},"description":{"scaleChildren":"Let banners and symbols in normal size when zooming when zooming in this view:","accessKeys":"This keys must be pressed to zoom with the mouse:"}},"updateIntervals":{"hour":"1 hour","hour12":"12 hours","day":"1 day","day3":"3 days","week":"1 week","week2":"2 weeks","week4":"4 weeks"}}},
+};
+
+/**********************************************************
+***********************************************************
+*****                                                 *****
+***** Start of functions / variables for all Scripts. *****
+*****                                                 *****
+***********************************************************
+**********************************************************/
 
 /**
- * Storage for the unsafeWindow.ikariam funtion.
+ * Sets unsafeWindow / window to win for easier access.
  */
-var ika;
+var win = typeof unsafeWindow != 'undefined' ? unsafeWindow : window;
 
-/***********************************************
-*** Start of the "debugging settings block". ***
-***********************************************/
+/**************************
+*** Debugging settings. ***
+**************************/
 
 // For more information about commands that are available for the Firebug console see http://getfirebug.com/wiki/index.php/Console_API.
-if(scriptInfo.debug) {
+if(scriptInfo.debug && win.console) {
 	var conTmp = win.console;
 } else {
 	var conTmp = {
@@ -134,20 +163,169 @@ if(scriptInfo.debug) {
 /**
  * Debugging console.
  */
-const con		= conTmp;
+const con = conTmp;
 
-/*********************************************
-*** End of the "debugging settings block". ***
-*********************************************/
+/********************************
+*** Functions for all Strings ***
+********************************/
 
 /**
- * myGM for more functions than the GM_* functions. (use myGM.* instead of GM_*)
+ * Replaces characters or whitespaces at the beginning of a string.
+ * 
+ * @param	String	toRemove
+ *   A string containing the characters to remove (optional, if not set: trim whitespaces).
+ * 
+ * @return String
+ *   The trimmed string.
+ */
+String.prototype.ltrim = function(toRemove) {
+	// Is there a string with the characters to remove?
+	var special = !!toRemove;
+	
+	// Return the trimmed string.
+	return special ? this.replace(new RegExp('^[' + toRemove + ']+'), '') : this.replace(/^\s+/, '');
+};
+
+/**
+ * Replaces characters or whitespaces at the end of a string.
+ * 
+ * @param	String	toRemove
+ *   A string containing the characters to remove (optional, if not set: trim whitespaces).
+ * 
+ * @return String
+ *   The trimmed string.
+ */
+String.prototype.rtrim = function(toRemove) {
+	// Is there a string with the characters to remove?
+	var special = !!toRemove;
+	
+	// Return the trimmed string.
+	return special ? this.replace(new RegExp('[' + toRemove + ']+$'), '') : this.replace(/\s+$/, '');
+};
+
+/**
+ * Replaces characters or whitespaces at the beginning and end of a string.
+ * 
+ * @param	String	toRemove
+ *   A string containing the characters to remove (optional, if not set: trim whitespaces).
+ * 
+ * @return String
+ *   The trimmed string.
+ */
+String.prototype.trim = function (toRemove) {
+	// Return the trimmed string.
+	return this.ltrim(toRemove).rtrim(toRemove);
+};
+
+/********************************
+*** myGM / Updater / Language ***
+********************************/
+
+/**
+ * myGM for cross-browser compatibility of the GM_* functions. (use myGM.* instead of GM_*)
+ * Also there are general used functions stored.
  */
 myGM = {
+	/**
+	 * If it is possible to use the default GM_*Value functions, true, otherwise false.
+	 */
+	canUseGmStorage: false,
+	
+	/**
+	 * If it is possible to use the default GM_getResourceText function, true, otherwise false.
+	 */
+	canUseGmRessource: false,
+	
+	/**
+	 * If it is possible to use the default GM_xmlhttpRequest function, true, otherwise false.
+	 */
+	canUseGmXhr: false,
+	
+	/**
+	 * If it is possible to use the localStorage, true, otherwise false.
+	 */
+	canUseLocalStorage: false,
+	
+	/**
+	 * The prefix which schuld be added to the values stored in localStorage / cookies.
+	 */
+	prefix: '',
+	
 	/**
 	 * Storage for the style sheets which will be added by the script.
 	 */
 	styleSheets: new Array(),
+	
+	/**
+	 * Storage for the notification id.
+	 */
+	notificationId: 0,
+	
+	/**
+	 * Init myGM.
+	 */
+	init: function() {
+		// Set the prefix for the script.
+		this.prefix				= 'script' + scriptInfo.id;
+		
+		// Set the possibility to use the different storages.
+		this.canUseLocalStorage	= !!win.localStorage;
+		this.canUseGmStorage	= !(typeof GM_getValue == 'undefined' || (typeof GM_getValue.toString == 'function' && GM_getValue.toString().indexOf('not supported') > -1))
+									&& !(typeof GM_setValue == 'undefined' || (typeof GM_setValue.toString == 'function' && GM_setValue.toString().indexOf('not supported') > -1))
+									&& !(typeof GM_deleteValue == 'undefined' || (typeof GM_deleteValue.toString == 'function' && GM_deleteValue.toString().indexOf('not supported') > -1))
+									&& !(typeof GM_listValues == 'undefined' || (typeof GM_listValues.toString == 'function' && GM_listValues.toString().indexOf('not supported') > -1));
+		
+		// Set the possibility to use the GM_ressource.
+		this.canUseGmRessource	= !(typeof GM_getResourceText == 'undefined' || (typeof GM_getResourceText.toString == 'function' && GM_getResourceText.toString().indexOf('not supported') > -1));
+		
+		// Set the possibillity to use the GM_xhr.
+		this.canUseGmXhr		= !(typeof GM_xmlhttpRequest == 'undefined' || (typeof GM_xmlhttpRequest.toString == 'function' && GM_xmlhttpRequest.toString().indexOf('not supported') > -1));
+		
+		// Set the close image. It is stored as a data URI. If you copy it to your browser, a red cross (16px * 16px) will be shown.
+		var closeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIhSURBVDjLlZPrThNRFIWJicmJz6BWiYbIkYDEG0JbBiitDQgm0PuFXqSAtKXtpE2hNuoPTXwSnwtExd6w0pl2OtPlrphKLSXhx07OZM769qy19wwAGLhM1ddC184+d18QMzoq3lfsD3LZ7Y3XbE5DL6Atzuyilc5Ciyd7IHVfgNcDYTQ2tvDr5crn6uLSvX+Av2Lk36FFpSVENDe3OxDZu8apO5rROJDLo30+Nlvj5RnTlVNAKs1aCVFr7b4BPn6Cls21AWgEQlz2+Dl1h7IdA+i97A/geP65WhbmrnZZ0GIJpr6OqZqYAd5/gJpKox4Mg7pD2YoC2b0/54rJQuJZdm6Izcgma4TW1WZ0h+y8BfbyJMwBmSxkjw+VObNanp5h/adwGhaTXF4NWbLj9gEONyCmUZmd10pGgf1/vwcgOT3tUQE0DdicwIod2EmSbwsKE1P8QoDkcHPJ5YESjgBJkYQpIEZ2KEB51Y6y3ojvY+P8XEDN7uKS0w0ltA7QGCWHCxSWWpwyaCeLy0BkA7UXyyg8fIzDoWHeBaDN4tQdSvAVdU1Aok+nsNTipIEVnkywo/FHatVkBoIhnFisOBoZxcGtQd4B0GYJNZsDSiAEadUBCkstPtN3Avs2Msa+Dt9XfxoFSNYF/Bh9gP0bOqHLAm2WUF1YQskwrVFYPWkf3h1iXwbvqGfFPSGW9Eah8HSS9fuZDnS32f71m8KFY7xs/QZyu6TH2+2+FAAAAABJRU5ErkJggg%3D%3D';
+		
+		// Set the notification style.
+		this.addStyle(
+				"." + this.prefix + "notificationBackground				{ z-index: 1000000000000; position: fixed; visibility: visible; top: 0px; left: 0px; width: 100%; height: 100%; padding: 0; background-color: #000; opacity: .7; } \
+				 ." + this.prefix + "notificationPanelContainer			{ z-index: 1000000000001; position: fixed; visibility: visible; top: 100px; left: 50%; width: 500px; height: 370px; margin-left: -250px; padding: 0; text-align: left; color: #333; font: 12px Arial,Helvetica,sans-serif; } \
+				 ." + this.prefix + "notificationPanel					{ position: relative; top: 0px; left: 0px; background-color: transparent; border: 0 none; overflow: hidden; } \
+				 ." + this.prefix + "notificationPanelHeader			{ height: 39px; background: none repeat scroll 0 0 transparent; font-weight: bold; line-height: 2; white-space: nowrap; } \
+				 ." + this.prefix + "notificationPanelHeaderL			{  } \
+				 ." + this.prefix + "notificationPanelHeaderR			{  } \
+				 ." + this.prefix + "notificationPanelHeaderM			{ height: 24px; background-color: #999; padding: 5px; border: 3px solid #000; border-radius: 5px; color: #811709; line-height: 1.34em; font-size: 15pt; } \
+				 ." + this.prefix + "notificationPanelBody				{ max-height: 311px; height: 100%; background: none repeat scroll 0 0 transparent; } \
+				 ." + this.prefix + "notificationPanelBodyL				{  } \
+				 ." + this.prefix + "notificationPanelBodyR				{  } \
+				 ." + this.prefix + "notificationPanelBodyM				{ height: 100%; background-color: #F5F5F5; border-left: 3px solid #000; border-right: 3px solid #000; border-top-left-radius: 5px; border-top-right-radius: 5px; padding: 0 10px; font-size: 14px; } \
+				 ." + this.prefix + "notificationPanelBodyMTop			{ max-height: 100px; line-height: 2; } \
+				 ." + this.prefix + "notificationPanelBodyMTop b		{ line-height: 3.5; font-size: 110%; } \
+				 ." + this.prefix + "notificationPanelBodyM a			{ color: #811709; font-weight: bold; } \
+				 ." + this.prefix + "notificationPanelBodyM h2			{ font-weight: bold; } \
+				 ." + this.prefix + "notificationPanelBodyMContent		{ max-height: 270px; padding: 10px; background-color: #FFF; border: 1px dotted #4D4D4D; font: 14px Arial,Helvetica,sans-serif; color: #333; border-collapse: separate; overflow-y:auto; } \
+				 ." + this.prefix + "notificationPanelBodyMBottom		{ max-height: 170px; padding: 10px; background-color: #FFF; border: 1px dotted #4D4D4D; font: 14px Arial,Helvetica,sans-serif; color: #333; border-collapse: separate; overflow-y:auto; } \
+				 ." + this.prefix + "notificationPanelBodyPlaceholder	{ height: 20px; } \
+				 ." + this.prefix + "notificationPanelFooter			{ height: 20px; background: none repeat scroll 0 0 transparent; } \
+				 ." + this.prefix + "notificationPanelFooterL			{  } \
+				 ." + this.prefix + "notificationPanelFooterR			{  } \
+				 ." + this.prefix + "notificationPanelFooterM			{ background-color: #F5F5F5; border-bottom: 3px solid #000; border-left: 3px solid #000; border-right: 3px solid #000; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; padding: 3px 0 2px 3px; font-size: 77%; } \
+				 ." + this.prefix + "notificationPanelClose				{ cursor: pointer; position: absolute; top: 10px; right: 10px; width: 16px; height: 16px; background-image: url('" + closeImage + "'); } \
+				 ." + this.prefix + "notificationPanelButton			{ background-color: #DADEDE; bottom: -4px; position: absolute; border-color: #C0C0C0 #4D4D4D #4D4D4D #C0C0C0; border-style: double; border-width: 3px; border-radius: 5px; cursor: pointer; display: inline; font-weight: bold; margin: 10px auto; padding: 2px 10px; text-align: center; font-size: 12px; left: 50%; width: 100px; } \
+				 ." + this.prefix + "notificationPanelButton:hover		{ color: #444; } \
+				 ." + this.prefix + "notificationPanelButton:active		{ border-color: #4D4D4D #C0C0C0 #C0C0C0 #4D4D4D; border-style: double; border-width: 3px; padding: 3px 10px 1px; } \
+				 ." + this.prefix + "notificationPanelButtonConfirm		{ margin-left: -105px; } \
+				 ." + this.prefix + "notificationPanelButtonAbort		{ margin-left: 5px; }",
+				'notification'
+			);
+		
+		// Set the updater style.
+		this.addStyle(
+				"." + this.prefix + "updateTable			{ border-collapse: separate; border-spacing: 2px; } \
+				 ." + this.prefix + "updateDataType			{ width: 100px; padding: 5px 0px 5px 5px; border: 1px solid #999; } \
+				 ." + this.prefix + "updateDataInfo			{ width: 300px; padding: 5px 5px 5px 20px; border: 1px solid #999; } \
+				 ." + this.prefix + "updateDataInfo ul li	{ list-style: disc outside none; }",
+				'updater'
+			);
+	},
 	
 	/**
 	 * Store a value specified by a key.
@@ -158,12 +336,37 @@ myGM = {
 	 *   The value to store.
 	 */
 	setValue: function(key, value) {
-		// Store the value.
-		GM_setValue(key, value);
+		// If the use of the default GM_setValue ist possible, use it.
+		if(this.canUseGmStorage) {
+			// Store the value.
+			GM_setValue(key, value);
+		
+		// Otherwise use the local storage if possible.
+		} else if(this.canUseLocalStorage) {
+			// Store the value.
+			win.localStorage.setItem(this.prefix + key, value);
+		
+		// Otherwise use cookies.
+		} else {
+			// Prepare the cookie name and value.
+			var data	= escape(this.prefix + key) + '=' + escape(win.JSON.stringify(value));
+			
+			// Set the expire date to January 1st, 2020.
+			var expire	= 'expires=' + (new Date(2020, 0, 1, 0, 0, 0, 0)).toGMTString();
+			
+			// Set the path to root.
+			var path	= 'path=/';
+			
+			// Made the cookie accessible from all servers.
+			var domain	= 'domain=ikariam.com';
+			
+			// Set the cookie.
+			document.cookie = data + ';' + expire + ';' + path + ';' + domain;
+		}
 	},
 	
 	/**
-	 * Get a value from the local storage and return it.
+	 * Get a value and return it.
 	 * 
 	 * @param	String	key
 	 *   The key of the value.
@@ -174,8 +377,45 @@ myGM = {
 	 *   The stored value.
 	 */
 	getValue: function(key, defaultValue) {
-		// Get the value.
-		return GM_getValue(key, defaultValue);
+		// Storage for the value.
+		var value = defaultValue;
+		
+		// If the use of the default GM_getValue ist possible, use it.
+		if(this.canUseGmStorage) {
+			// Get the value.
+			value = GM_getValue(key, defaultValue);
+		
+		// Otherwise use the local storage if possible.
+		} else if(this.canUseLocalStorage) {
+			// Get the value.
+			valueTmp = win.localStorage.getItem(this.prefix + key);
+			
+			// If the value is not set, let the default value set.
+			if(valueTmp) {
+				value = valueTmp;
+			}
+		
+		// Otherwise use cookies.
+		} else {
+			// Get all cookies.
+			var allCookies = document.cookie.split("; ");
+			
+			// Loop over all cookies.
+			for(var i = 0; i < allCookies.length; i++) {
+				// Get the key and value of a cookie.
+				var oneCookie = allCookies[i].split("=");
+				
+				// If the key is the correct key, get the value.
+				if(oneCookie[0] == escape(this.prefix + key)) {
+					// Get the value and abort the loop.
+					value = unescape(oneCookie[1]);
+					break;
+				}
+			}
+		}
+		
+		// Return the value (parsed for the correct return type).
+		return win.JSON.parse(value);
 	},
 	
 	/**
@@ -185,8 +425,33 @@ myGM = {
 	 *   The key of the value.
 	 */
 	deleteValue: function(key) {
-		// Delete the value.
-		GM_deleteValue(key);
+		// If the use of the default GM_deleteValue ist possible, use it.
+		if(this.canUseGmStorage) {
+			// Delete the value.
+			GM_deleteValue(key);
+		
+		// Otherwise use the local storage if possible.
+		} else if(this.canUseLocalStorage) {
+			// Remove the value.
+			win.localStorage.removeItem(this.prefix + key);
+		
+		// Otherwise use cookies.
+		} else {
+			// Prepare the cookie name.
+			var data	= escape(this.prefix + key) + '=';
+			
+			// Set the expire date to January 1st, 2000 (this will delete the cookie).
+			var expire	= 'expires=' + (new Date(2000, 0, 1, 0, 0, 0, 0)).toGMTString();
+			
+			// Set the path to root.
+			var path	= 'path=/';
+			
+			// Made the cookie accessible from all servers.
+			var domain	= 'domain=ikariam.com';
+			
+			// Set the cookie.
+			document.cookie = data + ';' + expire + ';' + path + ';' + domain;
+		}
 	},
 	
 	/**
@@ -196,8 +461,46 @@ myGM = {
 	 *   The array with all keys.
 	 */
 	listValues: function() {
-		// Store the key(s) to the array.
-		return GM_listValues();
+		// Create an array for the storage of the values keys.
+		var key = new Array();
+		
+		// If the use of the default GM_listValues ist possible, use it.
+		if(this.canUseGmStorage) {
+			// Store the key(s) to the array.
+			key = GM_listValues();
+		
+		// Otherwise use the local storage if possible.
+		} else if(this.canUseLocalStorage) {
+			// Loop over all stored values.
+			for(var i = 0; i < win.localStorage.length; i++) {
+				// Get the key name of the key with the number i.
+				var keyName = win.localStorage.key(i);
+
+				// If the value is set by the script, push the key name to the array.
+				if(keyName.indexOf(this.prefix) != -1) {
+					key.push(keyName.replace(this.prefix, ''));
+				}
+			}
+		
+		// Otherwise use cookies.
+		} else {
+			// Get all cookies.
+			var allCookies = document.cookie.split("; ");
+			
+			// Loop over all cookies.
+			for(var i = 0; i < allCookies.length; i++) {
+				// Get the key name of a cookie.
+				var keyName = unescape(allCookies[i].split("=")[0]);
+				
+				// If the key value is set by the script, push the key name to the array.
+				if(keyName.indexOf(this.prefix) != -1) {
+					key.push(keyName.replace(this.prefix, ''));
+				}
+			}
+		}
+
+		// Return all keys.
+		return key;
 	},
 	
 	/**
@@ -207,23 +510,33 @@ myGM = {
 	 *   The style rules to be set.
 	 * @param	String	id
 	 *   An id for the style set, to have the possibility to delete it. (optional, if none is set, the stylesheet is not stored)
+	 * @param	boolean	overwrite
+	 *   If a style with id should overwrite an existing style.
 	 * 
 	 * @return	boolean
 	 *    If the stylesheet was stored with the id.
 	 */
-	addStyle: function(styleRules, id) {
+	addStyle: function(styleRules, id, overwrite) {
 		// If the element was stored is saved here.
 		storedWithId = false;
 		
-		// Create a new style element and set the style rules.
-		var style = General.addElement('style', document.head);
-		style.type	= 'text/css';
-		style.innerHTML	= styleRules;
+		// If overwrite, remove the old style sheet.
+		if(overwrite && overwrite == true) {
+			this.removeStyle(id);
+		}
 		
-		// If an id is set and there is no other style sheet with that id, store it.
-		if(id && !this.styleSheets[id]) {
-			this.styleSheets[id] = style;
-			storedWithId = true;
+		// If the stylesheet doesn't exists.
+		if(!id || (id && !this.styleSheets[id])) {
+			// Create a new style element and set the style rules.
+			var style = this.addElement('style', document.head);
+			style.type	= 'text/css';
+			style.innerHTML	= styleRules;
+			
+			// If an id is set, store it.
+			if(id) {
+				this.styleSheets[id] = style;
+				storedWithId = true;
+			}
 		}
 		
 		// Return if the stylesheet was stored with an id.
@@ -266,8 +579,8 @@ myGM = {
 	 *   The name of the ressource to parse.
 	 */
 	getResourceParsed: function(name) {
-		// Store the ressource text to txt.
-		var txt = GM_getResourceText(name);
+		// Storage for the response text.
+		var responseText = '';
 		
 		// Function for safer parsing.
 		var safeParse = function(key, value) {
@@ -280,8 +593,25 @@ myGM = {
 							return value;
 						};
 		
-		// Return the parsed text.
-		return win.JSON.parse(txt, safeParse);
+		// If the use of the default GM_getRessourceText ist possible, use it.
+		if(this.canUseGmRessource) {
+			// Set the parsed text.
+			responseText = GM_getResourceText(name);
+			
+		// Otherwise perform a xmlHttpRequest.
+		} else {
+			// Perform the xmlHttpRequest.
+			responseText = this.xhr({
+				method: 'GET',
+				url: 'http://resources.ika-scripts.co.cc/' + scriptInfo.id + '/v' + scriptInfo.version + '/' + name + '.json',
+				headers: { 'User-agent': navigator.userAgent, 'Accept': 'text/html' },
+				synchronous: true,
+				onload: function(response) { return false; },
+			});
+		}
+		
+		// Return the parsed resource text.
+		return win.JSON.parse(responseText, safeParse);
 	},
 	
 	/**
@@ -291,41 +621,153 @@ myGM = {
 	 *   The arguments the request needs. (specified here: http://wiki.greasespot.net/GM_xmlhttpRequest)
 	 */
 	xhr: function(args) {
-		// Sent the request and return the result.
-		GM_xmlhttpRequest(args);
-	},
-};
-
-/**
- * General functions.
- */
-General = {
-	/**
-	 * Init the script.
-	 */
-	init: function() {
-		// Set unsafeWindow.ikariam to ika for easier access.
-		ika = unsafeWindow.ikariam;
-
-		// Get the id of the body.
-		var viewId = document.body.id;
+		// Storage for the result of the request.
+		var responseText;
 		
-		// Get the name of the view depending on the body id.
-		switch(viewId) {
-			case 'worldmap_iso':
-				View.name = 'world';
-			  break;
+		// Check if all required data is given.
+		if(!args.method || !args.url || !args.onload) {
+			return false;
+		}
+		
+		// If the use of the default GM_xmlhttpRequest ist possible, use it.
+		if(this.canUseGmXhr) {
+			// Sent the request.
+			var response = GM_xmlhttpRequest(args);
 			
-			case 'island':
-				View.name = 'island';
-			  break;
+			// Get the response text.
+			responseText = response.responseText;
+		
+		// Otherwise show a hint for the missing possibility to fetch the data.
+		} else {
+			// Storage if the link fetches metadata from userscripts.org
+			var usoUpdate	= (args.url.search(/^http:\/\/userscripts.org\/scripts\/source\/[0-9]+\.meta\.js$/i) != -1);
+			var isJSON		= (args.url.search(/\.json$/i) != -1);
 			
-			case 'city':
-				View.name = 'town';
-			  break;
+			// If it is a metadata request.
+			if(usoUpdate) {
+				// Set the update interval to max.
+				this.setValue('updater_updateInterval', 28 * 24 * 60 * 60);
+				
+				// Set the notification text.
+				var notificationText = {
+					header:	Language.$('default_update_notPossible_header'),
+					body:	Language.$('default_update_notPossible_text1') + '<a href="http://userscripts.org/scripts/show/' + scriptInfo.id + '" target="_blank" >' + scriptInfo.name + '</a>' + Language.$('default_update_notPossible_text2') + scriptInfo.version + Language.$('default_update_notPossible_text3'),
+				};
+				
+				// Show a notification.
+				this.notification(notificationText);
+				
+				responseText = true;
 			
-			default:
-			  break;
+			// Otherwise if it is JSON.
+			} else if(isJSON) {
+				// Do the request with a string indicating the error.
+				args.onload('{ "is_error": true }');
+				
+				// Return a string indicating the error.
+				responseText = '{ "is_error": true }';
+			
+			// Otherwise.
+			} else {
+				responseText = false;
+			}
+		}
+		
+		// Return the responseText.
+		return responseText;
+	},
+	
+	/**
+	 * Shows a notification to the user.
+	 * 
+	 * Possible notification texts:
+	 *   text.header (optional)
+	 *   text.body or text.bodyTop & text.bodyBottom
+	 *   text.confirm (optional)
+	 *   text.abort (optional)
+	 * 
+	 * @param	String[]	text
+	 *   The notification texts.
+	 * @param	function[]	callback
+	 *   The callbacks for confirm and abort. (optional, default: close panel)
+	 */
+	notification: function(text, callback) {
+		// Get the notification id.
+		this.notificationId += 1;
+		var notificationId = this.notificationId;
+		
+		// Create the background and the container.
+		var notificationBackground			= myGM.addElement('div', document.body, 'notificationBackground' + notificationId, 'notificationBackground', null, true);
+		var notificationPanelContainer		= myGM.addElement('div', document.body, 'notificationPanelContainer' + notificationId, 'notificationPanelContainer', null, true);
+		var notificationPanel				= myGM.addElement('div', notificationPanelContainer, 'notificationPanel' + notificationId, 'notificationPanel', null, true);
+		
+		// Create the notification panel header.
+		var notificationPanelHeader			= myGM.addElement('div', notificationPanel, 'notificationPanelHeader' + notificationId, 'notificationPanelHeader', null, true);
+		var notificationPanelHeaderL		= myGM.addElement('div', notificationPanelHeader, 'notificationPanelHeaderL' + notificationId, 'notificationPanelHeaderL', null, true);
+		var notificationPanelHeaderR		= myGM.addElement('div', notificationPanelHeaderL, 'notificationPanelHeaderR' + notificationId, 'notificationPanelHeaderR', null, true);
+		var notificationPanelHeaderM		= myGM.addElement('div', notificationPanelHeaderR, 'notificationPanelHeaderM' + notificationId, 'notificationPanelHeaderM', null, true);
+		
+		// Create the notification panel body.
+		var notificationPanelBody			= myGM.addElement('div', notificationPanel, 'notificationPanelBody' + notificationId, 'notificationPanelBody', null, true);
+		var notificationPanelBodyL			= myGM.addElement('div', notificationPanelBody, 'notificationPanelBodyL' + notificationId, 'notificationPanelBodyL', null, true);
+		var notificationPanelBodyR			= myGM.addElement('div', notificationPanelBodyL, 'notificationPanelBodyR' + notificationId, 'notificationPanelBodyR', null, true);
+		var notificationPanelBodyM			= myGM.addElement('div', notificationPanelBodyR, 'notificationPanelBodyM' + notificationId, 'notificationPanelBodyM', null, true);
+		if(text.body) {
+			var notificationPanelBodyMContent	= myGM.addElement('div', notificationPanelBodyM, 'notificationPanelBodyMContent' + notificationId, 'notificationPanelBodyMContent', null, true);
+		} else {
+			var notificationPanelBodyMTop		= myGM.addElement('div', notificationPanelBodyM, 'notificationPanelBodyMTop' + notificationId, 'notificationPanelBodyMTop', null, true);
+			var notificationPanelBodyMBottom	= myGM.addElement('div', notificationPanelBodyM, 'notificationPanelBodyMBottom' + notificationId, 'notificationPanelBodyMBottom', null, true);
+		}
+		var notificationPanelBodyPlaceholder	= myGM.addElement('div', notificationPanelBodyM, 'notificationPanelBodyPlaceholder' + notificationId, 'notificationPanelBodyPlaceholder', null, true);
+		
+		// Create the notification panel footer.
+		var notificationPanelFooter			= myGM.addElement('div', notificationPanel, 'notificationPanelFooter' + notificationId, 'notificationPanelFooter', null, true);
+		var notificationPanelFooterL		= myGM.addElement('div', notificationPanelFooter, 'notificationPanelFooterL' + notificationId, 'notificationPanelFooterL', null, true);
+		var notificationPanelFooterR		= myGM.addElement('div', notificationPanelFooterL, 'notificationPanelFooterR' + notificationId, 'notificationPanelFooterR', null, true);
+		var notificationPanelFooterM		= myGM.addElement('div', notificationPanelFooterR, 'notificationPanelFooterM' + notificationId, 'notificationPanelFooterM', null, true);
+		
+		// Create the confirm button.
+		var notificationPanelConfirm		= myGM.addElement('input', notificationPanel, 'notificationPanelConfirm' + notificationId, new Array('notificationPanelButton', 'notificationPanelButtonConfirm'), null, true);
+		notificationPanelConfirm.type		= 'button';
+		notificationPanelConfirm.value		= text.confirm ? text.confirm : Language.$('default_notification_button_confirm');
+		
+		// Create the abort button.
+		var notificationPanelAbort			= myGM.addElement('input', notificationPanel, 'notificationPanelAbort' + notificationId, new Array('notificationPanelButton', 'notificationPanelButtonAbort'), null, true);
+		notificationPanelAbort.type			= 'button';
+		notificationPanelAbort.value		= text.abort ? text.abort : Language.$('default_notification_button_abort');
+		
+		// Insert the texts into header, body and footer.
+		notificationPanelHeaderM.innerHTML			= (text.header ? text.header : Language.$('default_notification_header')) + '<div id="' + this.prefix + 'notificationPanelClose' + notificationId + '" class="' + this.prefix + 'notificationPanelClose"></div>';
+		notificationPanelFooterM.innerHTML			= scriptInfo.name + ' v' + scriptInfo.version;
+		if(text.body) {
+			notificationPanelBodyMContent.innerHTML	= text.body;
+		} else {
+			notificationPanelBodyMTop.innerHTML		= text.bodyTop ? text.bodyTop : '';
+			notificationPanelBodyMBottom.innerHTML	= text.bodyBottom ? text.bodyBottom : '';
+		}
+		
+		// Function to close the notification panel.
+		var closeNotificationPanel = function() {
+			// Remove the notification background.
+			document.body.removeChild(myGM.$('#' + myGM.prefix + 'notificationBackground' + notificationId));
+			
+			// Remove the notification panel.
+			document.body.removeChild(myGM.$('#' + myGM.prefix + 'notificationPanelContainer' + notificationId));
+		};
+		
+		// Add event listener to the buttons to close / install.
+		this.$('#' + this.prefix + 'notificationPanelClose' + notificationId).addEventListener('click', closeNotificationPanel, false);
+		
+		if(callback && callback.confirm) {
+			notificationPanelConfirm.addEventListener('click', function() { closeNotificationPanel(); callback.confirm(); }, false);
+		} else {
+			notificationPanelConfirm.addEventListener('click', closeNotificationPanel, false);
+		}
+		
+		if(callback && callback.abort) {
+			notificationPanelAbort.addEventListener('click', function() { closeNotificationPanel(); callback.abort(); }, false);
+		} else {
+			notificationPanelAbort.addEventListener('click', closeNotificationPanel, false);
 		}
 	},
 	
@@ -364,6 +806,519 @@ General = {
 	},
 	
 	/**
+	 * Creates a new element and adds it to a parent.
+	 * 
+	 * @param	String					type
+	 *   The type of the new element.
+	 * @param	element					parent
+	 *   The parent of the new element.
+	 * @param	int						id
+	 *   The last part of the id of the element. (optional, if not set, no id will be set)
+	 * @param	String || String[]		classes
+	 *   The class(es) of the element. (optional, if not set, no class will be set)
+	 * @param	mixed[]					style
+	 *   The styles of the element. (optional, if not set, no style will be set)
+	 * @param	boolean || boolean[]	hasPrefix
+	 *   If no prefix should be used. (optional, if not set, a prefix will be used for id and no prefix will be used for classes)
+	 * @param	element					nextSib
+	 *   The next sibling of the element. (optional, if not set, the element will be added at the end)
+	 * 
+	 * @return	element
+	 *   The new element.
+	 */
+	addElement: function(type, parent, id, classes, style, hasPrefix, nextSib) {
+		// Create the new Element.
+		var newElement = document.createElement(type);
+		
+		// If there is a id, set it.
+		if(id) {
+			// Get the id prefix.
+			var idPrefix = (hasPrefix && (hasPrefix == false || (hasPrefix.id && hasPrefix.id == false))) ? '' : this.prefix;
+			
+			// Set the id.
+			newElement.id = idPrefix + id;
+		}
+		
+		// Add all classes.
+		if(classes && classes != '') {
+			// Get the class prefix.
+			var classPrefix = (hasPrefix && (hasPrefix == true || (hasPrefix.classes && hasPrefix.classes == true))) ? this.prefix : '';
+			
+			// Set the class(es).
+			if(typeof classes == 'string') {
+				newElement.classList.add(classPrefix + classes);
+			} else {
+				for(var i = 0; i < classes.length; i++) {
+					newElement.classList.add(classPrefix + classes[i]);
+				}
+			}
+		}
+		
+		if(style) {
+			for(var i = 0; i < style.length; i++) {
+				newElement.style[style[i][0]] = style[i][1];
+			}
+		}
+
+		// If there is the next sibling defined, insert it before it.
+		if(nextSib) {
+			parent.insertBefore(newElement, nextSib);
+
+		// Otherwise insert it at the end.
+		} else {
+			parent.appendChild(newElement);
+		}
+		
+		// Return the new element.
+		return newElement;
+	},
+};
+
+/**
+ * Functions for updater.
+ */
+Updater = {
+	/**
+	 * Stores if the update was instructed by the user.
+	 */
+	manualUpdate: false,
+
+	/**
+	 * Init the Updater.
+	 */
+	init: function() {
+		// Get the difference between now and the last check.
+		var lastCheck	= myGM.getValue('updater_lastUpdateCheck', 0);
+		var millis		= (new Date()).getTime();
+		var diff		= millis - lastCheck;
+		
+		// If the module is active and the last update is enough time before, check for updates.
+		if(myGM.getValue('module_updateActive', true) && diff > myGM.getValue('updater_updateInterval', 3600) * 1000) {
+			// No manual Update.
+			this.manualUpdate = false;
+
+			// Check for Updates.
+			this.checkForUpdates();
+			
+			// Set the time for the last update check to now.
+			myGM.setValue('updater_lastUpdateCheck', millis + '');
+		}
+	},
+	
+	/**
+	 * Search manually for updates.
+	 */
+	doManualUpdate: function() {
+		// Manual Update.
+		Updater.manualUpdate = true;
+
+		// Check for Updates.
+		Updater.checkForUpdates();
+		
+		// Set the time for the last update check to now.
+		myGM.setValue('updater_lastUpdateCheck', (new Date()).getTime() + '');
+	},
+
+	/**
+	 * Check for updates for the Script.
+	 * 
+	 * @return	boolean
+	 *   If there is a newer version.
+	 */
+	checkForUpdates: function() {
+		// Send a request to the userscripts.org server to get the metadata of the script to check if there is a new Update.
+		myGM.xhr({
+				method: 'GET',
+				url: 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.meta.js',
+				headers: {'User-agent': 'Mozilla/5.0', 'Accept': 'text/html'},
+				onload: function(response) {
+					// Extract the metadata from the response.
+					var metadata = Updater.formatMetadata(response.responseText);
+					
+					// If a new Update is available and the update hint should be shown.
+					if(scriptInfo.version < metadata.version && (myGM.getValue('updater_hideUpdate', scriptInfo.version) < metadata.version || Updater.manualUpdate)) {
+						// Show update dialogue.
+						Updater.showUpdateInfo(metadata);
+
+					// If there is no new update and it was a manual update show hint.
+					} else if(Updater.manualUpdate)	{
+						// Set the notification text.
+						var notificationText = {
+							header:	Language.$('default_update_noNewExists_header'),
+							body:	Language.$('default_update_noNewExists_text1') + '<a href="http://userscripts.org/scripts/show/' + scriptInfo.id + '" target="_blank" >' + scriptInfo.name + '</a>' + Language.$('default_update_noNewExists_text2') + scriptInfo.version + Language.$('default_update_noNewExists_text3'),
+						};
+								
+						// Show a notification.
+						myGM.notification(notificationText);
+					}
+				},
+			});
+	},
+	
+	/**
+	 * Show the update information panel.
+	 * 
+	 * @param	mixed[]	metadata
+	 *   Array with formated metadata
+	 */
+	showUpdateInfo: function(metadata) {
+		// Get the update history.
+		var updateHistory = this.extractUpdateHistory(metadata);
+		
+		// Set the notification text.
+		var notificationText = {
+			header:		Language.$('default_update_possible_header'),
+			bodyTop:	Language.$('default_update_possible_text1') + '<a href="http://userscripts.org/scripts/show/' + scriptInfo.id + '" target="_blank" >' + scriptInfo.name + '</a>' + Language.$('default_update_possible_text2') + '.<br>' + Language.$('default_update_possible_text3') + scriptInfo.version + Language.$('default_update_possible_text4') + metadata.version + '.<br>&nbsp;&nbsp;<b><u>' + Language.$('default_update_possible_history') + '</u></b>',
+			bodyBottom:	this.formatUpdateHistory(updateHistory),
+			confirm:	Language.$('default_update_possible_button_install'),
+			abort:		Language.$('default_update_possible_button_hide'),
+		};
+		
+		// Set the notification callback.
+		var notificationCallback = {
+			confirm:	function() { top.location.href = 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.user.js'; },
+			abort:		function() { myGM.setValue('updater_hideUpdate', metadata.version + ''); },
+		};
+				
+		// Show a notification.
+		myGM.notification(notificationText, notificationCallback);
+	},
+	
+	/**
+	 * Format the given metadata.
+	 * 
+	 * @param	String	metadata
+	 *   The metadata to format.
+	 * 
+	 * @return	String[]
+	 *   The formated metadata as array.
+	 */
+	formatMetadata: function(metadataIn) {
+		// Create an array for the formated metadata.
+		var metadataOut = new Array();
+
+		// Extract the tags from the metadata.
+		var innerMeta = metadataIn.match(/\/\/ ==UserScript==((.|\n|\r)*?)\/\/ ==\/UserScript==/)[0];
+		
+		// If there are some tags.
+		if(innerMeta) {
+			// Extract all tags.
+			var tags = innerMeta.match(/\/\/ @(.*?)(\n|\r)/g);
+			
+			// Loop over all tags.
+			for(var i = 0; i < tags.length; i++) {
+				// Extract the data from the tag.
+				var tmp = tags[i].match(/\/\/ @(.*?)\s+(.*)/);
+				
+				// If there is no data with this tag create a new array to store all data with this tag.
+				if(!metadataOut[tmp[1]]) {
+					metadataOut[tmp[1]] = new Array(tmp[2]);
+
+				// Otherwise add the data to the existing array.
+				} else {
+					metadataOut[tmp[1]].push(tmp[2]);
+				}
+			}
+		}
+		
+		// Return the formated metadata.
+		return metadataOut;
+	},
+	
+	/**
+	 * Extract the update history from the metadata.
+	 * 
+	 * @param	String[]	metadata
+	 *   Array with the formated metadata.
+	 * 
+	 * @return	mixed[]
+	 *   The extracted update history.
+	 */
+	extractUpdateHistory: function(metadata) {
+		// Create variable to store the update history.
+		var updateHistory = new Array();
+		
+		// Loop over all update history data.
+		for(var i = 0; i < metadata['history'].length; i++) {
+			// Get the information from the update history data.
+			var tmp = metadata['history'][i].match(/^(\S+)\s+(\S+)\s+(.*)$/);
+			
+			// If there is no array for this version create one.
+			if(!updateHistory[tmp[1]]) {
+				updateHistory[tmp[1]] = new Array();
+			}
+			
+			// If it is a feature store it to feature in this version.
+			if(tmp[2] == 'Feature:') {
+				if(!updateHistory[tmp[1]]['feature']) {
+					updateHistory[tmp[1]]['feature'] = new Array(tmp[3]);
+				} else {
+					updateHistory[tmp[1]]['feature'].push(tmp[3]);
+				}
+
+			// If it is a bugfix store it to bugfix in this version.
+			} else if(tmp[2] == 'Bugfix:') {
+				if(!updateHistory[tmp[1]]['bugfix']) {
+					updateHistory[tmp[1]]['bugfix'] = new Array(tmp[3]);
+				} else {
+					updateHistory[tmp[1]]['bugfix'].push(tmp[3]);
+				}
+			
+			// Otherwise store it to other in this version.
+			} else {
+				if(!updateHistory[tmp[1]]['other']) {
+					updateHistory[tmp[1]]['other'] = new Array(tmp[2] + " " + tmp[3]);
+				} else {
+					updateHistory[tmp[1]]['other'].push(tmp[2] + " " + tmp[3]);
+				}
+			}
+		}
+		
+		// Return the update history.
+		return updateHistory;
+	},
+	
+	/**
+	 * Format the update history.
+	 * 
+	 * @param	mixed[]	updateHistory
+	 *   The update history.
+	 * 
+	 * @return	String
+	 *   The formated update history.
+	 */
+	formatUpdateHistory: function(updateHistory) {
+		// Get the labels for the types.
+		var types = {
+			feature:	Language.$('default_update_possible_type_feature'),
+			bugfix:		Language.$('default_update_possible_type_bugfix'),
+			other:		Language.$('default_update_possible_type_other'),
+		};
+
+		// Create a var for the formated update history.
+		var formatedUpdateHistory = '';
+		
+		// Loop over all versions.
+		for(var version in updateHistory) {
+			// Create a headline for each version and start a table.
+			formatedUpdateHistory += '<h2>v ' + version + '</h2><br><table class="' + myGM.prefix + 'updateTable"><tbody>';
+			
+			// Loop over all types.
+			for(var type in updateHistory[version]) {
+				// Create a table row for each type and start a list for the elements.
+				formatedUpdateHistory += '<tr><td class="' + myGM.prefix + 'updateDataType">' + types[type] + '</td><td class="' + myGM.prefix + 'updateDataInfo"><ul>';
+				
+				// Loop over the elements and add them to the list.
+				for(var i = 0 ; i < updateHistory[version][type].length; i++) {
+					formatedUpdateHistory += '<li>' + updateHistory[version][type][i] + '</li>';
+				}
+				
+				// End the list.
+				formatedUpdateHistory += '</ul></td></tr>';
+			}
+			
+			// End the table.
+			formatedUpdateHistory += '</tbody></table><br>';
+		}
+		
+		// Return the formated update history.
+		return formatedUpdateHistory;
+	},
+};
+
+/**
+ * Functions for language.
+ */
+Language = {
+	/**
+	 * The name of the language which is actually set.
+	 */
+	name: 'English',
+	
+	/**
+	 * The text of the used language.
+	 */
+	text: null,
+	
+	/**
+	 * Init the language and set the used language code.
+	 */
+	init: function() {
+		// Split the host string.
+		var lang = top.location.host.split('.');
+		
+		// Set the language name.
+		this.setLangName(lang ? lang[1] : 'en');
+		
+		// Set the text in the used language.
+		this.setText();
+	},
+	
+	/**
+	 * Set the name of the used language.
+	 * 
+	 * @param	String	code
+	 *   The laguage code.
+	 */
+	setLangName: function(code) {
+		// All languages.
+		var languageName = {
+			ae: 'Arabic',		ar: 'Spanish',		ba: 'Bosnian',		bg: 'Bulgarian',	br: 'Portuguese',	by: 'Russian',
+			cl: 'Spanish',		cn: 'Chinese',		co: 'Spanish',		cz: 'Czech',		de: 'German',		dk: 'Danish',
+			ee: 'Estonian',		en: 'English',		es: 'Spanish',		fi: 'Finish',		fr: 'French',		gr: 'Greek',
+			hk: 'Chinese',		hr: 'Bosnian',		hu: 'Hungarian',	id: 'Indonesian',	il: 'Hebrew',		it: 'Italian',
+			kr: 'Korean',		lt: 'Lithuanian',	lv: 'Latvian',		mx: 'Spanish',		nl: 'Dutch',		no: 'Norwegian',
+			pe: 'Spanish',		ph: 'Filipino',		pk: 'Urdu',			pl: 'Polish',		pt: 'Portuguese',	ro: 'Romanian',
+			rs: 'Serbian',		ru: 'Russian',		se: 'Swedish',		si: 'Slovene',		sk: 'Slovak',		tr: 'Turkish',
+			tw: 'Chinese',		ua: 'Ukranian',		us: 'English',		ve: 'Spanish',		vn: 'Vietnamese',	yu: 'Bosnian'
+		}[code];
+		
+		// Look up if implemented contains the language.
+		for(var i = 0; i < languageInfo.implemented.length; i++) {
+			// If the language is implemented set the name to it and return.
+			if(languageInfo.implemented[i] == languageName) {
+				this.name = languageName;
+				return;
+			}
+		}
+
+		// If the language is not implemented, set the language to english.
+		this.name = 'English';
+	},
+	
+	/*
+	 * Set the text for the script.
+	 */
+	setText: function() {
+		// Get the ressource.
+		var text = myGM.getResourceParsed('language' + this.name);
+		
+		// Get the ressource an store it to Language.text.
+		this.text = (text && !text.is_error) ? text : languageInfo.defaultText;
+	},
+	
+	/**
+	 * Return the name of the actually used language.
+	 * 
+	 * @return	String
+	 *   The country code.
+	 */
+	getLangName: function() {
+		return this.name;
+	},
+	
+	/**
+	 * Synonymous function for Language.getText().
+	 * 
+	 * @param	String	name
+	 *   The name of the placeholder.
+	 * 
+	 * @return	mixed
+	 *   The text.
+	 */
+	$: function(name) {
+		return this.getText(name);
+	},
+	
+	/**
+	 * Return the name of the actually used language.
+	 * 
+	 * @param	String	name
+	 *   The name of the placeholder.
+	 * 
+	 * @return	mixed
+	 *   The text.
+	 */
+	getText: function(name) {
+		// Set the text to the placeholder.
+		var erg = name;
+		
+		// Split the placeholder.
+		var parts = name.split('_');
+		
+		// If the splitting was successful.
+		if(parts) {
+			// Set txt to the "next level".
+			var txt = this.text ? this.text[parts[0]] : null;
+			
+			// Loop over all parts.
+			for(var i = 1; i < parts.length; i++) {
+				// If the "next level" exists, set txt to it.
+				if(txt && typeof txt[parts[i]] != 'undefined') {
+					txt = txt[parts[i]];
+				} else {
+					txt = erg;
+					break;
+				}
+			}
+			
+			// If the text type is not an object, a function or undefined.
+			if(typeof txt != 'object' && typeof txt != 'function' && typeof txt != 'undefined') {
+				erg = txt;
+			}
+		}
+		
+		// Return the text.
+		return erg;
+	},
+};
+
+/********************************************************
+*********************************************************
+*****                                               *****
+***** End of functions / variables for all Scripts. *****
+*****                                               *****
+*********************************************************
+********************************************************/
+
+
+
+/**********************
+*** Ikariam Script. ***
+**********************/
+
+/**
+ * Storage for the unsafeWindow.ikariam funtion.
+ */
+var ika;
+
+/**
+ * General functions.
+ */
+General = {
+	/**
+	 * Init the script.
+	 */
+	init: function() {
+		// Set the general used Script styles.
+		this.setStyles();
+		
+		// Set unsafeWindow.ikariam to ika for easier access.
+		ika = win.ikariam;
+
+		// Get the id of the body.
+		var viewId = document.body.id;
+		
+		// Get the name of the view depending on the body id.
+		switch(viewId) {
+			case 'worldmap_iso':
+				View.name = 'world';
+			  break;
+			
+			case 'island':
+				View.name = 'island';
+			  break;
+			
+			case 'city':
+				View.name = 'town';
+			  break;
+			
+			default:
+			  break;
+		}
+	},
+		
+	/**
 	 * Set the general script styles.
 	 */
 	setStyles: function() {
@@ -375,6 +1330,48 @@ General = {
 				 .minimizeImg:hover				{ background-position: -144px -19px; } \
 				 .maximizeImg					{ background-position: -126px 0; } \
 				 .maximizeImg:hover				{ background-position: -126px -19px; }"
+			);
+		
+		// Set the notification style.
+		myGM.addStyle(
+				"." + myGM.prefix + "notificationBackground				{ z-index: 1000000000000; position: fixed; visibility: visible; top: 0px; left: 0px; width: 100%; height: 100%; padding: 0; background-color: #000; opacity: .7; } \
+				 ." + myGM.prefix + "notificationPanelContainer			{ z-index: 1000000000001; position: fixed; visibility: visible; top: 100px; left: 50%; width: 500px; height: 370px; margin-left: -250px; padding: 0; text-align: left; color: #542C0F; font: 12px Arial,Helvetica,sans-serif; } \
+				 ." + myGM.prefix + "notificationPanel					{ position: relative; top: 0px; left: 0px; background-color: transparent; border: 0 none; overflow: hidden; } \
+				 ." + myGM.prefix + "notificationPanelHeader			{ height: 39px; background: none repeat scroll 0 0 transparent; font-weight: bold; line-height: 2; white-space: nowrap; } \
+				 ." + myGM.prefix + "notificationPanelHeaderL			{ height: 39px; background-image: url('skin/layout/notes_top_left.png'); background-position: left top; background-repeat: no-repeat; } \
+				 ." + myGM.prefix + "notificationPanelHeaderR			{ height: 39px; background-image: url('skin/layout/notes_top_right.png'); background-position: right top; background-repeat: no-repeat; } \
+				 ." + myGM.prefix + "notificationPanelHeaderM			{ height: 39px; margin: 0 14px 0 38px; padding: 12px 0 0; background-image: url('skin/layout/notes_top.png'); background-position: left top; background-repeat: repeat-x; color: #811709; line-height: 1.34em; } \
+				 ." + myGM.prefix + "notificationPanelBody				{ max-height: 311px; height: 100%; background: none repeat scroll 0 0 transparent; } \
+				 ." + myGM.prefix + "notificationPanelBodyL				{ height: 100%; background-image: url('skin/layout/notes_left.png'); background-position: left top; background-repeat: repeat-y; } \
+				 ." + myGM.prefix + "notificationPanelBodyR				{ height: 100%; background-image: url('skin/layout/notes_right.png'); background-position: right top; background-repeat: repeat-y; } \
+				 ." + myGM.prefix + "notificationPanelBodyM				{ height: 100%; background-color: #F7E7C5; background-image: none;  margin: 0 6px; padding: 0 10px; font-size: 14px; } \
+				 ." + myGM.prefix + "notificationPanelBodyMTop			{ max-height: 100px; line-height: 2; } \
+				 ." + myGM.prefix + "notificationPanelBodyMTop b		{ line-height: 3.5; font-size:110%; } \
+				 ." + myGM.prefix + "notificationPanelBodyM a			{ color: #811709; font-weight: bold; } \
+				 ." + myGM.prefix + "notificationPanelBodyM h2			{ font-weight: bold; } \
+				 ." + myGM.prefix + "notificationPanelBodyMContent		{ max-height: 270px; padding: 10px; background: url('skin/input/textfield.png') repeat-x scroll 0 0 #FFF7E1; border: 1px dotted #C0C0C0; font: 14px Arial,Helvetica,sans-serif; color: #000000; border-collapse: separate; overflow-y:auto; } \
+				 ." + myGM.prefix + "notificationPanelBodyMBottom		{ max-height: 170px; padding: 10px; background: url('skin/input/textfield.png') repeat-x scroll 0 0 #FFF7E1; border: 1px dotted #C0C0C0; font: 14px Arial,Helvetica,sans-serif; color: #000000; border-collapse: separate; overflow-y:auto; } \
+				 ." + myGM.prefix + "notificationPanelBodyPlaceholder	{ height: 20px; } \
+				 ." + myGM.prefix + "notificationPanelFooter			{ height: 20px; background: none repeat scroll 0 0 transparent; } \
+				 ." + myGM.prefix + "notificationPanelFooterL			{ height: 100%; background-image: url('skin/layout/notes_left.png'); background-position: left top; background-repeat: repeat-y; border: 0 none; } \
+				 ." + myGM.prefix + "notificationPanelFooterR			{ height: 21px; background-image: url('skin/layout/notes_br.png'); background-position: right bottom; background-repeat: no-repeat; } \
+				 ." + myGM.prefix + "notificationPanelFooterM			{ background-color: #F7E7C5; border-bottom: 3px solid #D2A860; border-left: 2px solid #D2A860; margin: 0 23px 0 3px; padding: 3px 0 2px 3px; font-size: 77%; } \
+				 ." + myGM.prefix + "notificationPanelClose				{ cursor: pointer; position: absolute; top: 12px; right: 8px; width: 17px; height: 17px; background-image: url('skin/layout/notes_close.png'); } \
+				 ." + myGM.prefix + "notificationPanelButton			{ background: url('skin/input/button.png') repeat-x scroll 0 0 #ECCF8E; bottom: -4px; position: absolute; border-color: #C9A584 #5D4C2F #5D4C2F #C9A584; border-style: double; border-width: 3px; cursor: pointer; display: inline; font-weight: bold; margin: 10px auto; padding: 2px 10px; text-align: center; font-size: 12px; left: 50%; width: 100px; } \
+				 ." + myGM.prefix + "notificationPanelButton:hover		{ color: #B3713F; } \
+				 ." + myGM.prefix + "notificationPanelButton:active		{ border-color: #5D4C2F #C9A584 #C9A584 #5D4C2F; border-style: double; border-width: 3px; padding: 3px 10px 1px; } \
+				 ." + myGM.prefix + "notificationPanelButtonConfirm		{ margin-left: -105px; } \
+				 ." + myGM.prefix + "notificationPanelButtonAbort		{ margin-left: 5px; }",
+				'notification', true
+			);
+		
+		// Set the updater style.
+		myGM.addStyle(
+				"." + myGM.prefix + "updateTable			{ border-collapse: separate; border-spacing: 2px; } \
+				 ." + myGM.prefix + "updateDataType			{ width: 100px; padding: 5px 0px 5px 5px; border: 1px solid #D2A860; } \
+				 ." + myGM.prefix + "updateDataInfo			{ width: 300px; padding: 5px 5px 5px 20px; border: 1px solid #D2A860; } \
+				 ." + myGM.prefix + "updateDataInfo ul li	{ list-style: disc outside none; }",
+				'updater', true
 			);
 	},
 	
@@ -396,14 +1393,14 @@ General = {
 	 * Returns the value of the selected option of a select field.
 	 * 
 	 * @param	String	id
-	 *   The last part of the id of the element (The first part will be "script" + the script-id.).
+	 *   The last part of the id of the element.
 	 * 
 	 * @return	String
 	 *   The value.
 	 */
 	getSelectValue: function(id) {
 		// Get the select field.
-		var select = General.$('#script' + scriptInfo.id + id);
+		var select = myGM.$('#' + myGM.prefix + id);
 		
 		// Return the value.
 		return select.options[select.selectedIndex].value;
@@ -424,7 +1421,7 @@ General = {
 		// Set a seperator every 3 digits from the end.
 		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g, '$1' + Language.$('settings_kiloSep'));
 		
-		// If the number ist negative write it in red.
+		// If the number is negative write it in red.
 		if(num < 0) {
 			txt = '<span class="red bold negative">' + txt + '</span>';
 		}
@@ -449,71 +1446,13 @@ General = {
 		// Do this for every cell.
 		for(var i = 0; i < cellText.length; i++) {
 			// Add the cell.
-			var cell = this.addElement(head ? 'th' : 'td', row, null, cellClassName[i]);
+			var cell = myGM.addElement(head ? 'th' : 'td', row, null, cellClassName[i]);
 			
 			// Set the content of the cell.
 			cell.innerHTML = cellText[i];
 		}
 	},
-	
-	/**
-	 * Creates a new element and adds it to a parent.
-	 * 
-	 * @param	String				type
-	 *   The type of the new element.
-	 * @param	element				parent
-	 *   The parent of the new element.
-	 * @param	int					id
-	 *   The last part of the id of the element. The first part will be "script" + the script-id. (optional, if not set, no id will be set)
-	 * @param	String || String[]	classes
-	 *   The class(es) of the element. (optional, if not set, no class will be set)
-	 * @param	mixed[]				style
-	 *   The styles of the element. (optional, if not set, no style will be set)
-	 * @param	element				nextSib
-	 *   The next sibling of the element. (optional, if not set the element will be added at the end)
-	 * 
-	 * @return	element
-	 *   The new element.
-	 */
-	addElement: function(type, parent, id, classes, style, nextSib) {
-		// Create the new Element.
-		var newElement = document.createElement(type);
 		
-		// If there is a id, set it.
-		if(id) {
-			newElement.id = 'script' + scriptInfo.id + id;
-		}
-		
-		// Add all classes.
-		if(classes && classes != '') {
-			if(typeof classes == 'string') {
-				newElement.classList.add(classes);
-			} else {
-				for(var i = 0; i < classes.length; i++) {
-					newElement.classList.add(classes[i]);
-				}
-			}
-		}
-		
-		if(style) {
-			for(var i = 0; i < style.length; i++) {
-				newElement.style[style[i][0]] = style[i][1];
-			}
-		}
-
-		// If there is the next sibling defined, insert it before it.
-		if(nextSib) {
-			parent.insertBefore(newElement, nextSib);
-
-		// Otherwise insert it at the end.
-		} else {
-			parent.appendChild(newElement);
-		}
-		
-		// Return the new element.
-		return newElement;
-	},
-	
 	/**
 	 * Creates a new checkbox and adds it to a parent.
 	 * 
@@ -528,10 +1467,10 @@ General = {
 	 */
 	addCheckbox: function(parent, id, checked, labelText) {
 		// Create the wrapper for the checkbox and the label.
-		var cbWrapper	= this.addElement('div', parent, null, 'cbWrapper');
+		var cbWrapper	= myGM.addElement('div', parent, null, 'cbWrapper');
 
 		// Create the checkbox and set the attributes.
-		var cb		= this.addElement('input', cbWrapper, id + 'Cb', 'checkbox');
+		var cb		= myGM.addElement('input', cbWrapper, id + 'Cb', 'checkbox');
 		cb.type		= 'checkbox';
 		cb.title	= labelText;
 		cb.checked	= checked ? 'checked' : '';
@@ -554,15 +1493,15 @@ General = {
 	 */	
 	addSelect: function(parent, id, selected, opts) {
 		// Create the wrapper for the select.
-		var wrapper				= this.addElement('div', parent, null, new Array('select_container', 'size175'), new Array(['position', 'relative']));
+		var wrapper				= myGM.addElement('div', parent, null, new Array('select_container', 'size175'), new Array(['position', 'relative']));
 		
 		// Create the select field.
-		var select	= this.addElement('select', wrapper, id + 'Select', 'dropdown');
+		var select	= myGM.addElement('select', wrapper, id + 'Select', 'dropdown');
 		
 		// Add the Options.
 		for(var i = 0; i < opts['name'].length; i++) {
 			// Create an option.
-			var option			= this.addElement('option', select);
+			var option			= myGM.addElement('option', select);
 
 			// Set the value and the name.
 			option.value		= opts['value'][i];
@@ -692,7 +1631,7 @@ EventHandling = {
 			this.classList.toggle('maximizeImg');
 			
 			// Get the table rows.
-			var tr = General.$$('tr', this.parentNode.parentNode.parentNode);
+			var tr = myGM.$$('tr', this.parentNode.parentNode.parentNode);
 			
 			// Toggle the visibility of all table rows except the first.
 			for(var i = 1; i < tr.length; i++) {
@@ -725,7 +1664,7 @@ EventHandling = {
 			}
 
 			// Show the zoom out button if it is invisible.
-			General.$('#script' + scriptInfo.id + 'zoomOut').classList.remove('invisible');
+			myGM.$('#' + myGM.prefix + 'zoomOut').classList.remove('invisible');
 
 			// Zoom.
 			ZoomFunction.zoom(factor);
@@ -748,7 +1687,7 @@ EventHandling = {
 			}
 
 			// Show the zoom in button if it is invisible.
-			General.$('#script' + scriptInfo.id + 'zoomIn').classList.remove('invisible');
+			myGM.$('#' + myGM.prefix + 'zoomIn').classList.remove('invisible');
 
 			// Zoom.
 			ZoomFunction.zoom(factor);
@@ -846,7 +1785,7 @@ EventHandling = {
 			// If the attribute was changed.
 			if(e.attrChange == MutationEvent.MODIFICATION) {
 				// If the style.display is set to none.
-				if(e.attrName == 'style' && e.newValue == 'display: none;') {
+				if(e.attrName.trim() == 'style' && e.newValue.search(/display: none/i) != -1) {
 					// Timeout to have access to GM_ funtions.
 					setTimeout(EnhancedView.getPopup, 0);
 				}
@@ -880,7 +1819,7 @@ EnhancedView = {
 	 */
 	initDesktop: function() {
 		// Wait for a popup.
-		General.$('#loadingPreview').addEventListener('DOMAttrModified', EventHandling.loadingPreview.attrModified, false);
+		myGM.$('#loadingPreview').addEventListener('DOMAttrModified', EventHandling.loadingPreview.attrModified, false);
 		
 		// Init parts which are not shown in popups.
 		this.initDesktopStatic();
@@ -890,12 +1829,13 @@ EnhancedView = {
 	 * Inits the modifications on the website which are not shown in popups.
 	 */
 	initDesktopStatic: function() {
+		
 		// Move loading circle.
 		if(myGM.getValue('module_lcMoveActive', true))	View.moveLoadingCircle();
 		
 		// Hide the Bird animation.
 		if(myGM.getValue('module_hideBirdsActive', true))	View.hideBirds();
-
+		
 		// Zoom function.
 		if(myGM.getValue('module_zoomActive', true))		ZoomFunction.init();
 	},
@@ -924,17 +1864,17 @@ EnhancedView = {
 	 */
 	getPopup: function() {
 		// If the script was already executet on this popup.
-		if(General.$('#script' + scriptInfo.id + 'alreadyExecuted'))		return;
+		if(myGM.$('#' + myGM.prefix + 'alreadyExecuted'))	return;
 		
 		// Get the popup.
-		popup = General.$('.templateView');
+		popup = myGM.$('.templateView');
 		
 		// Get the popup id.
 		popupId = popup ? popup.id : '';
 		
 		// If a popup exists, add the hint, that the popup script was executed.
 		if(popup) {
-			alreadyExecuted			= General.addElement('input', General.$('.mainContent', popup), 'alreadyExecuted');
+			alreadyExecuted			= myGM.addElement('input', myGM.$('.mainContent', popup), 'alreadyExecuted');
 			alreadyExecuted.type	= 'hidden';
 		}
 		
@@ -1017,7 +1957,7 @@ Tooltips = {
 	 */
 	autoshowGeneral: function(magnifierClass) {
 		// Get all magnifiers.
-		var magnifier = General.$$('.' + magnifierClass);
+		var magnifier = myGM.$$('.' + magnifierClass);
 
 		// Set the mousover and mouseout for all magnifiers.
 		for(var i = 0; i < magnifier.length; i++) {
@@ -1038,7 +1978,7 @@ Balance = {
 	 */
 	incomeOnTop: function() {
 		// Get the table for the summary.
-		var summaryTable = General.$('.table01');
+		var summaryTable = myGM.$('.table01');
 		
 		// Show the income on top.
 		this.showIncomeOnTop(summaryTable);
@@ -1052,7 +1992,7 @@ Balance = {
 	 */
 	incomeOnTopMobile: function() {
 		// Get the table for the summary.
-		var summaryTable = General.$('#balance');
+		var summaryTable = myGM.$('#balance');
 		
 		// Show the income on top.
 		this.showIncomeOnTop(summaryTable);
@@ -1069,8 +2009,8 @@ Balance = {
 		var income = this.getIncome();
 
 		// Create the rows for the income per day and the income per day.
-		incomeRow		= General.addElement('tr', summaryTable, null, new Array('result', 'alt'));
-		incomeRow24h	= General.addElement('tr', summaryTable, null, 'result');
+		incomeRow		= myGM.addElement('tr', summaryTable, null, new Array('result', 'alt'));
+		incomeRow24h	= myGM.addElement('tr', summaryTable, null, 'result');
 		
 		// Create the content of the table rows.
 		General.createTableRow(new Array(Language.$('balance_income_perHour'), '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], ['value', 'res']), incomeRow, false);
@@ -1085,7 +2025,7 @@ Balance = {
 	 */
 	getIncome: function() {
 		// Get the table cell with the actual income.
-		var incomeCell = General.$$('.hidden')[General.$$('.hidden').length - 1];
+		var incomeCell = myGM.$$('.hidden')[myGM.$$('.hidden').length - 1];
 		
 		// If the content of the cell is not just the income move one element inwards.
 		while(incomeCell.firstChild.firstChild) {
@@ -1104,10 +2044,10 @@ Balance = {
 	 */
 	shortUpkeepReductionTable: function() {
 		// Get the upkeep redutcion tables.
-		var uRT = General.$$('.upkeepReductionTable');
+		var uRT = myGM.$$('.upkeepReductionTable');
 		
 		if(uRT.length == 0) {
-			uRT = General.$$('#upkeepReductionTable');
+			uRT = myGM.$$('#upkeepReductionTable');
 		}
 		
 		// Create an array for data storage.
@@ -1120,45 +2060,45 @@ Balance = {
 		// Get the data for the troops and ships redution rows.
 		for(var i = 0; i < 3; i++) {
 			row.reason.push(Language.$('balance_upkeep_reason_' + i));
-			row.basicUpkeep.push(General.getInt(General.$$('.altbottomLine td.hidden, .result td.hidden, .alt.bottomLine td.hidden, .result td.hidden', uRT[0])[i].innerHTML));
-			row.supplyUpkeep.push(General.getInt(General.$$('.altbottomLine td.hidden, .result td.hidden, .alt.bottomLine td.hidden, .result td.hidden', uRT[1])[i].innerHTML));
+			row.basicUpkeep.push(General.getInt(myGM.$$('.altbottomLine td.hidden, .result td.hidden, .alt.bottomLine td.hidden, .result td.hidden', uRT[0])[i].innerHTML));
+			row.supplyUpkeep.push(General.getInt(myGM.$$('.altbottomLine td.hidden, .result td.hidden, .alt.bottomLine td.hidden, .result td.hidden', uRT[1])[i].innerHTML));
 			row.result.push(row.basicUpkeep[i] + row.supplyUpkeep[i]);
 		}
 		
 		// Get the start income.
-		var beforeReduction = General.getInt(General.$('td.hidden', uRT[2]).innerHTML);
+		var beforeReduction = General.getInt(myGM.$('td.hidden', uRT[2]).innerHTML);
 		
 		// Get the result income.
 		var income = this.getIncome();
 		
 		// Create the table to show the 
-		var shortTable = General.addElement('table', uRT[0].parentNode, null, new Array('table01', 'border', 'left'), null, uRT[0]);
+		var shortTable = myGM.addElement('table', uRT[0].parentNode, null, new Array('table01', 'border', 'left'), null, null, uRT[0]);
 		shortTable.id = 'balance';
 		
 		// Create the table head.
-		General.createTableRow(new Array('', Language.$('balance_upkeep_basic'), Language.$('balance_upkeep_supply'), Language.$('balance_upkeep_result')), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), General.addElement('tr', shortTable), true);
+		General.createTableRow(new Array('', Language.$('balance_upkeep_basic'), Language.$('balance_upkeep_supply'), Language.$('balance_upkeep_result')), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), myGM.addElement('tr', shortTable), true);
 		
 		// Create the start income row.
-		var startRow = General.addElement('tr', shortTable, null, new Array('alt', 'bottomLine'));
+		var startRow = myGM.addElement('tr', shortTable, null, new Array('alt', 'bottomLine'));
 		General.createTableRow(new Array(Language.$('balance_income_start'), '', '', General.formatToIkaNumber(beforeReduction)), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), startRow, false);
 		
 		// Create the troops / ships redution rows.
 		for(var i = 0; i < 3; i++) {
-			var newRow = General.addElement('tr', shortTable, null, (i % 2 == 1) ? new Array('alt', 'bottomLine') : '');
+			var newRow = myGM.addElement('tr', shortTable, null, (i % 2 == 1) ? new Array('alt', 'bottomLine') : '');
 			General.createTableRow(new Array(row.reason[i], General.formatToIkaNumber(-row.basicUpkeep[i]), General.formatToIkaNumber(-row.supplyUpkeep[i]), General.formatToIkaNumber(-row.result[i])), new Array('city', ['value', 'res'], ['value', 'res'], 'hidden'), newRow, false);
 		}
 		
 		// Create the result row.
-		var resultRow = General.addElement('tr', shortTable, null, 'result');
+		var resultRow = myGM.addElement('tr', shortTable, null, 'result');
 		General.createTableRow(new Array('<img alt="Summe" src="skin/layout/sigma.png">', '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], 'hidden'), resultRow, false);
 		
 		// Create the spacing between the tables.
-		General.addElement('hr', uRT[0].parentNode, null, null, null, uRT[0]);
+		myGM.addElement('hr', uRT[0].parentNode, null, null, null, null, uRT[0]);
 		
 		// Hide the data rows of the tables and add the show button.
 		for(var i = 0; i < uRT.length; i++) {
 			// Get all rows.
-			var tr = General.$$('tr', uRT[i]);
+			var tr = myGM.$$('tr', uRT[i]);
 			
 			// Hide all rows except the first.
 			for(var k = 1; k < tr.length; k++) {
@@ -1166,8 +2106,8 @@ Balance = {
 			}
 			
 			// Add the show button to the first row.
-			var th = General.$('th', tr[0]);
-			var btn = General.addElement('div', th, null, 'maximizeImg', new Array(['cssFloat', 'left']), th.firstChild);
+			var th = myGM.$('th', tr[0]);
+			var btn = myGM.addElement('div', th, null, 'maximizeImg', new Array(['cssFloat', 'left']), th.firstChild);
 			
 			// If mobile version.
 			if(General.isMobileVersion()){
@@ -1192,7 +2132,7 @@ OptionPanel = {
 	 */
 	desktop: function() {
 		// If the tab already exists return.
-		if(General.$('#tabScriptOptions')) {
+		if(myGM.$('#tabScriptOptions')) {
 			return;
 		}
 
@@ -1200,15 +2140,15 @@ OptionPanel = {
 		this.setStylesDesktop();
 
 		// Add the GM tab link to the tab menu.
-		var tabmenu					= General.$('.tabmenu');
-		jsTabGMOptions				= General.addElement('li', tabmenu, null, 'tab');
+		var tabmenu					= myGM.$('.tabmenu');
+		jsTabGMOptions				= myGM.addElement('li', tabmenu, null, 'tab');
 		jsTabGMOptions.id			= 'js_tabScriptOptions';
 		jsTabGMOptions.setAttribute('onclick', "switchTab('tabScriptOptions');");
 		jsTabGMOptions.innerHTML	= '<b class="tabScriptOptions"> ' + Language.$('optionPanel_scripts') + ' </b>';
 		
 		// Add the content wrapper for the GM tab to the tab menu.
-		var mainContent				= General.$('#tabGameOptions').parentNode;
-		tabGMOptions				= General.addElement('div', mainContent, null, null, new Array(['display', 'none']));
+		var mainContent				= myGM.$('#tabGameOptions').parentNode;
+		tabGMOptions				= myGM.addElement('div', mainContent, null, null, new Array(['display', 'none']));
 		tabGMOptions.id				= 'tabScriptOptions';
 		this.createTabContent(tabGMOptions);
 	},
@@ -1218,7 +2158,7 @@ OptionPanel = {
 	 */
 	mobile: function() {
 		// Get the mainview.
-		var mainview = General.$('#mainview');
+		var mainview = myGM.$('#mainview');
 		
 		// Create the options wrapper.
 		var wrapper = this.createOptionsWrapper(mainview, scriptInfo.name);
@@ -1230,10 +2170,10 @@ OptionPanel = {
 		this.createUpdateContentMobile(wrapper);
 		
 		// Horizontal row.
-		General.addElement('hr', wrapper);
+		myGM.addElement('hr', wrapper);
 
 		// Prepare placeholder for save hint.
-		General.addElement('p', wrapper, 'saveHint');
+		myGM.addElement('p', wrapper, 'saveHint');
 		
 		// Add the button to save the settings.
 		this.addSaveButton(wrapper);
@@ -1283,17 +2223,17 @@ OptionPanel = {
 	 */
 	createOptionsWrapper: function(tab, headerText) {
 		// Create the wrapper.
-		var optionsWrapper	= General.addElement('div', tab, null, 'contentBox01h');
+		var optionsWrapper	= myGM.addElement('div', tab, null, 'contentBox01h');
 		
 		// Create the header.
-		var optionsHeader		= General.addElement('h3', optionsWrapper, null, 'header');
+		var optionsHeader		= myGM.addElement('h3', optionsWrapper, null, 'header');
 		optionsHeader.innerHTML	= headerText;
 		
 		// Create the content wrapper.
-		var optionsWrapperContent	= General.addElement('div', optionsWrapper, null, 'content');
+		var optionsWrapperContent	= myGM.addElement('div', optionsWrapper, null, 'content');
 		
 		// Create the footer.
-		General.addElement('div', optionsWrapper, null, 'footer');
+		myGM.addElement('div', optionsWrapper, null, 'footer');
 		
 		// Return the content wrapper.
 		return optionsWrapperContent;
@@ -1365,7 +2305,7 @@ OptionPanel = {
 	 */
 	createModuleContentMobile: function(contentWrapper) {
 		// Create the header.
-		var moduleHeader		= General.addElement('h3', contentWrapper);
+		var moduleHeader		= myGM.addElement('h3', contentWrapper);
 		moduleHeader.innerHTML	= Language.$('optionPanel_module');
 		
 		// Get the ids.
@@ -1392,17 +2332,17 @@ OptionPanel = {
 		// Create the checkboxes and labels.
 		for(var i = 0; i < id.length; i++) {
 			// Create the checkbox wrapper.
-			var p	= General.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'left']));
+			var p	= myGM.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'left']));
 			
 			// Create the checkbox.
-			var cb		= General.addElement('input', p, id[i] + 'Cb');
+			var cb		= myGM.addElement('input', p, id[i] + 'Cb');
 			cb.type		= 'checkbox';
 			cb.checked	= value[i];
 			
 			// Create the checkbox label.
-			var cbLabel			= General.addElement('label', p, id[i] + 'Label');
+			var cbLabel			= myGM.addElement('label', p, id[i] + 'Label');
 			cbLabel.innerHTML	= label[i];
-			cbLabel.htmlFor		= 'script' + scriptInfo.id + id[i] + 'Cb';
+			cbLabel.htmlFor		= myGM.prefix + id[i] + 'Cb';
 		}
 	},
 	
@@ -1419,7 +2359,7 @@ OptionPanel = {
 		var tr2			= this.addOptionsTableRow(updateTable, true);
 
 		// Create label.
-		var updateIntervalLabel			= General.addElement('span', tr1.firstChild);
+		var updateIntervalLabel			= myGM.addElement('span', tr1.firstChild);
 		updateIntervalLabel.innerHTML	= Language.$('optionPanel_label_updateInterval');
 
 		// Array for update interval values and names.
@@ -1450,7 +2390,7 @@ OptionPanel = {
 		tr2.firstChild.classList.add('center');
 		
 		// Add the link for manual updates.
-		var updateLink			= General.addElement('a', tr2.firstChild);
+		var updateLink			= myGM.addElement('a', tr2.firstChild);
 		updateLink.href			= '#';
 		updateLink.innerHTML	= Language.$('optionPanel_label_manualUpdate1') + scriptInfo.name + Language.$('optionPanel_label_manualUpdate2');
 		updateLink.addEventListener('click', Updater.doManualUpdate, false);
@@ -1467,19 +2407,19 @@ OptionPanel = {
 	 */
 	createUpdateContentMobile: function(contentWrapper) {
 		// Create the header.
-		var updateHeader = General.addElement('h3', contentWrapper);
+		var updateHeader = myGM.addElement('h3', contentWrapper);
 		updateHeader.innerHTML = Language.$('optionPanel_update');
 		
 		// Create the select wrapper.
-		var p1	= General.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
+		var p1	= myGM.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
 
 		// Create the select label.
-		var selectLabel			= General.addElement('label', p1, 'updateIntervalLabel');
+		var selectLabel			= myGM.addElement('label', p1, 'updateIntervalLabel');
 		selectLabel.innerHTML	= Language.$('optionPanel_label_updateInterval');
-		selectLabel.htmlFor		= 'script' + scriptInfo.id + 'updateIntervalSelect';
+		selectLabel.htmlFor		= myGM.prefix + 'updateIntervalSelect';
 		
 		// Create the select field.
-		var select	= General.addElement('select', p1, 'updateIntervalSelect');
+		var select	= myGM.addElement('select', p1, 'updateIntervalSelect');
 		
 		// Array for update interval values and names.
 		var opts = new Array();
@@ -1505,8 +2445,8 @@ OptionPanel = {
 		// Create the select options.
 		for(var i = 0; i < opts['name'].length; i++) {
 			// Create new option.
-			var option	= General.addElement('option', select);
-			option.value	= opts['value'][i];
+			var option			= myGM.addElement('option', select);
+			option.value		= opts['value'][i];
 			option.innerHTML	= opts['name'][i];
 
 			// If the option is the actual option, select it.
@@ -1516,10 +2456,10 @@ OptionPanel = {
 		}
 		
 		// Create the update link wrapper.
-		var p2	= General.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
+		var p2	= myGM.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
 
 		// Add the link for manual updates.
-		var updateLink			= General.addElement('a', p2);
+		var updateLink			= myGM.addElement('a', p2);
 		updateLink.href			= '#';
 		updateLink.innerHTML	= Language.$('optionPanel_label_manualUpdate1') + scriptInfo.name + Language.$('optionPanel_label_manualUpdate2');
 		updateLink.addEventListener('click', Updater.doManualUpdate, false);
@@ -1541,14 +2481,14 @@ OptionPanel = {
 		var scDescriptionTr			= this.addOptionsTableRow(zoomTableScaleChildren, true);
 		scDescriptionTr.classList.add('content');
 		scDescriptionTr.firstChild.classList.add('left');
-		var scDescriptionP			= General.addElement('p', scDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
+		var scDescriptionP			= myGM.addElement('p', scDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
 		scDescriptionP.innerHTML	= Language.$('optionPanel_label_description_scaleChildren');
 		
 		// Add the description to the access key table.
 		var akDescriptionTr			= this.addOptionsTableRow(zoomTableAccessKeys, true);
 		akDescriptionTr.classList.add('content');
 		akDescriptionTr.firstChild.classList.add('left');
-		var akDescriptionP			= General.addElement('p', akDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
+		var akDescriptionP			= myGM.addElement('p', akDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
 		akDescriptionP.innerHTML	= Language.$('optionPanel_label_description_accessKeys');
 		
 		// Arrays for zoom factor values and names.
@@ -1580,7 +2520,7 @@ OptionPanel = {
 			var zoomFactorTr = this.addOptionsTableRow(zoomTableFactor, false);
 			
 			// Create the zoom factor label.
-			var zoomFactorLabel			= General.addElement('span', zoomFactorTr.firstChild);
+			var zoomFactorLabel			= myGM.addElement('span', zoomFactorTr.firstChild);
 			zoomFactorLabel.innerHTML	= Language.$('optionPanel_label_' + viewName[0][i] + '_zoomFactor');
 
 			// Create the zoom factor select.
@@ -1620,11 +2560,8 @@ OptionPanel = {
 	 */
 	addOptionsTable: function(wrapper) {
 		// Create table and tablebody.
-		var table	= General.addElement('table', wrapper, 'moduleContent');
-		var tableBody	= General.addElement('tbody', table);
-
-		// Add classes.
-		table.classList.add('table01');
+		var table		= myGM.addElement('table', wrapper, null, new Array('moduleContent', 'table01'));
+		var tableBody	= myGM.addElement('tbody', table);
 		
 		// Return the table body.
 		return tableBody;
@@ -1643,10 +2580,10 @@ OptionPanel = {
 	 */
 	addOptionsTableRow: function(optionsTableBody, oneCell) {
 		// Create the new table row.
-		var tr	= General.addElement('tr', optionsTableBody);
+		var tr	= myGM.addElement('tr', optionsTableBody);
 
 		// Create first cell.
-		var td1	= General.addElement('td', tr);
+		var td1	= myGM.addElement('td', tr);
 
 		// If just ond cell.
 		if(oneCell) {
@@ -1656,7 +2593,7 @@ OptionPanel = {
 		// Otherwise.
 		} else {
 			// Create second cell.
-			General.addElement('td', tr, null, 'left');
+			myGM.addElement('td', tr, null, 'left');
 		}
 
 		// Return the table row.
@@ -1674,10 +2611,10 @@ OptionPanel = {
 	 */
 	addSaveButton: function(parent) {
 		// Create the button wrapper.
-		var buttonWrapper		= General.addElement('div', parent, null, 'centerButton');
+		var buttonWrapper		= myGM.addElement('div', parent, null, 'centerButton');
 		
 		// Create the button.
-		var saveButton			= General.addElement('input', buttonWrapper, null, 'button');
+		var saveButton			= myGM.addElement('input', buttonWrapper, null, 'button');
 		saveButton.type			= 'submit';
 		saveButton.value		= Language.$('optionPanel_save');
 		
@@ -1692,13 +2629,13 @@ OptionPanel = {
 	 */
 	saveSettings: function() {
 		// Save the module settings.
-		myGM.setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
-		myGM.setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
-		myGM.setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
-		myGM.setValue('module_zoomActive', General.$('#script' + scriptInfo.id + 'zoomCb').checked);
-		myGM.setValue('module_lcMoveActive', General.$('#script' + scriptInfo.id + 'loadingCircleMoveCb').checked);
-		myGM.setValue('module_ttAutoActive', General.$('#script' + scriptInfo.id + 'tooltipsAutoCb').checked);
-		myGM.setValue('module_hideBirdsActive', General.$('#script' + scriptInfo.id + 'hideBirdsCb').checked);
+		myGM.setValue('module_updateActive', myGM.$('#' + myGM.prefix + 'updateCb').checked);
+		myGM.setValue('module_incomeActive', myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
+		myGM.setValue('module_urtShortActive', myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
+		myGM.setValue('module_zoomActive', myGM.$('#' + myGM.prefix + 'zoomCb').checked);
+		myGM.setValue('module_lcMoveActive', myGM.$('#' + myGM.prefix + 'loadingCircleMoveCb').checked);
+		myGM.setValue('module_ttAutoActive', myGM.$('#' + myGM.prefix + 'tooltipsAutoCb').checked);
+		myGM.setValue('module_hideBirdsActive', myGM.$('#' + myGM.prefix + 'hideBirdsCb').checked);
 		
 		// Save the update settings.
 		myGM.setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
@@ -1707,12 +2644,12 @@ OptionPanel = {
 		myGM.setValue('zoom_worldFactor', General.getInt(General.getSelectValue('zoomWorldSelect')));
 		myGM.setValue('zoom_islandFactor', General.getInt(General.getSelectValue('zoomIslandSelect')));
 		myGM.setValue('zoom_townFactor', General.getInt(General.getSelectValue('zoomTownSelect')));
-		myGM.setValue('zoom_worldScaleChildren', General.$('#script' + scriptInfo.id + 'zoomScaleChildrenWorldCb').checked);
-		myGM.setValue('zoom_islandScaleChildren', General.$('#script' + scriptInfo.id + 'zoomScaleChildrenIslandCb').checked);
-		myGM.setValue('zoom_townScaleChildren', General.$('#script' + scriptInfo.id + 'zoomScaleChildrenTownCb').checked);
-		myGM.setValue('zoom_ctrlPressed', General.$('#script' + scriptInfo.id + 'zoomCtrlPressedCb').checked);
-		myGM.setValue('zoom_altPressed', General.$('#script' + scriptInfo.id + 'zoomAltPressedCb').checked);
-		myGM.setValue('zoom_shiftPressed', General.$('#script' + scriptInfo.id + 'zoomShiftPressedCb').checked);
+		myGM.setValue('zoom_worldScaleChildren', myGM.$('#' + myGM.prefix + 'zoomScaleChildrenWorldCb').checked);
+		myGM.setValue('zoom_islandScaleChildren', myGM.$('#' + myGM.prefix + 'zoomScaleChildrenIslandCb').checked);
+		myGM.setValue('zoom_townScaleChildren', myGM.$('#' + myGM.prefix + 'zoomScaleChildrenTownCb').checked);
+		myGM.setValue('zoom_ctrlPressed', myGM.$('#' + myGM.prefix + 'zoomCtrlPressedCb').checked);
+		myGM.setValue('zoom_altPressed', myGM.$('#' + myGM.prefix + 'zoomAltPressedCb').checked);
+		myGM.setValue('zoom_shiftPressed', myGM.$('#' + myGM.prefix + 'zoomShiftPressedCb').checked);
 		
 		// Show success hint.
 		General.showTooltip('cityAdvisor', 'confirm', Language.$('general_successful'));
@@ -1723,15 +2660,15 @@ OptionPanel = {
 	 */
 	saveSettingsMobile: function() {
 		// Save the module settings.
-		myGM.setValue('module_updateActive', General.$('#script' + scriptInfo.id + 'updateCb').checked);
-		myGM.setValue('module_incomeActive', General.$('#script' + scriptInfo.id + 'incomeOnTopCb').checked);
-		myGM.setValue('module_urtShortActive', General.$('#script' + scriptInfo.id + 'upkeepReductionCb').checked);
+		myGM.setValue('module_updateActive', myGM.$('#' + myGM.prefix + 'updateCb').checked);
+		myGM.setValue('module_incomeActive', myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
+		myGM.setValue('module_urtShortActive', myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
 		
 		// Save the update settings.
 		myGM.setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
 		
 		// Show success hint.
-		General.$('#script' + scriptInfo.id + 'saveHint').innerHTML	= Language.$('general_successful');
+		myGM.$('#' + myGM.prefix + 'saveHint').innerHTML	= Language.$('general_successful');
 
 		// Delete the hint after 3 seconds.
 		setTimeout(OptionPanel.deleteSaveHintMobile, 3000);
@@ -1741,7 +2678,7 @@ OptionPanel = {
 	 * Delete the save hint.
 	 */
 	deleteSaveHintMobile: function() {
-		General.$('#script' + scriptInfo.id + 'saveHint').innerHTML	= '';
+		myGM.$('#' + myGM.prefix + 'saveHint').innerHTML	= '';
 	},
 };
 
@@ -1785,7 +2722,7 @@ ZoomFunction = {
 
 		// Zoom.
 		factor = this.zoom(factor);
-
+		
 		// Add the zoom Buttons.
 		this.addZoomButtons(factor);
 	},
@@ -1795,13 +2732,13 @@ ZoomFunction = {
 	 */
 	addZoomButtons: function(factor) {
 		// Get the help element in the GF toolbar
-		gfToolbar	= General.$('#GF_toolbar');
+		gfToolbar	= myGM.$('#GF_toolbar');
 		
 		// Create the zoom buttons.
-		var zoomWrapper	= General.addElement('div', gfToolbar, 'zoomWrapper');
-		var zoomIn		= General.addElement('div', zoomWrapper, 'zoomIn', 'maximizeImg');
-		var zoomFactor	= General.addElement('div', zoomWrapper, 'zoomFactor');
-		var zoomOut		= General.addElement('div', zoomWrapper, 'zoomOut', 'minimizeImg');
+		var zoomWrapper	= myGM.addElement('div', gfToolbar, 'zoomWrapper');
+		var zoomIn		= myGM.addElement('div', zoomWrapper, 'zoomIn', 'maximizeImg');
+		var zoomFactor	= myGM.addElement('div', zoomWrapper, 'zoomFactor');
+		var zoomOut		= myGM.addElement('div', zoomWrapper, 'zoomOut', 'minimizeImg');
 		
 		// Show the zoom factor.
 		zoomFactor.innerHTML = factor + '%';
@@ -1822,10 +2759,10 @@ ZoomFunction = {
 
 		// Add the styles.
 		myGM.addStyle(
-				"#script" + scriptInfo.id + "zoomWrapper	{ position: absolute; top: 2px; right: 0px; width: 72px; -moz-transform: scale(0.75); msTransform: scale(0.75); -o-transform: scale(0.75); -webkit-transform: scale(0.75); transform: scale(0.75); } \
-				 #script" + scriptInfo.id + "zoomIn			{ position: absolute; } \
-				 #script" + scriptInfo.id + "zoomFactor		{ position: absolute; left: 20px; width: 35px; text-align: center; } \
-				 #script" + scriptInfo.id + "zoomOut		{ position: absolute; left: 58px; }"
+				"#" + myGM.prefix + "zoomWrapper	{ position: absolute; top: 2px; right: 0px; width: 72px; -moz-transform: scale(0.75); msTransform: scale(0.75); -o-transform: scale(0.75); -webkit-transform: scale(0.75); transform: scale(0.75); } \
+				 #" + myGM.prefix + "zoomIn			{ position: absolute; } \
+				 #" + myGM.prefix + "zoomFactor		{ position: absolute; left: 20px; width: 35px; text-align: center; } \
+				 #" + myGM.prefix + "zoomOut		{ position: absolute; left: 58px; }"
 			);
 	},
 	
@@ -1835,9 +2772,9 @@ ZoomFunction = {
 	changeMouseWheelListener: function() {
 		// Get the scrollDiv depending on the view.
 		if(View.name == 'world') {
-			scrollDiv = General.$('#map1');
+			scrollDiv = myGM.$('#map1');
 		} else {
-			scrollDiv = General.$('#worldmap');
+			scrollDiv = myGM.$('#worldmap');
 		}
 
 		// Remove the old mouse wheel listener.
@@ -1863,7 +2800,7 @@ ZoomFunction = {
 		myGM.setValue('zoom_' + View.name + 'Factor', factor);
 		
 		// Update the zoom factor which is shown to the user.
-		var zoomFactorDiv = General.$('#script' + scriptInfo.id + 'zoomFactor');
+		var zoomFactorDiv = myGM.$('#' + myGM.prefix + 'zoomFactor');
 		
 		if(zoomFactorDiv) {
 			zoomFactorDiv.innerHTML = factor + '%';
@@ -1900,7 +2837,7 @@ ZoomFunction = {
 			var stepNumber = Math.round((factorNew - scale) / .05);
 			
 			// Get the center position of the worldmap.
-			var worldview	= General.$('#worldview');
+			var worldview	= myGM.$('#worldview');
 			var posX		= worldview.offsetLeft + worldview.offsetWidth / 2;
 			var posY		= worldview.offsetTop + worldview.offsetHeight / 2;
 			
@@ -1927,18 +2864,15 @@ ZoomFunction = {
 
 		// Get the new height and width of the scrollcover.
 		var heightWidth	= 100 / factor;
-		
-		// Remove the old style.
-		myGM.removeStyle('zoomWorld');
 
-		// Add the new style.
+		// Overwrite the old style.
 		myGM.addStyle(
 				"#scrollcover { -moz-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); msTransform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -o-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); -webkit-transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); transform: scale(" + factor + ") translate(" + translateXY + "%, " + translateXY + "%); height: " + heightWidth + "% !important; width: " + heightWidth + "% !important; }",
-				'zoomWorld'
+				'zoomWorld', true
 			);
 		
 		// Get the map.
-		map = General.$('#map1');
+		map = myGM.$('#map1');
 		
 		// Set the new offset.
 		newWmTop		= 0;
@@ -1958,17 +2892,14 @@ ZoomFunction = {
 	 *   The name of the view.
 	 */
 	scaleChildren: function(factor) {
-		// Remove the old style.
-		myGM.removeStyle('scaleChildren');
-
 		// Which view is used?
 		switch(View.name) {
 			// Worldview.
 			case 'world':
 				myGM.addStyle(
-						".wonder, .tradegood, .cities, .ownerstate	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); } \
-						 .cities									{ bottom: 10px !important; }",
-						'scaleChildren'
+						".wonder, .tradegood, .cities" + factor < 1 ? ", .ownerState" : "" + "	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); } \
+						 .cities																{ bottom: 10px !important; }",
+						'scaleChildren', true
 					);
 			  break;
 			
@@ -1976,7 +2907,7 @@ ZoomFunction = {
 			case 'island':
 				myGM.addStyle(
 						".scroll_img	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); }",
-						'scaleChildren'
+						'scaleChildren', true
 					);
 			  break;
 			
@@ -1984,7 +2915,7 @@ ZoomFunction = {
 			case 'town':
 				myGM.addStyle(
 						".timetofinish	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); }",
-						'scaleChildren'
+						'scaleChildren', true
 					);
 			  break;
 			
@@ -1997,495 +2928,17 @@ ZoomFunction = {
 };
 
 /**
- * Functions for updater.
- */
-Updater = {
-	/**
-	 * Stores if the update was instructed by the user.
-	 */
-	manualUpdate: false,
-
-	/**
-	 * Init the Updater.
-	 */
-	init: function() {
-		// Get the difference between now and the last check.
-		var lastCheck	= myGM.getValue('updater_lastUpdateCheck', 0);
-		var now			= new Date();
-		var millis		= now.getTime();
-		var diff		= millis - lastCheck;
-		
-		// If the module is active and the last update is enough time before, check for updates.
-		if(myGM.getValue('module_updateActive', true) && diff > myGM.getValue('updater_updateInterval', 3600) * 1000) {
-			// No manual Update.
-			this.manualUpdate = false;
-
-			// Check for Updates.
-			this.checkForUpdates();
-			
-			// Set the time for the last update check to now.
-			myGM.setValue('updater_lastUpdateCheck', millis + '');
-		}
-	},
-	
-	/**
-	 * Search manually for updates.
-	 */
-	doManualUpdate: function() {
-		// No manual Update.
-		Updater.manualUpdate = true;
-
-		// Check for Updates.
-		Updater.checkForUpdates();
-		
-		// Set the time for the last update check to now.
-		var now			= new Date();
-		var millis		= now.getTime();
-		myGM.setValue('updater_lastUpdateCheck', millis + '');
-	},
-
-	/**
-	 * Check for updates for the Script.
-	 * 
-	 * @return	boolean
-	 *   If there is a newer version.
-	 */
-	checkForUpdates: function() {
-		// Send a request to the userscripts.org server to get the metadata of the script to check if there is a new Update.
-		myGM.xhr({
-				method: 'GET',
-				url: 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.meta.js',
-				headers: {'User-agent': 'Mozilla/5.0', 'Accept': 'text/html'},
-				onload: function(response) {
-					// Extract the metadata from the response.
-					var metadata = Updater.formatMetadata(response.responseText);
-					
-					// If the installed script version is smaller than the metadata script version (= new update available).
-					if(scriptInfo.version < metadata.version) {
-						// Show updata dialogue.
-						Updater.showUpdateInfo(metadata);
-						
-					// If there is no new update and it was a manual update show hint.
-					} else if(Updater.manualUpdate)	{
-						General.showTooltip('cityAdvisor', 'error', Language.$('update_noNewExist'));
-					}
-				},
-			});
-	},
-	
-	/**
-	 * Show the update information panel.
-	 * 
-	 * @param	mixed[]	metadata
-	 *   Array with formated metadata
-	 */
-	showUpdateInfo: function(metadata) {
-		// Get the update history.
-		var updateHistory = this.extractUpdateHistory(metadata);
-		
-		// Set the Updater styles.
-		this.setStyles();
-		
-		// Create the background and the container.
-		var updateBackground		= General.addElement('div', document.body, 'updateBackground');
-		var updatePanelContainer	= General.addElement('div', document.body, 'updatePanelContainer');
-		var updatePanel				= General.addElement('div', updatePanelContainer, 'updatePanel');
-		
-		// Create the update panel header.
-		var updatePanelHeader		= General.addElement('div', updatePanel, 'updatePanelHeader');
-		var updatePanelHeaderL		= General.addElement('div', updatePanelHeader, 'updatePanelHeaderL');
-		var updatePanelHeaderR		= General.addElement('div', updatePanelHeaderL, 'updatePanelHeaderR');
-		var updatePanelHeaderM		= General.addElement('p', updatePanelHeaderR, 'updatePanelHeaderM');
-		
-		// Create the update panel body.
-		var updatePanelBody			= General.addElement('div', updatePanel, 'updatePanelBody');
-		var updatePanelBodyL		= General.addElement('div', updatePanelBody, 'updatePanelBodyL');
-		var updatePanelBodyR		= General.addElement('div', updatePanelBodyL, 'updatePanelBodyR');
-		var updatePanelBodyM		= General.addElement('div', updatePanelBodyR, 'updatePanelBodyM');
-		var updatePanelBodyMTop		= General.addElement('p', updatePanelBodyM, 'updatePanelBodyMTop');
-		var updatePanelBodyMBottom	= General.addElement('div', updatePanelBodyM, 'updatePanelBodyMBottom');
-		
-		// Create the update panel footer.
-		var updatePanelFooter		= General.addElement('div', updatePanel, 'updatePanelFooter');
-		var updatePanelFooterL		= General.addElement('div', updatePanelFooter, 'updatePanelFooterL');
-		var updatePanelFooterR		= General.addElement('div', updatePanelFooterL, 'updatePanelFooterR');
-		var updatePanelFooterM		= General.addElement('div', updatePanelFooterR, 'updatePanelFooterM');
-		
-		// Create the install button.
-		var updatePanelInstall		= General.addElement('input', updatePanel, 'updatePanelInstall');
-		updatePanelInstall.type		= 'button';
-		updatePanelInstall.value	= Language.$('update_install');
-		
-		// Create the close button.
-		var updatePanelCB			= General.addElement('input', updatePanel, 'updatePanelCB');
-		updatePanelCB.type			= 'button';
-		updatePanelCB.value			= Language.$('update_close');
-		
-		// Insert the texts into header, body and footer.
-		updatePanelHeaderM.innerHTML		= Language.$('update_header') + '<span><a><img id="script' + scriptInfo.id + 'updatePanelClose" src="skin/layout/notes_close.png"></a></span>';
-		updatePanelBodyMTop.innerHTML		= Language.$('update_text1') + '<a href="http://userscripts.org/scripts/show/' + scriptInfo.id + '" target="_blank" >' + scriptInfo.name + '</a>' + Language.$('update_text2') + '.<br>' + Language.$('update_text3') + scriptInfo.version + Language.$('update_text4') + metadata.version + '.<br>&nbsp;&nbsp;<b><u>' + Language.$('update_hist') + ':</u></b>';
-		updatePanelBodyMBottom.innerHTML	= this.formatUpdateHistory(updateHistory);
-		updatePanelFooterM.innerHTML		= scriptInfo.name + ' v' + scriptInfo.version;
-		
-		// Add event listener to the buttons to close / install.
-		General.$('#script' + scriptInfo.id + 'updatePanelClose').addEventListener('click', this.closeUpdatePanel, false);
-		updatePanelInstall.addEventListener('click', this.installScript, false);
-		updatePanelCB.addEventListener('click', this.closeUpdatePanel, false);
-	},
-	
-	/**
-	 * Set the styles that are used for the update panel.
-	 */
-	setStyles: function() {
-		// Add all update styles to the ikariam page.
-		myGM.addStyle(
-				"#script" + scriptInfo.id + "updateBackground			{ z-index: 1000000000000; position: fixed; visibility: visible; top: 0px; left: 0px; width: 100%; height: 100%; padding: 0; background-color: #000; opacity: .7; } \
-				 #script" + scriptInfo.id + "updatePanelContainer		{ z-index: 1000000000001; position: fixed; visibility: visible; top: 100px; left: 50%; width: 500px; height: 370px; margin-left: -250px; padding: 0; text-align: left; color: #542C0F; font: 12px Arial,Helvetica,sans-serif; } \
-				 #script" + scriptInfo.id + "updatePanel				{ position: relative; top: 0px; left: 0px; background-color: transparent; border: 0 none; overflow: hidden; } \
-				 #script" + scriptInfo.id + "updatePanelHeader			{ height: 39px; background: none repeat scroll 0 0 transparent; font-weight: bold; line-height: 2; white-space: nowrap; } \
-				 #script" + scriptInfo.id + "updatePanelHeaderL			{ height: 39px; background-image: url('skin/layout/notes_top_left.png'); background-position: left top; background-repeat: no-repeat; } \
-				 #script" + scriptInfo.id + "updatePanelHeaderR			{ height: 39px; background-image: url('skin/layout/notes_top_right.png'); background-position: right top; background-repeat: no-repeat; } \
-				 #script" + scriptInfo.id + "updatePanelHeaderM			{ height: 39px; margin: 0 14px 0 38px; padding: 12px 0 0; background-image: url('skin/layout/notes_top.png'); background-position: left top; background-repeat: repeat-x; color: #811709; line-height: 1.34em; } \
-				 #script" + scriptInfo.id + "updatePanelHeaderM span	{ text-align: right; display: block; margin: -15px 0 0; } \
-				 #script" + scriptInfo.id + "updatePanelBody			{ height: 311px; background: none repeat scroll 0 0 transparent; } \
-				 #script" + scriptInfo.id + "updatePanelBodyL			{ height: 100%; background-image: url('skin/layout/notes_left.png'); background-position: left top; background-repeat: repeat-y; } \
-				 #script" + scriptInfo.id + "updatePanelBodyR			{ height: 100%; background-image: url('skin/layout/notes_right.png'); background-position: right top; background-repeat: repeat-y; } \
-				 #script" + scriptInfo.id + "updatePanelBodyM			{ height: 100%; background-color: #F7E7C5; background-image: none;  margin: 0 6px; padding: 0 10px; font-size: 14px; } \
-				 #script" + scriptInfo.id + "updatePanelBodyMTop		{ height: 100px; line-height: 2; } \
-				 #script" + scriptInfo.id + "updatePanelBodyMTop b		{ line-height: 3.5; font-size:110%; } \
-				 #script" + scriptInfo.id + "updatePanelBodyM a			{ color: #811709; font-weight: bold; } \
-				 #script" + scriptInfo.id + "updatePanelBodyMBottom		{ height: 170px; padding: 10px; background: url('skin/input/textfield.png') repeat-x scroll 0 0 #FFF7E1; border: 1px dotted #C0C0C0; font: 14px Arial,Helvetica,sans-serif; color: #000000; border-collapse: separate; overflow-y:auto; } \
-				 #script" + scriptInfo.id + "updatePanelBodyMBottom h2	{ font-weight: bold; } \
-				 .script" + scriptInfo.id + "updateTable				{ border-collapse: separate; border-spacing: 2px; } \
-				 .script" + scriptInfo.id + "updateDataType				{ width: 100px; padding: 5px 0px 5px 5px; border: 1px solid #D2A860; } \
-				 .script" + scriptInfo.id + "updateDataInfo				{ width: 300px; padding: 5px 5px 5px 20px; border: 1px solid #D2A860; } \
-				 .script" + scriptInfo.id + "updateDataInfo ul li		{ list-style: disc outside none; } \
-				 #script" + scriptInfo.id + "updatePanelFooter			{ height: 20px; background: none repeat scroll 0 0 transparent; } \
-				 #script" + scriptInfo.id + "updatePanelFooterL			{ height: 100%; background-image: url('skin/layout/notes_left.png'); background-position: left top; background-repeat: repeat-y; border: 0 none; } \
-				 #script" + scriptInfo.id + "updatePanelFooterR			{ height: 21px; background-image: url('skin/layout/notes_br.png'); background-position: right bottom; background-repeat: no-repeat; } \
-				 #script" + scriptInfo.id + "updatePanelFooterM			{ background-color: #F7E7C5; border-bottom: 3px solid #D2A860; border-left: 2px solid #D2A860; margin: 0 23px 0 3px; padding: 5px 0 0; font-size: 77%; } \
-				 #script" + scriptInfo.id + "updatePanelClose			{ cursor: pointer } \
-				 #script" + scriptInfo.id + "updatePanelInstall			{ background: url('skin/input/button.png') repeat-x scroll 0 0 #ECCF8E; bottom: -4px; position: absolute; border-color: #C9A584 #5D4C2F #5D4C2F #C9A584; border-style: double; border-width: 3px; cursor: pointer; display: inline; font-weight: bold; margin: 10px auto; padding: 2px 10px; text-align: center; font-size: 12px; left: 50%; margin-left: -105px; width: 100px; } \
-				 #script" + scriptInfo.id + "updatePanelInstall:hover	{ color: #FFFFFF; text-decoration: none; } \
-				 #script" + scriptInfo.id + "updatePanelInstall:active	{ border-color: #5D4C2F #C9A584 #C9A584 #5D4C2F; border-style: double; border-width: 3px; padding: 3px 10px 1px; } \
-				 #script" + scriptInfo.id + "updatePanelCB				{ background: url('skin/input/button.png') repeat-x scroll 0 0 #ECCF8E; bottom: -4px; position: absolute; border-color: #C9A584 #5D4C2F #5D4C2F #C9A584; border-style: double; border-width: 3px; cursor: pointer; display: inline; font-weight: bold; margin: 10px auto; padding: 2px 10px; text-align: center; font-size: 12px; left: 50%; margin-left: 5px; width: 100px; } \
-				 #script" + scriptInfo.id + "updatePanelCB:hover		{ color: #FFFFFF; text-decoration: none; } \
-				 #script" + scriptInfo.id + "updatePanelCB:active		{ border-color: #5D4C2F #C9A584 #C9A584 #5D4C2F; border-style: double; border-width: 3px; padding: 3px 10px 1px; }"
-			);
-	},
-	
-	/**
-	 * Format the given metadata.
-	 * 
-	 * @param	String	metadata
-	 *   The metadata to format.
-	 * 
-	 * @return	String[]
-	 *   The formated metadata as array.
-	 */
-	formatMetadata: function(metadataIn) {
-		// Create an array for the formated metadata.
-		var metadataOut = new Array();
-
-		// Extract the tags from the metadata.
-		var innerMeta = metadataIn.match(/\/\/ ==UserScript==((.|\n|\r)*?)\/\/ ==\/UserScript==/)[0];
-		
-		// If there are some tags.
-		if(innerMeta) {
-			// Extract all tags.
-			var tags = innerMeta.match(/\/\/ @(.*?)(\n|\r)/g);
-			
-			// Loop over all tags.
-			for(var i = 0; i < tags.length; i++) {
-				// Extract the data from the tag.
-				var tmp = tags[i].match(/\/\/ @(.*?)\s+(.*)/);
-				
-				// If there is no data with this tag create a new array to store all data with this tag.
-				if(!metadataOut[tmp[1]]) {
-					metadataOut[tmp[1]] = new Array(tmp[2]);
-
-				// Otherwise add the data to the existing array.
-				} else {
-					metadataOut[tmp[1]].push(tmp[2]);
-				}
-			}
-		}
-		
-		// Return the formated metadata.
-		return metadataOut;
-	},
-	
-	/**
-	 * Extract the update history from the metadata.
-	 * 
-	 * @param	String[]	metadata
-	 *   Array with the formated metadata.
-	 * 
-	 * @return	mixed[]
-	 *   The extracted update history.
-	 */
-	extractUpdateHistory: function(metadata) {
-		// Create variable to store the update history.
-		var updateHistory = new Array();
-		
-		// Loop over all update history data.
-		for(var i = 0; i < metadata['history'].length; i++) {
-			// Get the information from the update history data.
-			var tmp = metadata['history'][i].match(/^(\S+)\s+(\S+)\s+(.*)$/);
-			
-			// If there is no array for this version create one.
-			if(!updateHistory[tmp[1]]) {
-				updateHistory[tmp[1]] = new Array();
-			}
-			
-			// If it is a feature store it to feature in this version.
-			if(tmp[2] == 'Feature:') {
-				if(!updateHistory[tmp[1]]['feature']) {
-					updateHistory[tmp[1]]['feature'] = new Array(tmp[3]);
-				} else {
-					updateHistory[tmp[1]]['feature'].push(tmp[3]);
-				}
-
-			// If it is a bugfix store it to bugfix in this version.
-			} else if(tmp[2] == 'Bugfix:') {
-				if(!updateHistory[tmp[1]]['bugfix']) {
-					updateHistory[tmp[1]]['bugfix'] = new Array(tmp[3]);
-				} else {
-					updateHistory[tmp[1]]['bugfix'].push(tmp[3]);
-				}
-			
-			// Otherwise store it to other in this version.
-			} else {
-				if(!updateHistory[tmp[1]]['other']) {
-					updateHistory[tmp[1]]['other'] = new Array(tmp[2] + " " + tmp[3]);
-				} else {
-					updateHistory[tmp[1]]['other'].push(tmp[2] + " " + tmp[3]);
-				}
-			}
-		}
-		
-		// Return the update history.
-		return updateHistory;
-	},
-	
-	/**
-	 * Format the update history.
-	 * 
-	 * @param	mixed[]	updateHistory
-	 *   The update history.
-	 * 
-	 * @return	String
-	 *   The formated update history.
-	 */
-	formatUpdateHistory: function(updateHistory) {
-		// Get the labels for the types.
-		var types = {
-			feature:	Language.$('update_feature'),
-			bugfix:		Language.$('update_bugfix'),
-			other:		Language.$('update_other'),
-		};
-
-		// Create a var for the formated update history.
-		var formatedUpdateHistory = '';
-		
-		// Loop over all versions.
-		for(var version in updateHistory) {
-			// Create a headline for each version and start a table.
-			formatedUpdateHistory += '<h2>v ' + version + '</h2><br><table class="script' + scriptInfo.id + 'updateTable"><tbody>';
-			
-			// Loop over all types.
-			for(var type in updateHistory[version]) {
-				// Create a table row for each type and start a list for the elements.
-				formatedUpdateHistory += '<tr><td class="script' + scriptInfo.id + 'updateDataType">' + types[type] + '</td><td class="script' + scriptInfo.id + 'updateDataInfo"><ul>';
-				
-				// Loop over the elements and add them to the list.
-				for(var i = 0 ; i < updateHistory[version][type].length; i++) {
-					formatedUpdateHistory += '<li>' + updateHistory[version][type][i] + '</li>';
-				}
-				
-				// End the list.
-				formatedUpdateHistory += '</ul></td></tr>';
-			}
-			
-			// End the table.
-			formatedUpdateHistory += '</tbody></table><br>';
-		}
-		
-		// Return the formated update history.
-		return formatedUpdateHistory;
-	},
-	
-	/**
-	 * Opens the install dialogue and closes the update panel.
-	 */
-	installScript: function() {
-		// Close the update panel.
-		Updater.closeUpdatePanel();
-
-		// Open the install dialogue
-		top.location.href = 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.user.js';
-	},
-	
-	/**
-	 * Removes everything of the updater from the website.
-	 */
-	closeUpdatePanel: function() {
-		// Remove the update background.
-		document.body.removeChild(General.$('#script' + scriptInfo.id + 'updateBackground'));
-
-		// Remove the update panel.
-		document.body.removeChild(General.$('#script' + scriptInfo.id + 'updatePanelContainer'));
-	},
-};
-
-/**
- * Functions for language.
- */
-Language = {
-	/**
-	 * The name of the language which is actually set.
-	 */
-	name: 'english',
-	
-	/**
-	 * The text of the used language.
-	 */
-	text: null,
-	
-	/**
-	 * Init the language and set the used language code.
-	 */
-	init: function() {
-		// Split the host string.
-		var lang = top.location.host.split('.');
-		
-		// Set the language name.
-		this.setLangName(lang ? lang[1] : 'en');
-		
-		// Set the text in the used language.
-		this.setText();
-	},
-	
-	/**
-	 * Set the name of the used language.
-	 * 
-	 * @param	String	code
-	 *   The laguage code.
-	 */
-	setLangName: function(code) {
-		// Languages which are already implemented.
-		var implemented = new Array('English', 'German');
-		
-		// All languages.
-		var languageName = {
-			ae: 'Arabic',		ar: 'Spanish',		ba: 'Bosnian',		bg: 'Bulgarian',	br: 'Portuguese',	by: 'Russian',
-			cl: 'Spanish',		cn: 'Chinese',		co: 'Spanish',		cz: 'Czech',		de: 'German',		dk: 'Danish',
-			ee: 'Estonian',		en: 'English',		es: 'Spanish',		fi: 'Finish',		fr: 'French',		gr: 'Greek',
-			hk: 'Chinese',		hr: 'Bosnian',		hu: 'Hungarian',	id: 'Indonesian',	il: 'Hebrew',		it: 'Italian',
-			kr: 'Korean',		lt: 'Lithuanian',	lv: 'Latvian',		mx: 'Spanish',		nl: 'Dutch',		no: 'Norwegian',
-			pe: 'Spanish',		ph: 'Filipino',		pk: 'Urdu',			pl: 'Polish',		pt: 'Portuguese',	ro: 'Romanian',
-			rs: 'Serbian',		ru: 'Russian',		se: 'Swedish',		si: 'Slovene',		sk: 'Slovak',		tr: 'Turkish',
-			tw: 'Chinese',		ua: 'Ukranian',		us: 'English',		ve: 'Spanish',		vn: 'Vietnamese',	yu: 'Bosnian'
-		}[code];
-		
-		// Look up if implemented contains the language.
-		for(var i = 0; i < implemented.length; i++) {
-			// If the language is implemented set the name to it and return.
-			if(implemented[i] == languageName) {
-				this.name = languageName;
-				return;
-			}
-		}
-
-		// If the language is not implemented, set the language to english.
-		this.name = 'English';
-	},
-	
-	/*
-	 * Set the text for the script.
-	 */
-	setText: function() {
-		this.text = myGM.getResourceParsed('language' + this.name);
-	},
-	
-	/**
-	 * Return the name of the actually used language.
-	 * 
-	 * @return	String
-	 *   The country code.
-	 */
-	getLangName: function() {
-		return this.name;
-	},
-	
-	/**
-	 * Synonymous function for Language.getText().
-	 * 
-	 * @param	String	name
-	 *   The name of the placeholder.
-	 * 
-	 * @return	mixed
-	 *   The text.
-	 */
-	$: function(name) {
-		return this.getText(name);
-	},
-	
-	/**
-	 * Return the name of the actually used language.
-	 * 
-	 * @param	String	name
-	 *   The name of the placeholder.
-	 * 
-	 * @return	mixed
-	 *   The text.
-	 */
-	getText: function(name) {
-		// Set the text to the placeholder.
-		var erg = name;
-		
-		// Split the placeholder.
-		var parts = name.split('_');
-		
-		// If the splitting was successful.
-		if(parts) {
-			// Set txt to the "next level".
-			var txt = this.text[parts[0]];
-			
-			// Loop over all parts.
-			for(var i = 1; i < parts.length; i++) {
-				// If the "next level" exists, set txt to it.
-				if(txt && typeof txt[parts[i]] != 'undefined') {
-					txt = txt[parts[i]];
-				} else {
-					txt = erg;
-					break;
-				}
-			}
-			
-			// If the text type is not an object, a function or undefined.
-			if(typeof txt != 'object' && typeof txt != 'function' && typeof txt != 'undefined') {
-				erg = txt;
-			}
-		}
-		
-		// Return the text.
-		return erg;
-	},
-};
-
-/**
  * The main function of the script.
  */
 function main() {
-	// Init the script.
-	General.init();
+	// Init the myGM functions.
+	myGM.init();
 	
 	// Init the language.
 	Language.init();
 	
-	// Set the general styles for the script.
-	General.setStyles();
+	// Init the script.
+	General.init();
 	
 	// Call the function to check for updates.
 	Updater.init();
