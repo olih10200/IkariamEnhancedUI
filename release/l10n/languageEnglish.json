@@ -78,10 +78,14 @@
 			"updateActive":			"Search for updates automatically",
 			"incomeOnTopActive":		"Show income on top in Balance view",
 			"upkeepReductionActive":	"Show a short version of the upkeep reduction",
+			"missingResActive":		"Show missing resources in construction view",
+			"resourceInfoActive":		"Show the hourly income directly in town view",
 			"zoomActive":			"Activate zoom in world view, island view, town view",
 			"lcMoveActive":			"Move loading circle to position bar",
 			"tooltipsAutoActive":		"Show tooltips in alliance mebers view and military advisor automatically",
 			"hideBirdsActive":		"Hide the bird swarm.",
+			"nctAdvisorActive":		"Don't center town information in the town advisor",
+			"memberInfoActive":		"Enable the possibility to save highscore data of alliance members",
 			"updateInterval":		"Interval to search for updates:",
 			"manualUpdate1":		"Search for updates for \"",
 			"manualUpdate2":		"\"!",
@@ -110,6 +114,21 @@
 			"week":		"1 week",
 			"week2":	"2 weeks",
 			"week4":	"4 weeks"
+		}
+	},
+	"memberInfo": {
+		"show":		"Alliance info",
+		"reset":	"Reset",
+		"lastReset":	"Time since the last reset:",
+		"noReset":	"No reset so far."
+	},
+	"resourceInfo": {
+		"dailyIncome": {
+			"wood":		"Daily production building material:",
+			"wine":		"Daily production wine:",
+			"marble":	"Daily production marble:",
+			"glass":	"Daily production crystal glass:",
+			"sulfur":	"Daily production sulphur:"
 		}
 	}
 }

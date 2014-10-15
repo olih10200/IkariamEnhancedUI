@@ -3,16 +3,16 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			7.01
+// @version			8.00
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @resource		languageGerman	http://resources.ika-scripts.co.cc/74221/v7.01/languageGerman.json
-// @resource		languageEnglish	http://resources.ika-scripts.co.cc/74221/v7.01/languageEnglish.json
-// @resource		languageLatvian	http://resources.ika-scripts.co.cc/74221/v7.01/languageLatvian.json
+// @resource		languageGerman	http://resources.ikascripts.de/74221/v8.00/languageGerman.json
+// @resource		languageEnglish	http://resources.ikascripts.de/74221/v8.00/languageEnglish.json
+// @resource		languageLatvian	http://resources.ikascripts.de/74221/v8.00/languageLatvian.json
 // 
 // @bug				Opera	Zooming with the mouse is only possible with "Alt" or without any key. No fix possible as I know.
 // @bug				Chrome	No good solution for zooming with mouse. Default Ikariam scroll zoom function can not be changed.
@@ -20,6 +20,15 @@
 // @bug				Chrome	Latvian special chars are not shown correct.
 // @bug				All		The selected island is not centered in world view.
 // @bug				All		If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			8.00	Feature: Show the missing resources in construction view. (desktop)
+// @history			8.00	Feature: Show the hourly income directly in town view and add the daily production as popup. (desktop)
+// @history			8.00	Feature: Don't center town information in the town advisor. (desktop)
+// @history			8.00	Feature: Save the highscore data of alliance members and compare it with the actual value. (desktop)
+// @history			8.00	Bugfix: There was an error with a missing language package and seperators. (mobile & desktop)
+// @history			8.00	Bugfix: Some things in worldview were not resized correctly. (desktop)
+// @history			8.00	Prevent more than one script execution.
+// @history			8.00	Prevent more than one script option panel (the script option panel now is usable for other scripts, too).
 // 
 // @history			7.01	Bugfix: Zooming was broken.
 // @history			7.01	Bugfix: Dropdown menus created by the script were broken.
@@ -103,11 +112,11 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'7.01',
+	version:	'8.00',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
-	debug:		true,
+	debug:		false,
 };
 
 /**
@@ -115,7 +124,8 @@ const scriptInfo = {
  */
 const languageInfo = {
 	implemented:	new Array('English', 'German', 'Latvian'),
-	defaultText:	{"default":{"update":{"notPossible":{"header":"No Update possible","text1":"It is not possible to check for updates for ","text2":". Please check manually for Updates for the script. The actual installed version is ","text3":". This message will appear again in four weeks."},"possible":{"header":"Update available","text1":"There is an update for ","text2":" available.","text3":"At the moment there is version ","text4":" installed. The newest version is ","history":"Version History","type":{"feature":"Feature(s)","bugfix":"Bugfix(es)","other":""},"button":{"install":"Install","hide":"Hide"}},"noNewExists":{"header":"No Update available","text1":"There is no new version for ","text2":" available. The newest version ","text3":" is installed."}},"notification":{"header":"Script notification","button":{"confirm":"OK","abort":"Abort"}}},"settings":{"kiloSep":",","decSep":".","left2right":true},"general":{"successful":"Your order has been carried out.","error":"There was an error in your request.","ctrl":"Ctrl","alt":"Alt","shift":"Shift"},"balance":{"income":{"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep":{"reason":{"0":"Troops","1":"Ships","2":"Troops &amp; Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"optionPanel":{"scripts":"Scripts","update":"Update","module":"Modules","zoom":"Zoom function","save":"Save settings!","label":{"updateActive":"Search for updates automatically","incomeOnTopActive":"Show income on top in Balance view","upkeepReductionActive":"Show a short version of the upkeep reduction","zoomActive":"Activate zoom in world view, island view, town view","lcMoveActive":"Move loading circle to position bar","tooltipsAutoActive":"Show tooltips in alliance mebers view and military advisor automatically","hideBirdsActive":"Hide the bird swarm.","updateInterval":"Interval to search for updates:","manualUpdate1":"Search for updates for \"","manualUpdate2":"\"!","world":{"zoomFactor":"Zoom worldmap:","scaleChildren":"Worldmap"},"island":{"zoomFactor":"Zoom island view:","scaleChildren":"Island view"},"town":{"zoomFactor":"Zoom town view:","scaleChildren":"Town view"},"description":{"scaleChildren":"Let banners and symbols in normal size when zooming when zooming in this view:","accessKeys":"This keys must be pressed to zoom with the mouse:"}},"updateIntervals":{"hour":"1 hour","hour12":"12 hours","day":"1 day","day3":"3 days","week":"1 week","week2":"2 weeks","week4":"4 weeks"}}},
+	useResource:	true,
+	defaultText:	{"default":{"update":{"notPossible":{"header":"No Update possible","text1":"It is not possible to check for updates for ","text2":". Please check manually for Updates for the script. The actual installed version is ","text3":". This message will appear again in four weeks."},"possible":{"header":"Update available","text1":"There is an update for ","text2":" available.","text3":"At the moment there is version ","text4":" installed. The newest version is ","history":"Version History","type":{"feature":"Feature(s)","bugfix":"Bugfix(es)","other":""},"button":{"install":"Install","hide":"Hide"}},"noNewExists":{"header":"No Update available","text1":"There is no new version for ","text2":" available. The newest version ","text3":" is installed."}},"notification":{"header":"Script notification","button":{"confirm":"OK","abort":"Abort"}}},"settings":{"kiloSep":",","decSep":".","left2right":true},"general":{"successful":"Your order has been carried out.","error":"There was an error in your request.","ctrl":"Ctrl","alt":"Alt","shift":"Shift"},"balance":{"income":{"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep":{"reason":{"0":"Troops","1":"Ships","2":"Troops &amp; Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"optionPanel":{"scripts":"Scripts","update":"Update","module":"Modules","zoom":"Zoom function","save":"Save settings!","label":{"updateActive":"Search for updates automatically","incomeOnTopActive":"Show income on top in Balance view","upkeepReductionActive":"Show a short version of the upkeep reduction","missingResActive":"Show missing resources in construction view","resourceInfoActive":"Show the hourly income directly in town view","zoomActive":"Activate zoom in world view, island view, town view","lcMoveActive":"Move loading circle to position bar","tooltipsAutoActive":"Show tooltips in alliance mebers view and military advisor automatically","hideBirdsActive":"Hide the bird swarm.","nctAdvisorActive":"Don't center town information in the town advisor","memberInfoActive":"Enable the possibility to save highscore data of alliance members","updateInterval":"Interval to search for updates:","manualUpdate1":"Search for updates for \"","manualUpdate2":"\"!","world":{"zoomFactor":"Zoom worldmap:","scaleChildren":"Worldmap"},"island":{"zoomFactor":"Zoom island view:","scaleChildren":"Island view"},"town":{"zoomFactor":"Zoom town view:","scaleChildren":"Town view"},"description":{"scaleChildren":"Let banners and symbols in normal size when zooming when zooming in this view:","accessKeys":"This keys must be pressed to zoom with the mouse:"}},"updateIntervals":{"hour":"1 hour","hour12":"12 hours","day":"1 day","day3":"3 days","week":"1 week","week2":"2 weeks","week4":"4 weeks"}},"memberInfo":{"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset:","noReset":"No reset so far."},"resourceInfo":{"dailyIncome":{"wood":"Daily production building material:","wine":"Daily production wine:","marble":"Daily production marble:","glass":"Daily production crystal glass:","sulfur":"Daily production sulphur:"}}},
 };
 
 /**********************************************************
@@ -279,7 +289,7 @@ myGM = {
 									&& !(typeof GM_deleteValue == 'undefined' || (typeof GM_deleteValue.toString == 'function' && GM_deleteValue.toString().indexOf('not supported') > -1))
 									&& !(typeof GM_listValues == 'undefined' || (typeof GM_listValues.toString == 'function' && GM_listValues.toString().indexOf('not supported') > -1));
 		
-		// Set the possibility to use the GM_ressource.
+		// Set the possibility to use the GM_resource.
 		this.canUseGmRessource	= !(typeof GM_getResourceText == 'undefined' || (typeof GM_getResourceText.toString == 'function' && GM_getResourceText.toString().indexOf('not supported') > -1));
 		
 		// Set the possibillity to use the GM_xhr.
@@ -340,20 +350,23 @@ myGM = {
 	 *   The value to store.
 	 */
 	setValue: function(key, value) {
+		// Stringify the value to store also arrays.
+		var toStore = win.JSON.stringify(value);
+		
 		// If the use of the default GM_setValue ist possible, use it.
 		if(this.canUseGmStorage) {
 			// Store the value.
-			GM_setValue(key, value);
+			GM_setValue(key, toStore);
 		
 		// Otherwise use the local storage if possible.
 		} else if(this.canUseLocalStorage) {
 			// Store the value.
-			win.localStorage.setItem(this.prefix + key, value);
+			win.localStorage.setItem(this.prefix + key, toStore);
 		
 		// Otherwise use cookies.
 		} else {
 			// Prepare the cookie name and value.
-			var data	= escape(this.prefix + key) + '=' + escape(win.JSON.stringify(value));
+			var data	= escape(this.prefix + key) + '=' + escape(toStore);
 			
 			// Set the expire date to January 1st, 2020.
 			var expire	= 'expires=' + (new Date(2020, 0, 1, 0, 0, 0, 0)).toGMTString();
@@ -580,7 +593,7 @@ myGM = {
 	 * Returns the content of a resource parsed with JSON.parse.
 	 * 
 	 * @param	String	name
-	 *   The name of the ressource to parse.
+	 *   The name of the resource to parse.
 	 */
 	getResourceParsed: function(name) {
 		// Storage for the response text.
@@ -837,7 +850,7 @@ myGM = {
 		// If there is a id, set it.
 		if(id) {
 			// Get the id prefix.
-			var idPrefix = (hasPrefix && (hasPrefix == false || (hasPrefix.id && hasPrefix.id == false))) ? '' : this.prefix;
+			var idPrefix = !(hasPrefix == false || (hasPrefix && hasPrefix.id == false)) ? this.prefix : '';
 			
 			// Set the id.
 			newElement.id = idPrefix + id;
@@ -846,7 +859,7 @@ myGM = {
 		// Add all classes.
 		if(classes && classes != '') {
 			// Get the class prefix.
-			var classPrefix = (hasPrefix && (hasPrefix == true || (hasPrefix.classes && hasPrefix.classes == true))) ? this.prefix : '';
+			var classPrefix = !!(hasPrefix == true || (hasPrefix && hasPrefix.classes == true)) ? this.prefix : '';
 			
 			// Set the class(es).
 			if(typeof classes == 'string') {
@@ -1098,7 +1111,7 @@ Updater = {
 			bugfix:		Language.$('default_update_possible_type_bugfix'),
 			other:		Language.$('default_update_possible_type_other'),
 		};
-
+		
 		// Create a var for the formated update history.
 		var formatedUpdateHistory = '';
 		
@@ -1151,8 +1164,21 @@ Language = {
 		// Split the host string.
 		var lang = top.location.host.split('.');
 		
+		// Set the default language code.
+		var langCode = 'en';
+		
+		// Change the language code, if lang exists.
+		if(lang) {
+			for(var i = 0; i < lang.length; i++) {
+				if(lang[i] == 'ikariam') {
+					langCode = lang[i - 1];
+					break;
+				}
+			}
+		}
+		
 		// Set the language name.
-		this.setLangName(lang ? lang[1] : 'en');
+		this.setLangName(langCode);
 		
 		// Set the text in the used language.
 		this.setText();
@@ -1194,11 +1220,22 @@ Language = {
 	 * Set the text for the script.
 	 */
 	setText: function() {
-		// Get the ressource.
-		var text = myGM.getResourceParsed('language' + this.name);
-		
-		// Get the ressource an store it to Language.text.
-		this.text = (text && !text.is_error) ? text : languageInfo.defaultText;
+		// If a resource is used for the language text, use it.
+		if(languageInfo.useResource) {
+			// Get the ressource.
+			var text = myGM.getResourceParsed('language' + this.name);
+			
+			// Store it to Language.text.
+			this.text = (text && !text.is_error) ? text : languageInfo.defaultText;
+			
+		// Otherwise: Use the text in languageInfo.
+		} else {
+			// Get the text.
+			var text = languageInfo['text'][this.name];
+			
+			// Store it to Language.text.
+			this.text = (text && !text.is_error) ? text : languageInfo.text.English;
+		}
 	},
 	
 	/**
@@ -1390,7 +1427,7 @@ General = {
 	 */
 	getInt: function(txt) {
 		// Return the formated number.
-		return parseInt(txt.replace(Language.$('settings_kiloSep'), ''));
+		return parseInt(txt.replace(/(\.|,)/g, ''));
 	},
 	
 	/**
@@ -1398,13 +1435,15 @@ General = {
 	 * 
 	 * @param	String	id
 	 *   The last part of the id of the element.
+	 * @param	boolean	hasNoPrefix
+	 *   Says if the id has no prefix.
 	 * 
 	 * @return	String
 	 *   The value.
 	 */
-	getSelectValue: function(id) {
+	getSelectValue: function(id, hasNoPrefix) {
 		// Get the select field.
-		var select = myGM.$('#' + myGM.prefix + id);
+		var select = myGM.$('#' + (hasNoPrefix ? '' : myGM.prefix) + id);
 		
 		// Return the value.
 		return select.options[select.selectedIndex].value;
@@ -1415,19 +1454,26 @@ General = {
 	 *
 	 * @param	int		num
 	 *   The number to format.
+	 * @param	boolean || boolean[]	addColor
+	 *   If the number should be coloured. (optional, if not set, a color will be used for negative and no color will be used for positive numbers)
 	 * 
 	 * @return	String
 	 *   The formated number.
 	 */
-	formatToIkaNumber: function(num) {
+	formatToIkaNumber: function(num, addColor, usePlusSign) {
 		var txt = num + '';
 		
 		// Set a seperator every 3 digits from the end.
 		txt = txt.replace(/(\d)(?=(\d{3})+\b)/g, '$1' + Language.$('settings_kiloSep'));
 		
-		// If the number is negative write it in red.
-		if(num < 0) {
+		// If the number is negative and it is enabled, write it in red.
+		if(num < 0 && !(addColor == false || (addColor && addColor.negative == false))) {
 			txt = '<span class="red bold negative">' + txt + '</span>';
+		}
+		
+		// If the number is positive and it is enabled, write it in red.
+		if(num > 0 && !!(addColor == true || (addColor && addColor.positive == true))) {
+			txt = '<span class="green bold">' + (usePlusSign ? '+' : '') + txt + '</span>';
 		}
 		
 		// Return the formated number.
@@ -1529,6 +1575,20 @@ General = {
 	 */
 	isMobileVersion: function() {
 		return (top.location.href.search(/http:\/\/m/) > -1);
+	},
+	
+	/**
+	 * Returns a code consisting of the server name and the country code.
+	 * 
+	 * @return	string
+	 *   The code.
+	 */
+	getServerCode: function() {
+		// Split the host string.
+		var lang = top.location.host.split('.');
+		
+		// Set the language name.
+		return (lang ? lang[1] + '_' + lang[0] : 'undefined');
 	},
 	
 	/**
@@ -1748,6 +1808,39 @@ EventHandling = {
 	},
 	
 	/**
+	 * Events for the info link.
+	 */
+	memberInfo: {
+		/**
+		 * Is called after the info link is clicked.
+		 */
+		clickShow: function() {
+			// Set the flag showing the link was klicked.
+			myGM.setValue('memberInfo_infoLinkClicked', true);
+			
+			// Set the search settings so that the needed view is shown.
+			myGM.$('#tab_highscore input[name="searchUser"]').value = '';
+			myGM.$('#searchOnlyFriends').checked = false;
+			myGM.$('#searchOnlyAllies').checked = true;
+			
+			// Start the search.
+			myGM.$('#tab_highscore input[type="submit"]').click();
+		},
+		
+		/**
+		 * Is called after the reset button is clicked.
+		 */
+		clickReset: function() {
+			// Store the member information and the actual time.
+			myGM.setValue(General.getServerCode() + '_memberInfo_data_' + MemberInfo.type, MemberInfo.data);
+			myGM.setValue(General.getServerCode() + '_memberInfo_time_' + MemberInfo.type, (new Date).getTime());
+			
+			// Update the view.
+			EventHandling.memberInfo.clickShow();
+		},
+	},
+	
+	/**
 	 * Events for loading preview.
 	 */
 	loadingPreview: {
@@ -1809,15 +1902,26 @@ EnhancedView = {
 	 * Inits the modifications on the website which are not shown in popups.
 	 */
 	initDesktopStatic: function() {
-		
 		// Move loading circle.
-		if(myGM.getValue('module_lcMoveActive', true))	View.moveLoadingCircle();
+		if(myGM.getValue('module_lcMoveActive', true))			View.moveLoadingCircle();
 		
 		// Hide the Bird animation.
-		if(myGM.getValue('module_hideBirdsActive', true))	View.hideBirds();
+		if(myGM.getValue('module_hideBirdsActive', true))		View.hideBirds();
 		
-		// Zoom function.
-		if(myGM.getValue('module_zoomActive', true))		ZoomFunction.init();
+		// Hide the Bird animation.
+		if(myGM.getValue('module_nctAdvisorActive', true))		View.noCenterTownAdvisor();
+		
+		// Init the Zoom function.
+		if(myGM.getValue('module_zoomActive', true))			ZoomFunction.init();
+		
+		// Init the function for showing the missing resources.
+		if(myGM.getValue('module_missingResActive', true))		MissingResources.init();
+
+		// Init the function for showing the resource information.
+		if(myGM.getValue('module_resourceInfoActive', true))	ResourceInfo.init();
+		
+		// Init the function for showing the missing resources.
+		if(myGM.getValue('module_memberInfoActive', false))		MemberInfo.init();
 	},
 	
 	/**
@@ -1829,7 +1933,7 @@ EnhancedView = {
 
 		// If the view is finances.
 		if(params.search(/view=finances/) > -1) {
-			if(myGM.getValue('module_incomeActive', true))	Balance.incomeOnTopMobile();
+			if(myGM.getValue('module_incomeActive', true))		Balance.incomeOnTopMobile();
 			if(myGM.getValue('module_urtShortActive', true))	Balance.shortUpkeepReductionTable();
 		}
 
@@ -1843,8 +1947,11 @@ EnhancedView = {
 	 * Calls the script module depending on the popup.
 	 */
 	getPopup: function() {
+		// Update resource information.
+		if(myGM.getValue('module_resourceInfoActive', true))	ResourceInfo.updateResourceInfo();
+		
 		// If the script was already executed on this popup.
-		if(myGM.$('#' + myGM.prefix + 'alreadyExecuted'))	return;
+		if(myGM.$('#' + myGM.prefix + 'alreadyExecutedPopup'))	return;
 		
 		// Get the popup.
 		popup = myGM.$('.templateView');
@@ -1854,9 +1961,13 @@ EnhancedView = {
 		
 		// If a popup exists, add the hint, that the popup script was executed.
 		if(popup) {
-			alreadyExecuted			= myGM.addElement('input', myGM.$('.mainContent', popup), 'alreadyExecuted');
+			alreadyExecuted			= myGM.addElement('input', myGM.$('.mainContent', popup), 'alreadyExecutedPopup');
 			alreadyExecuted.type	= 'hidden';
 		}
+		
+		/******************************************************
+		*** Functions that should only run once on a popup. ***
+		******************************************************/
 		
 		// Options popup.
 		if(popupId == 'options_c')		OptionPanel.desktop();
@@ -1875,6 +1986,13 @@ EnhancedView = {
 		
 		// Diplomacy ally view popup.
 		if(popupId == 'embassy_c' && myGM.getValue('module_ttAutoActive', true))			Tooltips.autoshowInAllianceView();
+		
+		// Show missing resources.
+		if(popupId == 'buildingGround_c' && myGM.getValue('module_missingResActive', true))	MissingResources.showInBuildingGround();
+		if(myGM.$('#buildingUpgrade') && myGM.getValue('module_missingResActive', true))	MissingResources.showInSidebar();
+		
+		// Highscore popup.
+		if(popupId == 'highscore_c' && myGM.getValue('module_memberInfoActive', false))		MemberInfo.show();
 	},
 };
 
@@ -1905,6 +2023,15 @@ View = {
 		// Add the style.
 		myGM.addStyle(
 				 ".bird_swarm	{ visibility: hidden !important; }"
+			);
+	},
+	
+	/**
+	 * Don't center the city and date in town advisor vertically.
+	 */
+	noCenterTownAdvisor: function() {
+		myGM.addStyle(
+				"#inboxCity td	{ vertical-align: top !important; }"
 			);
 	},
 };
@@ -2102,7 +2229,7 @@ Balance = {
 		ika.controller.adjustSizes();
 	},
 };
-	
+
 /**
  * Functions for option panel.
  */
@@ -2111,25 +2238,23 @@ OptionPanel = {
 	 * Adds the tab for the script options in the desktop version.
 	 */
 	desktop: function() {
-		// If the tab already exists return.
-		if(myGM.$('#tabScriptOptions')) {
-			return;
+		// If the script options tab doesn't exists, create it.
+		if(!myGM.$('#tabScriptOptions')) {
+			// Set the styles.
+			this.setStylesDesktop();
+			
+			// Add the GM tab link to the tab menu.
+			var tabmenu					= myGM.$('.tabmenu');
+			var jsTabGMOptions			= myGM.addElement('li', tabmenu, 'js_tabScriptOptions', 'tab', null, false);
+			jsTabGMOptions.innerHTML	= '<b class="tabScriptOptions"> ' + Language.$('optionPanel_scripts') + ' </b>';
+			jsTabGMOptions.setAttribute('onclick', "switchTab('tabScriptOptions');");
+			
+			// Add the content wrapper for the GM tab to the tab menu.
+			var mainContent				= myGM.$('#tabGameOptions').parentNode;
+			var tabGMOptions			= myGM.addElement('div', mainContent, 'tabScriptOptions', null, new Array(['display', 'none']), false);
 		}
-
-		// Set the styles.
-		this.setStylesDesktop();
-
-		// Add the GM tab link to the tab menu.
-		var tabmenu					= myGM.$('.tabmenu');
-		jsTabGMOptions				= myGM.addElement('li', tabmenu, null, 'tab');
-		jsTabGMOptions.id			= 'js_tabScriptOptions';
-		jsTabGMOptions.setAttribute('onclick', "switchTab('tabScriptOptions');");
-		jsTabGMOptions.innerHTML	= '<b class="tabScriptOptions"> ' + Language.$('optionPanel_scripts') + ' </b>';
 		
-		// Add the content wrapper for the GM tab to the tab menu.
-		var mainContent				= myGM.$('#tabGameOptions').parentNode;
-		tabGMOptions				= myGM.addElement('div', mainContent, null, null, new Array(['display', 'none']));
-		tabGMOptions.id				= 'tabScriptOptions';
+		// Fill the tab with content.
 		this.createTabContent(tabGMOptions);
 	},
 	
@@ -2230,47 +2355,33 @@ OptionPanel = {
 		var updateTable	= this.addOptionsTable(contentWrapper);
 		
 		// Get the ids.
-		var id		= new Array(
-				'update',
-				'incomeOnTop',
-				'upkeepReduction',
-				'zoom',
-				'loadingCircleMove',
-				'tooltipsAuto',
-				'hideBirds'
+		var cbData	= new Array(
+				{ id: 'update',					value: myGM.getValue('module_updateActive', true),			label: Language.$('optionPanel_label_updateActive'),			hrAfter: true	},
+				{ id: 'incomeOnTop',			value: myGM.getValue('module_incomeActive', true),			label: Language.$('optionPanel_label_incomeOnTopActive'),		hrAfter: false	},
+				{ id: 'upkeepReduction',		value: myGM.getValue('module_urtShortActive', true),		label: Language.$('optionPanel_label_upkeepReductionActive'),	hrAfter: false	},
+				{ id: 'missingResources',		value: myGM.getValue('module_missingResActive', true),		label: Language.$('optionPanel_label_missingResActive'),		hrAfter: false	},
+				{ id: 'resourceInformation',	value: myGM.getValue('module_resourceInfoActive', true),	label: Language.$('optionPanel_label_resourceInfoActive'),		hrAfter: false	},
+				{ id: 'zoom',					value: myGM.getValue('module_zoomActive', true),			label: Language.$('optionPanel_label_zoomActive'),				hrAfter: true	},
+				{ id: 'loadingCircleMove',		value: myGM.getValue('module_lcMoveActive', true),			label: Language.$('optionPanel_label_lcMoveActive'),			hrAfter: false	},
+				{ id: 'tooltipsAuto',			value: myGM.getValue('module_ttAutoActive', true),			label: Language.$('optionPanel_label_tooltipsAutoActive'),		hrAfter: false	},
+				{ id: 'hideBirds',				value: myGM.getValue('module_hideBirdsActive', true),		label: Language.$('optionPanel_label_hideBirdsActive'),			hrAfter: false	},
+				{ id: 'noCenterTownAdvisor',	value: myGM.getValue('module_nctAdvisorActive', true),		label: Language.$('optionPanel_label_nctAdvisorActive'),		hrAfter: true	},
+				{ id: 'memberInformation',		value: myGM.getValue('module_memberInfoActive', false),		label: Language.$('optionPanel_label_memberInfoActive'),		hrAfter: false	}
 			);
 		
-		// Get the values.
-		var value	= new Array(
-				myGM.getValue('module_updateActive', true),
-				myGM.getValue('module_incomeActive', true),
-				myGM.getValue('module_urtShortActive', true),
-				myGM.getValue('module_zoomActive', true),
-				myGM.getValue('module_lcMoveActive', true),
-				myGM.getValue('module_ttAutoActive', true),
-				myGM.getValue('module_hideBirdsActive', true)
-			);
-		
-		// Get the labels.
-		var label	= new Array(
-				Language.$('optionPanel_label_updateActive'),
-				Language.$('optionPanel_label_incomeOnTopActive'),
-				Language.$('optionPanel_label_upkeepReductionActive'),
-				Language.$('optionPanel_label_zoomActive'),
-				Language.$('optionPanel_label_lcMoveActive'),
-				Language.$('optionPanel_label_tooltipsAutoActive'),
-				Language.$('optionPanel_label_hideBirdsActive')
-			);
-		
-		for(var i = 0; i < id.length; i++) {
+		for(var i = 0; i < cbData.length; i++) {
 			// Create table row.
 			var tr	= this.addOptionsTableRow(updateTable, true);
 
 			// Create checkbox.
-			General.addCheckbox(tr.firstChild, id[i], value[i], label[i]);
+			General.addCheckbox(tr.firstChild, cbData[i]['id'], cbData[i]['value'], cbData[i]['label']);
 			
 			// Add class for checkbox.
 			tr.firstChild.classList.add('left');
+			
+			if(cbData[i]['hrAfter'] == true) {
+				myGM.addElement('hr', updateTable);
+			}
 		}
 
 		// Add the button to save the settings.
@@ -2616,6 +2727,10 @@ OptionPanel = {
 		myGM.setValue('module_lcMoveActive', myGM.$('#' + myGM.prefix + 'loadingCircleMoveCb').checked);
 		myGM.setValue('module_ttAutoActive', myGM.$('#' + myGM.prefix + 'tooltipsAutoCb').checked);
 		myGM.setValue('module_hideBirdsActive', myGM.$('#' + myGM.prefix + 'hideBirdsCb').checked);
+		myGM.setValue('module_nctAdvisorActive', myGM.$('#' + myGM.prefix + 'noCenterTownAdvisorCb').checked);
+		myGM.setValue('module_missingResActive', myGM.$('#' + myGM.prefix + 'missingResourcesCb').checked);
+		myGM.setValue('module_resourceInfoActive', myGM.$('#' + myGM.prefix + 'resourceInformationCb').checked);
+		myGM.setValue('module_memberInfoActive', myGM.$('#' + myGM.prefix + 'memberInformationCb').checked);
 		
 		// Save the update settings.
 		myGM.setValue('updater_updateInterval', General.getInt(General.getSelectValue('updateIntervalSelect')));
@@ -2891,8 +3006,8 @@ ZoomFunction = {
 			// Worldview.
 			case 'world':
 				myGM.addStyle(
-						".wonder, .tradegood, .cities" + factor < 1 ? ", .ownerState" : "" + "	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); } \
-						 .cities																{ bottom: 10px !important; }",
+						".wonder, .tradegood, .cities" + (factor < 1 ? ", .ownerState" : "") + "	{ -moz-transform: scale(" + 1 / factor + "); msTransform: scale(" + 1 / factor + "); -o-transform: scale(" + 1 / factor + "); -webkit-transform: scale(" + 1 / factor + "); transform: scale(" + 1 / factor + "); } \
+						 .cities																	{ bottom: 10px !important; }",
 						'scaleChildren', true
 					);
 			  break;
@@ -2922,11 +3037,392 @@ ZoomFunction = {
 };
 
 /**
+ * Function for showing the missing resources directly in the construction / update view.
+ */
+MissingResources = {
+	/**
+	 * Init the missing ressources.
+	 */
+	init: function() {
+		// Set the required styles.
+		myGM.addStyle(
+				"#sidebar #buildingUpgrade ul.resources li			{ width: 120px; } \
+				 #sidebar #buildingUpgrade ul.resources li.time		{ width: 60px !important; } \
+				 #sidebar ." + myGM.prefix + "missingResources		{ float: right; }"
+			);
+	},
+	
+	/**
+	 * Shows the missing resources in the building ground popup.
+	 */
+	showInBuildingGround: function() {
+		// Show the resources.
+		this.show(false);
+	},
+	
+	/**
+	 * Shows the missing resources in the sidebar.
+	 */
+	showInSidebar: function() {
+		// Show the resources.
+		this.show(true);
+	},
+	
+	/**
+	 * Shows the missing resources in the place which is given.
+	 * 
+	 * @param	boolean	isSidebar
+	 *   If the place where to show is the sidebar.
+	 */
+	show: function(isSidebar) {
+		// Store the current resources.
+		var current = Array();
+		current.push(ika.model.currentResources.resource);	// Wood.
+		current.push(ika.model.currentResources[1]);		// Wine.
+		current.push(ika.model.currentResources[2]);		// Marble.
+		current.push(ika.model.currentResources[3]);		// Crystal.
+		current.push(ika.model.currentResources[4]);		// Sulfur.
+		
+		// Store the resource names.
+		var resourceName = new Array('wood', 'wine', 'marble', 'glass', 'sulfur');
+		
+		// Get all possible wrappers.
+		var wrapper = myGM.$$('#' + (isSidebar ? 'sidebar' : 'buildingGround') + ' .resources');
+		
+		// Loop over all wrappers.
+		for(var i = 0; i < wrapper.length; i++) {
+			// Loop over all resources.
+			for(var k = 0; k < resourceName.length; k++) {
+				// Get the resource node.
+				var node = myGM.$('.' + resourceName[k], wrapper[i]);
+				
+				// If the node exist, show the missing resources.
+				if(node) {
+					// Get the missing resource number.
+					var missing = current[k] - General.getInt(node.lastChild.nodeValue);
+					
+					// If there are resources missing.
+					if(missing < 0) {
+						// Show the missing resource info.
+						var show = myGM.addElement('span', node, null, 'missingResources', null, true);
+						show.innerHTML = (isSidebar ? '' : ' (') + '-' + General.formatToIkaNumber(missing * -1) + (isSidebar ? '' : ')');
+					}
+				}
+			}
+		}
+	},
+};
+
+/**
+ * Functions for showing the hourly production directly in the town view.
+ * Also adds the daily Production to the resource tooltip. 
+ */
+ResourceInfo = {
+	/**
+	 * Storage for the last tradegood.
+	 */
+	lastTradegood: null,
+	
+	/**
+	 * Inits the resource info.
+	 */
+	init: function() {
+		// Set the styles.
+		this.setStyles();
+		this.addResourceInfo();
+	},
+	
+	/**
+	 * Sets the styles that are required for the resource info.
+	 */
+	setStyles: function() {
+		// Add all styles to the ikariam page.
+		myGM.addStyle(
+				"#resources_wood, #resources_wine, #resources_marble, #resources_glass, #resources_sulfur						{ line-height: 13px !important; text-align: right; } \
+				 #js_GlobalMenu_wood, #js_GlobalMenu_wine, #js_GlobalMenu_marble, #js_GlobalMenu_crystal, #js_GlobalMenu_sulfur	{ padding-right: 4px; } \
+				 ." + myGM.prefix + "hourlyIncomeResource																		{ font-size: 11px; padding-right: 4px; }",
+				'resoureInfo', true
+			);
+	},
+	
+	/**
+	 * Show the resource info.
+	 */
+	addResourceInfo: function() {
+		// Set all resource types.
+		var types = new Array('wood', 'wine', 'marble', 'glass', 'sulfur');
+		
+		// Loop over all resource types.
+		for(var i = 0; i < types.length; i++) {
+			// Add the hourly info.
+			myGM.addElement('span', myGM.$('#resources_' + types[i]), 'hourlyIncomeResource' + types[i], 'hourlyIncomeResource', null, true);
+			
+			// Add the daily info.
+			var parent			= myGM.$('#resources_' + types[i] + ' .tooltip');
+			var classes			= (i < 2) ? 'smallFont' : new Array('smallFont', 'invisible');
+			var wrapper			= myGM.addElement('p', parent, 'dailyIncomeResourceWrapper' + types[i], classes, null, { id: true, classes: false }, myGM.$('p:nth-child(2)', parent));
+			wrapper.innerHTML	= Language.$('resourceInfo_dailyIncome_' + types[i]) + ' ';
+			myGM.addElement('span', wrapper, 'dailyIncomeResource' + types[i]);
+		}
+		
+		// Update the resource information.
+		this.updateResourceInfo(true);
+	},
+	
+	/**
+	 * Update the shown resource information.
+	 */
+	updateResourceInfo: function(firstRun) {
+		// Set all resource types.
+		var types = new Array('wood', 'wine', 'marble', 'glass', 'sulfur');
+		
+		// Get some needed data.
+		var producedTradegood	= ika.model.producedTradegood;
+		var tradegood			= ika.model.tradegoodProduction * 3600 + 0.001;
+		var resource			= ika.model.resourceProduction * 3600 + 0.001;
+		var wineSpending		= ika.model.wineSpendings;
+		var producesWine		= ika.model.cityProducesWine;
+		var prefix				= '#' + myGM.prefix;
+		
+		// Bugfix for the first running of the script on the page: wineSpending is not reduced by vineyard.
+		if(firstRun) {
+			// Get the vineyard.
+			var vineyard = myGM.$('.vineyard');
+			
+			// If a vineyard exists, reduce the vine spending.
+			if(vineyard) {
+				// Get the vineyard level.
+				var level = vineyard.className.match(/level([0-9]*)/i)[1];
+				
+				// Reduce the wine spending.
+				wineSpending = (wineSpending * (100 - level)) / 100;
+			}
+		}
+		
+		// Update the wood data.
+		myGM.$(prefix + 'hourlyIncomeResource' + types[0]).innerHTML	= '<br>' + General.formatToIkaNumber(Math.floor(resource), true, true);
+		myGM.$(prefix + 'dailyIncomeResource' + types[0]).innerHTML		= General.formatToIkaNumber(Math.floor(resource * 24), false);
+		
+		// Delete the last tradegood info.
+		if(this.lastTradegood) {
+			// Hourly.
+			myGM.$(prefix + 'hourlyIncomeResource' + types[this.lastTradegood]).innerHTML	= '';
+			
+			// Daily.
+			myGM.$(prefix + 'dailyIncomeResource' + types[this.lastTradegood]).innerHTML	= '';
+			
+			// Hide the daily tradegood info if it is not wine.
+			if(this.lastTradegood != 1)	myGM.$(prefix + 'dailyIncomeResourceWrapper' + types[this.lastTradegood]).classList.add('invisible');
+		}
+		
+		// Add the info if the city produces wine.
+		if(producesWine) {
+			// Hourly.
+			myGM.$(prefix + 'hourlyIncomeResource' + types[producedTradegood]).innerHTML	= '<br>' + General.formatToIkaNumber(Math.floor(tradegood - wineSpending), true, true);
+			
+			// Daily.
+			myGM.$(prefix + 'dailyIncomeResource' + types[producedTradegood]).innerHTML		= General.formatToIkaNumber(Math.floor((tradegood - wineSpending) * 24), false);
+		
+		// Add the info if the city doesn't produces wine.
+		} else {
+			// Hourly.
+			myGM.$(prefix + 'hourlyIncomeResource' + types[producedTradegood]).innerHTML	= '<br>' + General.formatToIkaNumber(Math.floor(tradegood), true, true);
+			myGM.$(prefix + 'hourlyIncomeResource' + types[1]).innerHTML					= '<br>' + General.formatToIkaNumber(Math.floor(-1 * wineSpending), true, true);
+			
+			// Daily.
+			myGM.$(prefix + 'dailyIncomeResource' + types[producedTradegood]).innerHTML		= General.formatToIkaNumber(Math.floor(tradegood * 24), false);
+			myGM.$(prefix + 'dailyIncomeResource' + types[1]).innerHTML						= General.formatToIkaNumber(Math.floor(-1 * wineSpending * 24), false);
+		}
+		
+		// Show the daily tradegood info.
+		myGM.$(prefix + 'dailyIncomeResourceWrapper' + types[producedTradegood]).classList.remove('invisible');
+		
+		// Store the actual tradegood as last produced tradegood.
+		this.lastTradegood = producedTradegood;
+	},
+};
+
+/**
+ * Functions for the member info.
+ */
+MemberInfo = {
+	/**
+	 * Storage for the highscore type.
+	 */
+	type: '',
+	
+	/**
+	 * Storage for all actual member information.
+	 */
+	data: null,
+	
+	/**
+	 * Init the member info.
+	 */
+	init: function() {
+		// Add the styles.
+		myGM.addStyle(
+				"#" + myGM.prefix + "resetInfo	{ float: right; margin-top: -6px; margin-right: 6px; } \
+				 .score span					{ float: right; text-align: right; width: 70px; } \
+				 .place span					{ float: right; text-align: right; width: 30px; } \
+				 .highscore th:nth-child(4)		{ width: 30% !important; } \
+				 .highscore th:nth-child(5)		{ width: 10% !important; } \
+				 #tab_highscore	.centerButton	{ margin: 10px 0px; }",
+				'memberInfo', true
+			);
+	},
+	
+	/**
+	 * Starts the script.
+	 */
+	show: function() {
+		// Show the link for the info.
+		this.addShowButton();
+		
+		// Show the info if the flag is set.
+		if(myGM.getValue('memberInfo_infoLinkClicked', false)) {
+			// Delete the flag.
+			myGM.setValue('memberInfo_infoLinkClicked', false);
+			
+			// Show the information.
+			this.showInfo();
+		}
+	},
+	
+	/**
+	 * Add a button for showing the inforation to the highscore.
+	 */
+	addShowButton: function() {
+		// Get the parent of the show button.
+		var parent	= myGM.$('#tab_highscore .centerButton');
+		
+		// Add the button to show the information.
+		var btn		= myGM.addElement('input', parent, 'showInfo', 'button');
+		btn.type	= 'button';
+		btn.value	= Language.$('memberInfo_show');
+		
+		// Add the event listener to the button.
+		btn.addEventListener('click', EventHandling.memberInfo.clickShow, false);
+	},
+	
+	/**
+	 * Add a button for resetting the inforation to the highscore.
+	 */
+	addResetButton: function() {
+		// Get the parent of the reset button.
+		var parent	= myGM.$('#tab_highscore .content p');
+		
+		// Add the reset button.
+		var btn		= myGM.addElement('input', parent, 'resetInfo', 'button');
+		btn.type	= 'button';
+		btn.value	= Language.$('memberInfo_reset');
+		
+		// Add the event listener to the button.
+		btn.addEventListener('click', EventHandling.memberInfo.clickReset, false);
+	},
+	
+	/**
+	 * Adds the time since the last reset to the highscore view.
+	 */
+	addLastResetTime: function() {
+		// Get the time since the last reset.
+		var lastResetTime = myGM.getValue(General.getServerCode() + '_memberInfo_time_' + MemberInfo.type, 0);
+		var diff = new Date() - lastResetTime;
+		
+		// Get the hours, days and minutes since the last reset.
+		var d = Math.floor(diff / 86400000);
+		diff = diff % 86400000;
+		var h = Math.floor(diff / 3600000);
+		diff = diff % 3600000;
+		var m = Math.floor(diff / 60000);
+		
+		// Get the string of the last reset.
+		var lastReset = lastResetTime ? (d + 'd ' + h + 'h ' + m + 'min') : Language.$('memberInfo_noReset');
+		
+		// Get the parent of the reset button.
+		var parent	= myGM.$('#tab_highscore .content p');
+		
+		// Add the reset button.
+		var span		= myGM.addElement('span', parent);
+		span.innerHTML	= '<br><span class="bold brown">' + Language.$('memberInfo_lastReset') + ' ' + lastReset + '</span>';
+	},
+	
+	/**
+	 * Shows the information about the members in the highscore view.
+	 */
+	showInfo: function() {
+		// Set the highscore type.
+		this.type = General.getSelectValue('js_highscoreType', true);
+		
+		// Storage for member information.
+		var memberInfoData = {};
+		
+		// Storage for old member information.
+		var memberInfoDataOld = myGM.getValue(General.getServerCode() + '_memberInfo_data_' + this.type, null);
+		
+		// Get the table rows of the ally members.
+		var allyRows = myGM.$$('table.highscore tr.ownally');
+		
+		// Loop over all ally rows.
+		for(var i = 0; i < allyRows.length; i++) {
+			// Get the id of the ally member.
+			var actionLink	= myGM.$('.action a', allyRows[i]).href;
+			var id			= actionLink.match(/receiverId=([0-9]*)/i)[1];
+			
+			// Get score and place of the member and store it.
+			memberInfoData[id]			= {};
+			memberInfoData[id]['place']	= General.getInt(myGM.$('.place', allyRows[i]).innerHTML);
+			memberInfoData[id]['score']	= General.getInt(myGM.$('.score', allyRows[i]).innerHTML);
+			
+			// Get the difference in place and score.
+			var placeDiff = myGM.addElement('span', myGM.$('.place', allyRows[i]));
+			var scoreDiff = myGM.addElement('span', myGM.$('.score', allyRows[i]));
+			
+			// Show the difference in place and score.
+			placeDiff.innerHTML += (memberInfoDataOld && memberInfoDataOld[id]) ? General.formatToIkaNumber(memberInfoDataOld[id]['place'] - memberInfoData[id]['place'], true, true) : '-';
+			scoreDiff.innerHTML += (memberInfoDataOld && memberInfoDataOld[id]) ? General.formatToIkaNumber(memberInfoData[id]['score'] - memberInfoDataOld[id]['score'], true, true) : '-';
+		}
+		
+		// Get the own table row.
+		var ownRow = myGM.$('table.highscore tr.own');
+			
+		// Get the own score and place.
+		memberInfoData['own']			= {};
+		memberInfoData['own']['place']	= General.getInt(myGM.$('.place', ownRow).innerHTML);
+		memberInfoData['own']['score']	= General.getInt(myGM.$('.score', ownRow).innerHTML);
+		
+		// Get the difference in place and score.
+		var placeDiff = myGM.addElement('span', myGM.$('.place', ownRow));
+		var scoreDiff = myGM.addElement('span', myGM.$('.score', ownRow));
+		
+		// Show the difference in place and score.
+		placeDiff.innerHTML += (memberInfoDataOld && memberInfoDataOld['own']) ? General.formatToIkaNumber(memberInfoDataOld['own']['place'] - memberInfoData['own']['place'], true, true) : '-';
+		scoreDiff.innerHTML += (memberInfoDataOld && memberInfoDataOld['own']) ? General.formatToIkaNumber(memberInfoData['own']['score'] - memberInfoDataOld['own']['score'], true, true) : '-';
+		
+		// Store the new member information for later use.
+		this.data = memberInfoData;
+		
+		// Add the reset button.
+		this.addResetButton();
+		
+		// Show the time of the last reset.
+		this.addLastResetTime();
+	},
+};
+
+/**
  * The main function of the script.
  */
 function main() {
 	// Init the myGM functions.
 	myGM.init();
+	
+	// If the script was already executed, do nothing.
+	if(myGM.$('#' + myGM.prefix + 'alreadyExecutedScript'))	return;
+	
+	// Add the hint, that the script was already executed.
+	var alreadyExecuted		= myGM.addElement('input', myGM.$('#container'), 'alreadyExecutedScript');
+	alreadyExecuted.type	= 'hidden';
 	
 	// Init the language.
 	Language.init();

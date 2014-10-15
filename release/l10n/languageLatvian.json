@@ -78,10 +78,14 @@
 			"updateActive":			"Meklēt atjauninājumus automātiski",
 			"incomeOnTopActive":		"Rādīt ienākumus bilances pārskata augšdaļā",
 			"upkeepReductionActive":	"Rādīt apgādes samazinājumu īso versiju",
+			"upkeepReductionActive":	"Show a short version of the upkeep reduction",
+			"missingResActive":		"Rādīt trūkstošos resursus celtniecības skatā",
 			"zoomActive":			"Aktivizēt zoom funkciju pasaules skatā, salas skatā, pilsētas skatā",
 			"lcMoveActive":			"Pārvietot uz augšējo joslu apli, kas parādās pie procesu apstrādes",
 			"tooltipsAutoActive":		"Rādīt uznirstošos lodziņus alianses biedru skatā un karaspēka padomdevējā automātiski",
 			"hideBirdsActive":		"Paslēpt putnu baru.",
+			"nctAdvisorActive":		"Necentrēt pilsētas informāciju pilsētas padomdevējā",
+			"memberInfoActive":		"Ieslēgt iespēju saglabāt TOP listes datus par alianses biedriem",
 			"updateInterval":		"Intervāls starp atjauninājumu meklēšanu:",
 			"manualUpdate1":		"Meklēt atjauninājumus \"",
 			"manualUpdate2":		"\"!",
@@ -110,6 +114,21 @@
 			"week":		"1 nedēļa",
 			"week2":	"2 nedēļas",
 			"week4":	"4 nedēļas"
+		}
+	},
+	"memberInfo": {
+		"show":		"Alianses info",
+		"reset":	"Notīrīt",
+		"lastReset":	"Laiks kopš pēdējās notīrīšanas:",
+		"noReset":	"Pagaidām nav veikta tīrīšana."
+	},
+	"resourceInfo": {
+		"dailyIncome": {
+			"wood":		"Ikdienas kokmateriālu produkcija:",
+			"wine":		"Ikdienas vīna produkcija:",
+			"marble":	"Ikdienas marmora produkcija:",
+			"glass":	"Ikdienas kristāla produkcija:",
+			"sulfur":	"Ikdienas sēra produkcija:"
 		}
 	}
 }

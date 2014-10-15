@@ -2,15 +2,15 @@
 	"default": {
 		"update": {
 			"notPossible": {
-				"header":	"Keine Aktualisierung m&ouml;glich",
-				"text1":	"Es ist nicht m&ouml;glich, nach Updates f&uuml;r ",
-				"text2":	" zu suchen. Bitte pr&uuml;fe selbst auf Updates f&uuml;r das Script. Die Momentan installierte Version ist ",
+				"header":	"Keine Aktualisierung m�glich",
+				"text1":	"Es ist nicht m�glich, nach Updates f�r ",
+				"text2":	" zu suchen. Bitte pr�fe selbst auf Updates f�r das Script. Die Momentan installierte Version ist ",
 				"text3":	". Diese Nachricht wird in vier Wochen wieder angezeigt."
 			},
 			"possible": {
-				"header":	"Aktualisierung verf&uuml;gbar",
-				"text1":	"Es ist ein Update f&uuml;r ",
-				"text2":	" verf&uuml;gbar.",
+				"header":	"Aktualisierung verf�gbar",
+				"text1":	"Es ist ein Update f�r ",
+				"text2":	" verf�gbar.",
 				"text3":	"Zur Zeit ist Version ",
 				"text4":	" installiert. Die neueste Version ist ",
 				"history":	"Versionshistorie",
@@ -25,9 +25,9 @@
 				}
 			},
 			"noNewExists": {
-				"header":	"Kein Update verf&uuml;gbar",
-				"text1":	"Es ist kein Update f&uuml;r ",
-				"text2":	" verf&uuml;gbar. Die neueste Version ",
+				"header":	"Kein Update verf�gbar",
+				"text1":	"Es ist kein Update f�r ",
+				"text2":	" verf�gbar. Die neueste Version ",
 				"text3":	" ist installiert."
 			}
 		},
@@ -45,7 +45,7 @@
 		"left2right":	true
 	},
 	"general": {
-		"successful":	"Dein Befehl wurde ausgef&uuml;hrt.",
+		"successful":	"Dein Befehl wurde ausgef�hrt.",
 		"error":	"Es gab einen Fehler in deiner Anfrage!",
 		"ctrl":		"Strg",
 		"alt":		"Alt",
@@ -55,7 +55,7 @@
 		"income": {
 			"perHour":	"Einkommen pro Stunde",
 			"perDay":	"Einkommen pro Tag",
-			"start":	"Einkommen ohne Abz&uuml;ge"
+			"start":	"Einkommen ohne Abz�ge"
 		},
 		"upkeep": {
 			"reason": {
@@ -77,13 +77,17 @@
 		"label": {
 			"updateActive":			"Automatisch nach Updates suchen",
 			"incomeOnTopActive":		"Einkommen in der Bilanz auch oben anzeigen",
-			"upkeepReductionActive":	"Eine gek&uuml;rzte Version der Einkommensreduktion anzeigen",
+			"upkeepReductionActive":	"Eine gek�rzte Version der Einkommensreduktion anzeigen",
+			"missingResActive":		"Fehlende Ressourcen anzeigen",
+			"resourceInfoActive":		"Tageseinkommen in der Stadtansicht anzeigen",
 			"zoomActive":			"Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren",
 			"lcMoveActive":			"Ladekreis in Positionsleiste verschieben",
-			"tooltipsAutoActive":		"Tooltips in Allianzmitgliederliste und Milit&auml;rberater automatisch anzeigen",
+			"tooltipsAutoActive":		"Tooltips in Allianzmitgliederliste und Milit�rberater automatisch anzeigen",
 			"hideBirdsActive":		"Den Vogelschwarm nicht anzeigen.",
-			"updateInterval":		"In folgenden Zeitabst&auml;nden nach Updates suchen:",
-			"manualUpdate1":		"Nach Updates f&uuml;r \"",
+			"nctAdvisorActive":		"St�dteinformationen im St�dteberater vertikal nicht zentrieren",
+			"memberInfoActive":		"Speichern von Highscorest�nden von Allianzmitgliedern erm�glichen",
+			"updateInterval":		"In folgenden Zeitabst�nden nach Updates suchen:",
+			"manualUpdate1":		"Nach Updates f�r \"",
 			"manualUpdate2":		"\" suchen!",
 			"world": {
 				"zoomFactor":		"Zoom in der Weltkarte:",
@@ -98,8 +102,8 @@
 				"scaleChildren":	"Stadtansicht"
 			},
 			"description": {
-				"scaleChildren":	"Beschriftungen und Symbole beim Zoomen in folgenden Ansichten in Normalgr&ouml;&szlig;e belassen:",
-				"accessKeys":		"Folgende Tasten m&uuml;ssen gedr&uuml;ckt sein, um mit der Maus zoomen zu k&ouml;nnen:"
+				"scaleChildren":	"Beschriftungen und Symbole beim Zoomen in folgenden Ansichten in Normalgr��e belassen:",
+				"accessKeys":		"Folgende Tasten m�ssen gedr�ckt sein, um mit der Maus zoomen zu k�nnen:"
 			}
 		},
 		"updateIntervals": {
@@ -110,6 +114,21 @@
 			"week":		"1 Woche",
 			"week2":	"2 Wochen",
 			"week4":	"4 Wochen"
+		}
+	},
+	"memberInfo": {
+		"show":		"Alli Infos",
+		"reset":	"Zur�cksetzen",
+		"lastReset":	"Zeit seit dem letzten Zur�cksetzen:",
+		"noReset":	"Bisher nicht zur�ckgesetzt."
+	},
+	"resourceInfo": {
+		"dailyIncome": {
+			"wood":		"Tagesproduktion Baumaterial:",
+			"wine":		"Tagesproduktion Wein:",
+			"marble":	"Tagesproduktion Marmor:",
+			"glass":	"Tagesproduktion Kristallglas:",
+			"sulfur":	"Tagesproduktion Schwefel:"
 		}
 	}
 }
