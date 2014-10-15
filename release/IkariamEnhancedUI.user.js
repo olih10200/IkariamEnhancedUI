@@ -3,7 +3,7 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			2.5
+// @version			2.6
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://s*.ikariam.gameforge.com/*
@@ -21,6 +21,8 @@
 // @grant			GM_listValues
 // @grant			GM_getResourceText
 // @grant			GM_xmlhttpRequest
+// 
+// @history			2.6		Bugfix: Script options were broken.
 // 
 // @history			2.5		Bugfix: Game language is recognized again.
 // @history			2.5		Bugfix: Works now in Greasemonkey 2.0+
@@ -151,7 +153,7 @@
  * Information about the Script.
  */
 var scriptInfo = {
-	version:	'2.5',
+	version:	'2.6',
 	id:			4369,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -2098,6 +2100,9 @@ EnhancedView = {
 		switch(popupId) {
 			// Options popup.
 			case 'options':
+			case 'optionsAccount':
+			case 'optionsNotification':
+			case 'optionsFacebook':
 				OptionPanel.show();
 			  break;
 
@@ -2494,13 +2499,13 @@ OptionPanel = {
 
 			// Add the GM tab link to the tab menu.
 			var tabmenu					= myGM.$('.tabmenu');
-			var jsTabGMOptions			= myGM.addElement('li', tabmenu, 'js_tabScriptOptions', 'tab', null, false);
-			jsTabGMOptions.innerHTML	= '<b class="tabScriptOptions"> ' + Language.$('optionPanel_scripts') + ' </b>';
-			jsTabGMOptions.setAttribute('onclick', "switchTab('tabScriptOptions');");
+			var jsTabGMOptions			= myGM.addElement('li', tabmenu, 'js_tab_optionsScript', 'tab', null, false);
+			jsTabGMOptions.innerHTML	= '<b class="tab_optionsScript"> ' + Language.$('optionPanel_scripts') + ' </b>';
+			jsTabGMOptions.setAttribute('onclick', "switchTab('tab_optionsScript');");
 
 			// Add the content wrapper for the GM tab to the tab menu.
-			var mainContent				= myGM.$('#tabGameOptions').parentNode;
-			tabGMOptions			= myGM.addElement('div', mainContent, 'tabScriptOptions', null, new Array(['display', 'none']), false);
+			var mainContent				= myGM.$('#tabMenu').parentNode;
+			tabGMOptions			= myGM.addElement('div', mainContent, 'tab_optionsScript', null, new Array(['display', 'none']), false);
 		}
 
 		// Fill the tab with content.
@@ -2513,7 +2518,7 @@ OptionPanel = {
 	setStyles: function() {
 		// Add all styles to the ikariam page.
 		myGM.addStyle(
-				"#js_tabGameOptions, #js_tabAccountOptions, #js_tabFacebookOptions, #js_tabOpenIDOptions, #js_tabScriptOptions	{ width: 130px !important; margin-left: 5px !important; border-radius: 5px 5px 0px 0px } \
+				"#js_tab_options, #js_tab_optionsAccount, #js_tab_optionsNotifications, #js_tab_optionsFacebook, #js_tab_optionsScript	{ width: 123px !important; margin-left: 5px !important; border-radius: 5px 5px 0px 0px } \
 				 ." + myGM.prefix + "SignatureInput	{ resize: none; width: 99%; height: 75px; } \
 				 #tabScriptOptions hr				{ margin: 0; } \
 				 .cbWrapper							{ margin: 0 0 0 10px; }"
