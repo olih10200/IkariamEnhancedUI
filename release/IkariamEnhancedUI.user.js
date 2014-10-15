@@ -3,16 +3,16 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			7.00
+// @version			7.01
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @resource		languageGerman	http://resources.ika-scripts.co.cc/74221/v7.00/languageGerman.json
-// @resource		languageEnglish	http://resources.ika-scripts.co.cc/74221/v7.00/languageEnglish.json
-// @resource		languageLatvian	http://resources.ika-scripts.co.cc/74221/v7.00/languageLatvian.json
+// @resource		languageGerman	http://resources.ika-scripts.co.cc/74221/v7.01/languageGerman.json
+// @resource		languageEnglish	http://resources.ika-scripts.co.cc/74221/v7.01/languageEnglish.json
+// @resource		languageLatvian	http://resources.ika-scripts.co.cc/74221/v7.01/languageLatvian.json
 // 
 // @bug				Opera	Zooming with the mouse is only possible with "Alt" or without any key. No fix possible as I know.
 // @bug				Chrome	No good solution for zooming with mouse. Default Ikariam scroll zoom function can not be changed.
@@ -20,6 +20,10 @@
 // @bug				Chrome	Latvian special chars are not shown correct.
 // @bug				All		The selected island is not centered in world view.
 // @bug				All		If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			7.01	Bugfix: Zooming was broken.
+// @history			7.01	Bugfix: Dropdown menus created by the script were broken.
+// @history			7.01	Bugfix: Tooltips in in Alliance / Military view were not shown correctly.
 // 
 // @history			7.00	Feature: Cross-browser compatibility. (Firefox, Chrome, Opera)
 // @history			7.00	Feature: Latvian translation - thanks to Draxo. (mobile & desktop)
@@ -99,11 +103,11 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'7.00',
+	version:	'7.01',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
-	debug:		false,
+	debug:		true,
 };
 
 /**
@@ -1493,7 +1497,7 @@ General = {
 	 */	
 	addSelect: function(parent, id, selected, opts) {
 		// Create the wrapper for the select.
-		var wrapper				= myGM.addElement('div', parent, null, new Array('select_container', 'size175'), new Array(['position', 'relative']));
+		var wrapper				= myGM.addElement('div', parent, id + 'SelectContainer', new Array('select_container', 'size175'), new Array(['position', 'relative']));
 		
 		// Create the select field.
 		var select	= myGM.addElement('select', wrapper, id + 'Select', 'dropdown');
@@ -1651,20 +1655,8 @@ EventHandling = {
 		 * Zoom in when clicking on the zoom in button.
 		 */
 		zoomIn: function(e) {
-			// Get the element from the event.
-			e = e || win.event;
-			var target = e.target || e.srcElement;
-			
 			// Get the zoom factor.
 			factor = myGM.getValue('zoom_' + View.name + 'Factor', 100) + ZoomFunction.zoomStep;
-			
-			// If the factor is too big set it to the max allowed and hide the zoom in button.
-			if(factor >= ZoomFunction.maxZoom) {
-				this.classList.add('invisible');
-			}
-
-			// Show the zoom out button if it is invisible.
-			myGM.$('#' + myGM.prefix + 'zoomOut').classList.remove('invisible');
 
 			// Zoom.
 			ZoomFunction.zoom(factor);
@@ -1674,20 +1666,8 @@ EventHandling = {
 		 * Zoom out when clicking on the zoom out button.
 		 */
 		zoomOut: function(e) {
-			// Get the element from the event.
-			e = e || win.event;
-			var target = e.target || e.srcElement;
-			
 			// Get the zoom factor.
 			factor = myGM.getValue('zoom_' + View.name + 'Factor', 100) - ZoomFunction.zoomStep;
-			
-			// If the factor is too small set it to the min allowed and hide the zoom out button.
-			if(factor <= ZoomFunction.minZoom) {
-				this.classList.add('invisible');
-			}
-
-			// Show the zoom in button if it is invisible.
-			myGM.$('#' + myGM.prefix + 'zoomIn').classList.remove('invisible');
 
 			// Zoom.
 			ZoomFunction.zoom(factor);
@@ -1863,7 +1843,7 @@ EnhancedView = {
 	 * Calls the script module depending on the popup.
 	 */
 	getPopup: function() {
-		// If the script was already executet on this popup.
+		// If the script was already executed on this popup.
 		if(myGM.$('#' + myGM.prefix + 'alreadyExecuted'))	return;
 		
 		// Get the popup.
@@ -1958,13 +1938,13 @@ Tooltips = {
 	autoshowGeneral: function(magnifierClass) {
 		// Get all magnifiers.
 		var magnifier = myGM.$$('.' + magnifierClass);
-
+		
 		// Set the mousover and mouseout for all magnifiers.
 		for(var i = 0; i < magnifier.length; i++) {
 			var magOnClick = magnifier[i].onclick;
 			magnifier[i].onclick = 'return false;';
-			magnifier[i].addEventListener('mouseover', magOnClick, false);
-			magnifier[i].addEventListener('mouseout', magOnClick, false);
+			magnifier[i].addEventListener('mouseover', function(e) { ika.controller.captureMousePosition(e); this(e); }.bind(magOnClick), true);
+			magnifier[i].addEventListener('mouseout', function(e) { ika.controller.captureMousePosition(e); this(e); }.bind(magOnClick), true);
 		}
 	},
 };
@@ -2719,18 +2699,18 @@ ZoomFunction = {
 		
 		// Get the zooming factor.
 		var factor = myGM.getValue('zoom_' + View.name + 'Factor', 100);
-
-		// Zoom.
-		factor = this.zoom(factor);
 		
 		// Add the zoom Buttons.
-		this.addZoomButtons(factor);
+		this.addZoomButtons();
+		
+		// Zoom.
+		this.zoom(factor);
 	},
 	
 	/**
 	 * Add the Buttons for zooming to the view.
 	 */
-	addZoomButtons: function(factor) {
+	addZoomButtons: function() {
 		// Get the help element in the GF toolbar
 		gfToolbar	= myGM.$('#GF_toolbar');
 		
@@ -2740,22 +2720,9 @@ ZoomFunction = {
 		var zoomFactor	= myGM.addElement('div', zoomWrapper, 'zoomFactor');
 		var zoomOut		= myGM.addElement('div', zoomWrapper, 'zoomOut', 'minimizeImg');
 		
-		// Show the zoom factor.
-		zoomFactor.innerHTML = factor + '%';
-		
 		// Add the event listener.
 		zoomIn.addEventListener('click', EventHandling.zoomFunction.zoomIn, false);
 		zoomOut.addEventListener('click', EventHandling.zoomFunction.zoomOut, false);
-		
-		// Hide the zoom in button if the max zoom is reached.
-		if(factor >= this.maxZoom) {
-			zoomIn.classList.add('invisible');
-		}
-		
-		// Hide the zoom out button if the min zoom is reached.
-		if(factor <= this.minZoom) {
-			zoomOut.classList.add('invisible');
-		}
 
 		// Add the styles.
 		myGM.addStyle(
@@ -2772,16 +2739,16 @@ ZoomFunction = {
 	changeMouseWheelListener: function() {
 		// Get the scrollDiv depending on the view.
 		if(View.name == 'world') {
-			scrollDiv = myGM.$('#map1');
+			var scrollDivId	= '#map1';
 		} else {
-			scrollDiv = myGM.$('#worldmap');
+			var scrollDivId	= '#worldmap';
 		}
 
-		// Remove the old mouse wheel listener.
-		win.Event.removeListener(scrollDiv, 'DOMMouseScroll');
-		win.Event.removeListener(scrollDiv, 'mousewheel');
+		// Remove the old mouse wheel listener. (with the use of Ikariam-jQuery)
+		win.$(scrollDivId).unbind('mousewheel');
 		
 		// Add the new mouse wheel listener.
+		var scrollDiv = myGM.$(scrollDivId);
 		scrollDiv.addEventListener('DOMMouseScroll', EventHandling.zoomFunction.mouseScroll, false);
 		scrollDiv.addEventListener('mousewheel', EventHandling.zoomFunction.mouseScroll, false);
 	},
@@ -2799,13 +2766,40 @@ ZoomFunction = {
 		// Store the zoom factor.
 		myGM.setValue('zoom_' + View.name + 'Factor', factor);
 		
-		// Update the zoom factor which is shown to the user.
-		var zoomFactorDiv = myGM.$('#' + myGM.prefix + 'zoomFactor');
+		// Update the zoom factor which is shown to the user and the zoom buttons.
+		var zoomFactorDiv	= myGM.$('#' + myGM.prefix + 'zoomFactor');
+		var zoomIn			= myGM.$('#' + myGM.prefix + 'zoomIn');
+		var zoomOut			= myGM.$('#' + myGM.prefix + 'zoomOut');
 		
+		// Zoom factor.
 		if(zoomFactorDiv) {
 			zoomFactorDiv.innerHTML = factor + '%';
 		}
-
+		
+		// Zoom in.
+		if(zoomIn) {
+			// If it is not allowed to zoom in, hide the zoom in button.
+			if(factor >= this.maxZoom) {
+				zoomIn.classList.add('invisible');
+			
+			// Otherwise: Show the zoom in button.
+			} else {
+				zoomIn.classList.remove('invisible');
+			}
+		}
+		
+		// Zoom out.
+		if(zoomOut) {
+			// If it is not allowed to zoom out, hide the zoom out button.
+			if(factor <= this.minZoom) {
+				zoomOut.classList.add('invisible');
+			
+			// Otherwise: Show the zoom out button.
+			} else {
+				zoomOut.classList.remove('invisible');
+			}
+		}
+		
 		// Get the factor as normal number, not as percentage.
 		factorNew = factor / 100.0;
 		
