@@ -3,16 +3,16 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			8.01
+// @version			9.00
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @resource		languageGerman	http://resources.ikascripts.de/74221/v8.01/languageGerman.json
-// @resource		languageEnglish	http://resources.ikascripts.de/74221/v8.01/languageEnglish.json
-// @resource		languageLatvian	http://resources.ikascripts.de/74221/v8.01/languageLatvian.json
+// @resource		languageGerman	http://resources.ikascripts.de/74221/v9.00/languageGerman.json
+// @resource		languageEnglish	http://resources.ikascripts.de/74221/v9.00/languageEnglish.json
+// @resource		languageLatvian	http://resources.ikascripts.de/74221/v9.00/languageLatvian.json
 // 
 // @bug				Opera	Zooming with the mouse is only possible with "Alt" or without any key. No fix possible as I know.
 // @bug				Opera	No update checks and different language settings are possible due to missing comands.
@@ -22,6 +22,15 @@
 // @bug				Chrome	Latvian special chars are not shown correct.
 // @bug				All		The selected island is not centered in world view.
 // @bug				All		If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			9.00	Feature: Message signature can be set. (desktop)
+// @history			9.00	Feature: Button for faster sending of circular messages. (desktop)
+// @history			9.00	Feature: Make links in messages clickable. (desktop)
+// @history			9.00	Feature: Show town infos of colonizing cities. (desktop)
+// @history			9.00	Feature: Information about cargo / fleets is displayed directly in military view. (desktop)
+// @history			9.00	Feature: Script options: Sections on the script tab can be folded. (desktop)
+// @history			9.00	Bugfix: Tooltips with mouseover were not clickable anymore. (desktop)
+// @history			9.00	Changes in code for better overview.
 // 
 // @history			8.01	Feature: Different styles for income in town view. (desktop)
 // @history			8.01	Feature: Remaining resources after upgrade. (desktop)
@@ -119,7 +128,7 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'8.01',
+	version:	'9.00',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -132,7 +141,7 @@ const scriptInfo = {
 const languageInfo = {
 	implemented:	new Array('English', 'German', 'Latvian'),
 	useResource:	true,
-	defaultText:	{"default":{"update":{"notPossible":{"header":"No Update possible","text1":"It is not possible to check for updates for ","text2":". Please check manually for Updates for the script. The actual installed version is ","text3":". This message will appear again in four weeks."},"possible":{"header":"Update available","text1":"There is an update for ","text2":" available.","text3":"At the moment there is version ","text4":" installed. The newest version is ","history":"Version History","type":{"feature":"Feature(s)","bugfix":"Bugfix(es)","other":""},"button":{"install":"Install","hide":"Hide"}},"noNewExists":{"header":"No Update available","text1":"There is no new version for ","text2":" available. The newest version ","text3":" is installed."}},"notification":{"header":"Script notification","button":{"confirm":"OK","abort":"Abort"}}},"settings":{"kiloSep":",","decSep":".","left2right":true},"general":{"successful":"Your order has been carried out.","error":"There was an error in your request.","ctrl":"Ctrl","alt":"Alt","shift":"Shift"},"balance":{"income":{"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep":{"reason":{"0":"Troops","1":"Ships","2":"Troops &amp; Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"optionPanel":{"scripts":"Scripts","update":"Update","module":"Modules","resInfoMissingRes":"Resource Information / Missing Resources","zoom":"Zoom function","save":"Save settings!","label":{"updateActive":"Search for updates automatically","incomeOnTopActive":"Show income on top in Balance view","upkeepReductionActive":"Show a short version of the upkeep reduction","missingResActive":"Show missing resources in construction view","resourceInfoActive":"Show the hourly income directly in town view","zoomActive":"Activate zoom in world view, island view, town view","lcMoveActive":"Move loading circle to position bar","tooltipsAutoActive":"Show tooltips in alliance mebers view and military advisor automatically","hideBirdsActive":"Hide the bird swarm.","nctAdvisorActive":"Don't center town information in the town advisor","niceAllyPageActive":"Show the external allypages better formatted","memberInfoActive":"Enable the possibility to save highscore data of alliance members","updateInterval":"Interval to search for updates:","manualUpdate1":"Search for updates for \"","manualUpdate2":"\"!","world":{"zoomFactor":"Zoom worldmap:","scaleChildren":"Worldmap"},"island":{"zoomFactor":"Zoom island view:","scaleChildren":"Island view"},"town":{"zoomFactor":"Zoom town view:","scaleChildren":"Town view"},"description":{"scaleChildren":"Let banners and symbols in normal size when zooming when zooming in this view:","accessKeys":"This keys must be pressed to zoom with the mouse:"}},"updateIntervals":{"hour":"1 hour","hour12":"12 hours","day":"1 day","day3":"3 days","week":"1 week","week2":"2 weeks","week4":"4 weeks"}},"memberInfo":{"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset:","noReset":"No reset so far."},"resourceInfo":{"label":{"hourlyIncomeStyle":"Style of the hourly income in town view:"},"align":{"right":"Right align","left":"Left align","rightWithSeparation":"Right align with separation"},"dailyIncome":{"wood":"Daily production building material:","wine":"Daily production wine:","marble":"Daily production marble:","glass":"Daily production crystal glass:","sulfur":"Daily production sulphur:"}},"missingRes":{"label":{"showPositive":"Show also the remaining resources after an upgrade","showColoured":"Show the remaining resources coloured"}}},
+	defaultText:	{"default":{"update":{"notPossible":{"header":"No Update possible","text1":"It is not possible to check for updates for ","text2":". Please check manually for Updates for the script. The actual installed version is ","text3":". This message will appear again in four weeks."},"possible":{"header":"Update available","text1":"There is an update for ","text2":" available.","text3":"At the moment there is version ","text4":" installed. The newest version is ","history":"Version History","type":{"feature":"Feature(s)","bugfix":"Bugfix(es)","other":""},"button":{"install":"Install","hide":"Hide"}},"noNewExists":{"header":"No Update available","text1":"There is no new version for ","text2":" available. The newest version ","text3":" is installed."}},"notification":{"header":"Script notification","button":{"confirm":"OK","abort":"Abort"}}},"settings":{"kiloSep":",","decSep":".","left2right":true},"general":{"successful":"Your order has been carried out.","error":"There was an error in your request.","ctrl":"Ctrl","alt":"Alt","shift":"Shift","yes":"Yes","no":"No"},"balance":{"income":{"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep":{"reason":{"0":"Troops","1":"Ships","2":"Troops &amp; Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"optionPanel":{"scripts":"Scripts","update":"Update","module":"Modules","resInfoMissingRes":"Resource Information / Missing Resources","zoom":"Zoom function","messageSignature":"Message signature","save":"Save settings!","label":{"updateActive":"Search for updates automatically","incomeOnTopActive":"Show income on top in Balance view","upkeepReductionActive":"Show a short version of the upkeep reduction","missingResActive":"Show missing resources in construction view","resourceInfoActive":"Show the hourly income directly in town view","zoomActive":"Activate zoom in world view, island view, town view","messageSignatureActive":"Enable message signatures","easyCircularMsgActive":"Show button for faster sending of circular messages","replaceUrlsActive":"Make links in messages clickable","colonizingLinksActive":"Show information about colonizing cities","lcMoveActive":"Move loading circle to position bar","tooltipsAutoActive":"Show tooltips in alliance mebers view and military advisor automatically","directMilitaryTtActive":"Show information about cargo / fleets in military view without tooltips","hideBirdsActive":"Hide the bird swarm.","nctAdvisorActive":"Don't center town information in the town advisor","niceAllyPageActive":"Show the external allypages better formatted","memberInfoActive":"Enable the possibility to save highscore data of alliance members","updateInterval":"Interval to search for updates:","manualUpdate1":"Search for updates for \"","manualUpdate2":"\"!","useServerSignature":"Use local signature","placementTop":"Insert signature above cited messages","signatureText":{"global":"Global signature, which could be used on every world:","server":"Local signature, which only could be used on this world:"},"world":{"zoomFactor":"Zoom worldmap:","scaleChildren":"Worldmap"},"island":{"zoomFactor":"Zoom island view:","scaleChildren":"Island view"},"town":{"zoomFactor":"Zoom town view:","scaleChildren":"Town view"},"description":{"scaleChildren":"Let banners and symbols in normal size when zooming when zooming in this view:","accessKeys":"This keys must be pressed to zoom with the mouse:"}},"updateIntervals":{"hour":"1 hour","hour12":"12 hours","day":"1 day","day3":"3 days","week":"1 week","week2":"2 weeks","week4":"4 weeks"}},"memberInfo":{"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset:","noReset":"No reset so far."},"resourceInfo":{"label":{"hourlyIncomeStyle":"Style of the hourly income in town view:"},"align":{"right":"Right align","left":"Left align","rightWithSeparation":"Right align with separation"},"dailyIncome":{"wood":"Daily production building material:","wine":"Daily production wine:","marble":"Daily production marble:","glass":"Daily production crystal glass:","sulfur":"Daily production sulphur:"}},"missingRes":{"label":{"showPositive":"Show also the remaining resources after an upgrade","showColoured":"Show the remaining resources coloured"}},"easyCircularMsg":{"getLink":"Save link for circular message","send":"Send circular message"},"replacedUrl":{"notification":{"header":"Attention!","text1":"You're going to open the link ","text2":". This happens on your own risk. Proceed?"}}},
 };
 
 /**********************************************************
@@ -1367,6 +1376,9 @@ General = {
 			default:
 			  break;
 		}
+		
+		// Add the script toolbar.
+		myGM.addElement('div', myGM.$('#GF_toolbar'), 'toolbar');
 	},
 		
 	/**
@@ -1375,7 +1387,8 @@ General = {
 	setStyles: function() {
 		// Add the general used styles.
 		myGM.addStyle(
-				".bottomLine					{ border-bottom: 1px dotted #CCA569; } \
+				"#" + myGM.prefix + "toolbar	{ position: absolute; top: 0px; right: 0px; } \
+				 .bottomLine					{ border-bottom: 1px dotted #CCA569; } \
 				 .minimizeImg, .maximizeImg		{ background: url('skin/interface/window_control_sprite.png') no-repeat scroll 0 0 transparent; cursor: pointer; display: block; height: 18px; width: 18px; } \
 				 .minimizeImg					{ background-position: -144px 0; } \
 				 .minimizeImg:hover				{ background-position: -144px -19px; } \
@@ -1460,6 +1473,20 @@ General = {
 	},
 	
 	/**
+	 * Returns a code consisting of the server name and the country code.
+	 * 
+	 * @return	string
+	 *   The code.
+	 */
+	getServerCode: function() {
+		// Split the host string.
+		var lang = top.location.host.split('.');
+		
+		// Set the language name.
+		return (lang ? lang[1] + '_' + lang[0] : 'undefined');
+	},
+	
+	/**
 	 * Formats a number to that format that is used in Ikariam.
 	 *
 	 * @param	int		num
@@ -1495,93 +1522,6 @@ General = {
 		// Return the formated number.
 		return txt;
 	},
-	
-	/**
-	 * Adds cells to a table row.
-	 * 
-	 * @param	String[]	cellText
-	 *   Array with the text of the cells.
-	 * @param	String[]	cellClassName
-	 *   Array with the classes of the cells.
-	 * @param	element		row
-	 *   Table row where the cells should be added.
-	 * @param	boolean		head
-	 *   If the row is a table head row.
-	 */
-	createTableRow: function(cellText, cellClassName, row, head) {
-		// Do this for every cell.
-		for(var i = 0; i < cellText.length; i++) {
-			// Add the cell.
-			var cell = myGM.addElement(head ? 'th' : 'td', row, null, cellClassName[i]);
-			
-			// Set the content of the cell.
-			cell.innerHTML = cellText[i];
-		}
-	},
-		
-	/**
-	 * Creates a new checkbox and adds it to a parent.
-	 * 
-	 * @param	element	parent
-	 *   The parent of the new checkbox.
-	 * @param	String	id
-	 *   The middle part of the id of the checkbox.
-	 * @param	boolean	checked
-	 *   If the checkbox is checked or not.
-	 * @param	String	labelText
-	 *   The text of the label.
-	 */
-	addCheckbox: function(parent, id, checked, labelText) {
-		// Create the wrapper for the checkbox and the label.
-		var cbWrapper	= myGM.addElement('div', parent, null, 'cbWrapper');
-
-		// Create the checkbox and set the attributes.
-		var cb		= myGM.addElement('input', cbWrapper, id + 'Cb', 'checkbox');
-		cb.type		= 'checkbox';
-		cb.title	= labelText;
-		cb.checked	= checked ? 'checked' : '';
-		
-		// Replace the checkbox for better appearance.
-		ika.controller.replaceCheckboxes();
-	},
-
-	/**
-	 * Creates a new select field and adds it to a parent.
-	 * 
-	 * @param	element	parent
-	 *   The parent of the new select field.
-	 * @param	String	id
-	 *   The last part of the id of the select field.
-	 * @param	boolean	selected
-	 *   The value of the selected option.
-	 * @param	mixed[]	opts
-	 *   An array with the names an values of the options.
-	 */	
-	addSelect: function(parent, id, selected, opts) {
-		// Create the wrapper for the select.
-		var wrapper				= myGM.addElement('div', parent, id + 'SelectContainer', new Array('select_container', 'size175'), new Array(['position', 'relative']));
-		
-		// Create the select field.
-		var select	= myGM.addElement('select', wrapper, id + 'Select', 'dropdown');
-		
-		// Add the Options.
-		for(var i = 0; i < opts.length; i++) {
-			// Create an option.
-			var option			= myGM.addElement('option', select);
-
-			// Set the value and the name.
-			option.value		= opts[i]['value'];
-			option.innerHTML	= opts[i]['name'];
-
-			// If the option is selected, set selected to true.
-			if(option.value == selected) {
-				option.selected = 'selected';
-			}
-		}
-		
-		// Replace the dropdown for better appearance.
-		ika.controller.replaceDropdownMenus();
-	},
 		
 	/**
 	 * Returns if the user is logged in to the mobile version.
@@ -1591,20 +1531,6 @@ General = {
 	 */
 	isMobileVersion: function() {
 		return (top.location.href.search(/http:\/\/m/) > -1);
-	},
-	
-	/**
-	 * Returns a code consisting of the server name and the country code.
-	 * 
-	 * @return	string
-	 *   The code.
-	 */
-	getServerCode: function() {
-		// Split the host string.
-		var lang = top.location.host.split('.');
-		
-		// Set the language name.
-		return (lang ? lang[1] + '_' + lang[0] : 'undefined');
 	},
 	
 	/**
@@ -1730,7 +1656,7 @@ EventHandling = {
 		/**
 		 * Zoom in when clicking on the zoom in button.
 		 */
-		zoomIn: function(e) {
+		zoomIn: function() {
 			// Get the zoom factor.
 			factor = myGM.getValue('zoom_' + View.name + 'Factor', 100) + ZoomFunction.zoomStep;
 
@@ -1741,7 +1667,7 @@ EventHandling = {
 		/**
 		 * Zoom out when clicking on the zoom out button.
 		 */
-		zoomOut: function(e) {
+		zoomOut: function() {
 			// Get the zoom factor.
 			factor = myGM.getValue('zoom_' + View.name + 'Factor', 100) - ZoomFunction.zoomStep;
 
@@ -1812,6 +1738,30 @@ EventHandling = {
 	 */
 	optionPanel: {
 		/**
+		 * Toggles the visibility of the option wrapper contents.
+		 */
+		toggle: function(e) {
+			// Get the element from the event.
+			e = e || win.event;
+			var target = e.target || e.srcElement;
+			
+			// Switch the button picture.
+			this.classList.toggle('minimizeImg');
+			this.classList.toggle('maximizeImg');
+			
+			// Toggle the visibility of the content.
+			myGM.$('.content', this.parentNode.parentNode).classList.toggle('invisible');
+			
+			// Store the visibility.
+			var optionId = this.parentNode.parentNode.id.replace(myGM.prefix, '');
+			OptionPanel.optionVisibility[optionId] = !OptionPanel.optionVisibility[optionId];
+			myGM.setValue('optionPanel_optionVisibility', OptionPanel.optionVisibility);
+			
+			// Adjust the size of the Scrollbar.
+			ika.controller.adjustSizes();
+		},
+		
+		/**
 		 * Save the settings in the option panel.
 		 */
 		saveSettings: function() {
@@ -1864,19 +1814,47 @@ EventHandling = {
 		 * 
 		 */
 		resourcesUpdated: function(e) {
-			// Get the element from the event.
-			e = e || win.event;
-			var target = e.target || e.srcElement;
-			
-			// If the popup is colsed, remove the action listener.
+			// If the popup is closed, remove the action listener.
 			if(!myGM.$('#buildingUpgrade')) {
 				myGM.$('#cityResources').removeEventListener('DOMSubtreeModified', EventHandling.missingResources.resourcesUpdated, false);
 			
-			// Otherwise: check the reason for firing and update the resources if necessary.
+			// Otherwise: update the resources if necessary.
 			} else {
 				// Timeout to have access to GM_ funtions.
 				setTimeout(function() { MissingResources.show(true, true); }, 0);
 			}
+		},
+	},
+	
+	/**
+	 * Functions for replaced urls
+	 */
+	replacedUrl: {
+		/**
+		 * Is called after a replaced url is clicked.
+		 */
+		click: function(e) {
+			// Get the element from the event.
+			e = e || win.event;
+			var target = e.target || e.srcElement;
+			
+			// Set the notification text.
+			var notificationText = {
+				header:		Language.$('replacedUrl_notification_header'),
+				body:		Language.$('replacedUrl_notification_text1') + '<span class="bold red">"' + this.innerHTML + '"</span>' + Language.$('replacedUrl_notification_text2'),
+				confirm:	Language.$('general_yes'),
+				abort:		Language.$('general_no'),
+			};
+			
+			var linkToOpen = this.innerHTML;
+
+			// Set the notification callback.
+			var notificationCallback = {
+				confirm:	function() { win.open(linkToOpen) },
+			};
+			
+			// Show the notification.
+			myGM.notification(notificationText, notificationCallback);
 		},
 	},
 	
@@ -1942,29 +1920,41 @@ EnhancedView = {
 	 * Inits the modifications on the website which are not shown in popups.
 	 */
 	initDesktopStatic: function() {
-		// Move loading circle.
-		if(myGM.getValue('module_lcMoveActive', true))			View.moveLoadingCircle();
-		
 		// Hide the Bird animation.
-		if(myGM.getValue('module_hideBirdsActive', true))		View.hideBirds();
+		if(myGM.getValue('module_hideBirdsActive', true))			View.hideBirds();
 		
 		// Init the Zoom function.
-		if(myGM.getValue('module_zoomActive', true))			ZoomFunction.init();
+		if(myGM.getValue('module_zoomActive', true))				ZoomFunction.init();
+		
+		// Init the circular message link.
+		if(myGM.getValue('module_easyCircularMsgActive', true))		Message.easyCircularMessage();
 
 		// Init the function for showing the resource information.
-		if(myGM.getValue('module_resourceInfoActive', true))	ResourceInfo.init();
+		if(myGM.getValue('module_resourceInfoActive', true))		ResourceInfo.init();
+		
+		// Move loading circle.
+		if(myGM.getValue('module_lcMoveActive', true))				View.moveLoadingCircle();
 		
 		// Init the function for showing the missing resources.
-		if(myGM.getValue('module_missingResActive', true))		MissingResources.init();
+		if(myGM.getValue('module_missingResActive', true))			MissingResources.init();
 		
 		// Don't center town advisor.
-		if(myGM.getValue('module_nctAdvisorActive', true))		View.noCenterTownAdvisor();
+		if(myGM.getValue('module_nctAdvisorActive', true))			View.noCenterTownAdvisor();
 		
 		// Init the function for showing the missing resources.
-		if(myGM.getValue('module_niceAllyPageActive', true))	View.niceAllyPage();
+		if(myGM.getValue('module_niceAllyPageActive', true))		View.niceAllyPage();
+		
+		// If the military tooltip should be shown without mouseover or click, add the styles.
+		if(myGM.getValue('module_directMilitaryTtActive', true))	Tooltips.initDirectMilitaryTooltip();
+		
+		// Set the colonizing links.
+		if(myGM.getValue('module_colonizingLinksActive', true) && View.name == 'island')	City.setColonizingLinks();
+		
+		// Set the styles for the 
+		if(myGM.getValue('module_replaceUrlsActive', true))			Message.setStyleForReplaceUrl();
 		
 		// Init the function for showing the missing resources.
-		if(myGM.getValue('module_memberInfoActive', false))		MemberInfo.init();
+		if(myGM.getValue('module_memberInfoActive', false))			MemberInfo.init();
 	},
 	
 	/**
@@ -1991,7 +1981,10 @@ EnhancedView = {
 	 */
 	getPopup: function() {
 		// Update resource information.
-		if(myGM.getValue('module_resourceInfoActive', true))	ResourceInfo.updateResourceInfo();
+		if(myGM.getValue('module_resourceInfoActive', true))								ResourceInfo.updateResourceInfo();
+		
+		// Set the colonizing links.
+		if(myGM.getValue('module_colonizingLinksActive', true) && View.name == 'island')	City.setColonizingLinks();
 		
 		// If the script was already executed on this popup.
 		if(myGM.$('#' + myGM.prefix + 'alreadyExecutedPopup'))	return;
@@ -2000,7 +1993,7 @@ EnhancedView = {
 		popup = myGM.$('.templateView');
 		
 		// Get the popup id.
-		popupId = popup ? popup.id : '';
+		popupId = popup ? popup.id.replace('_c', '') : '';
 		
 		// If a popup exists, add the hint, that the popup script was executed.
 		if(popup) {
@@ -2012,30 +2005,62 @@ EnhancedView = {
 		*** Functions that should only run once on a popup. ***
 		******************************************************/
 		
-		// Options popup.
-		if(popupId == 'options_c')		OptionPanel.desktop();
+		//
+		switch(popupId) {
+			// Options popup.
+			case 'options':
+				OptionPanel.desktop();
+			  break;
+			
+			// Finance popup.
+			case 'finances':
+				if(myGM.getValue('module_incomeActive', true))		Balance.incomeOnTop();
+				if(myGM.getValue('module_urtShortActive', true))	Balance.shortUpkeepReductionTable();
+			  break;
+			
+			// Military view popup.
+			case 'militaryAdvisor':
+				if(myGM.getValue('module_directMilitaryTtActive', true))	Tooltips.directMilitaryTooltip();
+				if(myGM.getValue('module_ttAutoActive', true))				Tooltips.autoshowInMilitaryView();
+			  break;
+			
+			// Diplomacy ally view popup.
+			case 'diplomacyAlly':
+				if(myGM.getValue('module_ttAutoActive', true))			Tooltips.autoshowInAllianceView();
+				if(myGM.getValue('module_easyCircularMsgActive', true))	Message.getCircularMessageLink();
+			  break;
+			
+			// Show messages.
+			case 'diplomacyAdvisor':
+			case 'diplomacyAdvisorOutBox':
+			case 'diplomacyAdvisorArchive':
+			case 'diplomacyAdvisorArchiveOutBox':
+				if(myGM.getValue('module_replaceUrlsActive', true))	Message.replaceUrl();
+			  break;
+			
+			// Diplomacy ally view popup in embassy.
+			case 'embassy':
+				if(myGM.getValue('module_ttAutoActive', true))		Tooltips.autoshowInAllianceView();
+			  break;
+			
+			// Building ground popup.
+			case 'buildingGround':
+				if(myGM.getValue('module_missingResActive', true))	MissingResources.showInBuildingGround();
+			  break;
 		
-		// Finance popup.
-		if(popupId == 'finances_c') {
-			if(myGM.getValue('module_incomeActive', true))									Balance.incomeOnTop();
-			if(myGM.getValue('module_urtShortActive', true))								Balance.shortUpkeepReductionTable();
+			// Write message popup.
+			case 'sendIKMessage':
+				if(myGM.getValue('module_messageSigActive', true))	Message.addSignature();
+			  break;
+			
+			// Highscore popup.
+			case 'highscore':
+				if(myGM.getValue('module_memberInfoActive', false))	MemberInfo.show();
+			  break;
 		}
-
-		// Military view popup.
-		if(popupId == 'militaryAdvisor_c' && myGM.getValue('module_ttAutoActive', true))	Tooltips.autoshowInMilitaryView();
 		
-		// Diplomacy ally view popup.
-		if(popupId == 'diplomacyAlly_c' && myGM.getValue('module_ttAutoActive', true))		Tooltips.autoshowInAllianceView();
-		
-		// Diplomacy ally view popup.
-		if(popupId == 'embassy_c' && myGM.getValue('module_ttAutoActive', true))			Tooltips.autoshowInAllianceView();
-		
-		// Show missing resources.
-		if(popupId == 'buildingGround_c' && myGM.getValue('module_missingResActive', true))	MissingResources.showInBuildingGround();
+		// Building view.
 		if(myGM.$('#buildingUpgrade') && myGM.getValue('module_missingResActive', true))	MissingResources.showInSidebar();
-		
-		// Highscore popup.
-		if(popupId == 'highscore_c' && myGM.getValue('module_memberInfoActive', false))		MemberInfo.show();
 	},
 };
 
@@ -2073,6 +2098,7 @@ View = {
 	 * Don't center the city and date in town advisor vertically.
 	 */
 	noCenterTownAdvisor: function() {
+		// Add the style.
 		myGM.addStyle(
 				"#inboxCity td	{ vertical-align: top !important; }"
 			);
@@ -2084,8 +2110,7 @@ View = {
 	niceAllyPage: function() {
 		// Add the style.
 		myGM.addStyle(
-				"#allyPage_c .allypage	{ padding: 4px 12px; text-align: left; }",
-				'niceAllyPage', true
+				"#allyPage_c .allypage	{ padding: 4px 12px; text-align: left; }"
 			);
 	},
 };
@@ -2107,7 +2132,7 @@ Tooltips = {
 	 */
 	autoshowInMilitaryView: function() {
 		// Enable toggling on mouseover / mouseout.
-		this.autoshowGeneral('spyMilitary');
+		this.autoshowGeneral('spyMilitary', myGM.getValue('module_directMilitaryTtActive', true));
 	},
 	
 	/**
@@ -2115,17 +2140,64 @@ Tooltips = {
 	 * 
 	 * @param	String	magnifierClass
 	 *   The class of the tooltips to enable toggling.
+	 * @param	boolean	deleteOnClick
+	 *   If the onClick event should be deleted or just moved to mouseover.
 	 */
-	autoshowGeneral: function(magnifierClass) {
+	autoshowGeneral: function(magnifierClass, deleteOnClick) {
 		// Get all magnifiers.
 		var magnifier = myGM.$$('.' + magnifierClass);
 		
 		// Set the mousover and mouseout for all magnifiers.
 		for(var i = 0; i < magnifier.length; i++) {
+			// Get the onclick event and "delete" the old one.
 			var magOnClick = magnifier[i].onclick;
 			magnifier[i].onclick = 'return false;';
-			magnifier[i].addEventListener('mouseover', function(e) { ika.controller.captureMousePosition(e); this(e); }.bind(magOnClick), true);
-			magnifier[i].addEventListener('mouseout', function(e) { ika.controller.captureMousePosition(e); this(e); }.bind(magOnClick), true);
+			
+			// If the on click event should be moved.
+			if(!deleteOnClick) {
+				// Add the show event.
+				var magIcon = myGM.$('.magnify_icon', magnifier[i]);
+				if(!magIcon) magIcon = magnifier[i];
+				magIcon.addEventListener('mouseover', function(e) { ika.controller.captureMousePosition(e); this(e); }.bind(magOnClick), true);
+			}
+		}
+		
+		// If the on click event should be moved.
+		if(!deleteOnClick) {
+			// Trigger the close event with jQuery on a click on the popup.
+			myGM.$('.templateView .mainContent').addEventListener('click', function() { win.$(document).trigger("closeExclusiveInfo"); }, true);
+		}
+	},
+	
+	/**
+	 * Shows the military tooltip without mouseover.
+	 */
+	initDirectMilitaryTooltip: function() {
+		// Add the style.
+		myGM.addStyle(
+				"#js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon				{ background-image: none; cursor: default; width: 240px; } \
+				 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip		{ display: inline; position: relative; padding: 0px; border: none; } \
+				 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip h5	{ display: none; }"
+			);
+	},
+	
+	/**
+	 * Hide the ship number if mission is transport or trade and the ships belong to you.
+	 */
+	directMilitaryTooltip: function() {
+		// Get the table rows.
+		var militaryEventTableTr = myGM.$$('#js_MilitaryMovementsFleetMovementsTable .military_event_table tr');
+		
+		// Loop at the table rows.
+		for(var i = 1; i < militaryEventTableTr.length; i++) {
+			// Get the mission div.
+			var missionDiv = myGM.$('td:nth-child(1) div.mission_icon', militaryEventTableTr[i]);
+			
+			// If it is your own table row and the mission is transport or trade.
+			if(militaryEventTableTr[i].classList.contains('own') && (missionDiv.classList.contains('transport') || missionDiv.classList.contains('trade'))) {
+				// Hide the table cell.
+				myGM.$('td:nth-child(4) div', militaryEventTableTr[i]).classList.add('invisible');
+			}
 		}
 	},
 };
@@ -2174,8 +2246,8 @@ Balance = {
 		incomeRow24h	= myGM.addElement('tr', summaryTable, null, 'result');
 		
 		// Create the content of the table rows.
-		General.createTableRow(new Array(Language.$('balance_income_perHour'), '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], ['value', 'res']), incomeRow, false);
-		General.createTableRow(new Array(Language.$('balance_income_perDay'), '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', ['value', 'res'], ['value', 'res'], ['value', 'res']), incomeRow24h, false);
+		this.createTableRow(new Array(Language.$('balance_income_perHour'), '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], ['value', 'res']), incomeRow, false);
+		this.createTableRow(new Array(Language.$('balance_income_perDay'), '', '', General.formatToIkaNumber(income * 24)), new Array('sigma', ['value', 'res'], ['value', 'res'], ['value', 'res']), incomeRow24h, false);
 	},
 	
 	/**
@@ -2237,21 +2309,21 @@ Balance = {
 		shortTable.id = 'balance';
 		
 		// Create the table head.
-		General.createTableRow(new Array('', Language.$('balance_upkeep_basic'), Language.$('balance_upkeep_supply'), Language.$('balance_upkeep_result')), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), myGM.addElement('tr', shortTable), true);
+		this.createTableRow(new Array('', Language.$('balance_upkeep_basic'), Language.$('balance_upkeep_supply'), Language.$('balance_upkeep_result')), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), myGM.addElement('tr', shortTable), true);
 		
 		// Create the start income row.
 		var startRow = myGM.addElement('tr', shortTable, null, new Array('alt', 'bottomLine'));
-		General.createTableRow(new Array(Language.$('balance_income_start'), '', '', General.formatToIkaNumber(beforeReduction)), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), startRow, false);
+		this.createTableRow(new Array(Language.$('balance_income_start'), '', '', General.formatToIkaNumber(beforeReduction)), new Array('city', ['value', 'res'], ['value', 'res'], ['value', 'res']), startRow, false);
 		
 		// Create the troops / ships redution rows.
 		for(var i = 0; i < 3; i++) {
 			var newRow = myGM.addElement('tr', shortTable, null, (i % 2 == 1) ? new Array('alt', 'bottomLine') : '');
-			General.createTableRow(new Array(row.reason[i], General.formatToIkaNumber(-row.basicUpkeep[i]), General.formatToIkaNumber(-row.supplyUpkeep[i]), General.formatToIkaNumber(-row.result[i])), new Array('city', ['value', 'res'], ['value', 'res'], 'hidden'), newRow, false);
+			this.createTableRow(new Array(row.reason[i], General.formatToIkaNumber(-row.basicUpkeep[i]), General.formatToIkaNumber(-row.supplyUpkeep[i]), General.formatToIkaNumber(-row.result[i])), new Array('city', ['value', 'res'], ['value', 'res'], 'hidden'), newRow, false);
 		}
 		
 		// Create the result row.
 		var resultRow = myGM.addElement('tr', shortTable, null, 'result');
-		General.createTableRow(new Array('<img alt="Summe" src="skin/layout/sigma.png">', '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], 'hidden'), resultRow, false);
+		this.createTableRow(new Array('<img alt="Summe" src="skin/layout/sigma.png">', '', '', General.formatToIkaNumber(income)), new Array('sigma', ['value', 'res'], ['value', 'res'], 'hidden'), resultRow, false);
 		
 		// Create the spacing between the tables.
 		myGM.addElement('hr', uRT[0].parentNode, null, null, null, null, uRT[0]);
@@ -2282,12 +2354,42 @@ Balance = {
 		// Adjust the size of the Scrollbar.
 		ika.controller.adjustSizes();
 	},
+	
+	/**
+	 * Adds cells to a table row.
+	 * 
+	 * @param	String[]	cellText
+	 *   Array with the text of the cells.
+	 * @param	String[]	cellClassName
+	 *   Array with the classes of the cells.
+	 * @param	element		row
+	 *   Table row where the cells should be added.
+	 * @param	boolean		head
+	 *   If the row is a table head row.
+	 */
+	createTableRow: function(cellText, cellClassName, row, head) {
+		// Do this for every cell.
+		for(var i = 0; i < cellText.length; i++) {
+			// Add the cell.
+			var cell = myGM.addElement(head ? 'th' : 'td', row, null, cellClassName[i]);
+			
+			// Set the content of the cell.
+			cell.innerHTML = cellText[i];
+		}
+	},
 };
 
 /**
  * Functions for option panel.
  */
 OptionPanel = {
+	/**
+	 * Storage for option visibility.
+	 */
+	optionVisibility: {
+		moduleOption:	true,
+	},
+	
 	/**
 	 * Adds the tab for the script options in the desktop version.
 	 */
@@ -2345,7 +2447,9 @@ OptionPanel = {
 		// Add all styles to the ikariam page.
 		myGM.addStyle(
 				"#js_tabGameOptions, #js_tabAccountOptions, #js_tabFacebookOptions, #js_tabOpenIDOptions, #js_tabScriptOptions	{ width: 130px !important; margin-left: 5px !important; border-radius: 5px 5px 0px 0px } \
-				 .cbWrapper			{ margin: 0 0 0 10px; }"
+				 ." + myGM.prefix + "SignatureInput	{ resize: none; width: 99%; height: 75px; } \
+				 #tabScriptOptions hr				{ margin: 0; } \
+				 .cbWrapper							{ margin: 0 0 0 10px; }"
 			);
 	},
 	
@@ -2356,21 +2460,28 @@ OptionPanel = {
 	 *   The tab where the content should be added.
 	 */
 	createTabContent: function(tab) {
+		// Get the option visibility.
+		this.optionVisibility = myGM.getValue('optionPanel_optionVisibility', this.optionVisibility);
+		
 		// Create the wrapper for the enabling / disabling of modules.
-		var moduleContentWrapper	= this.createOptionsWrapper(tab, Language.$('optionPanel_module'));
+		var moduleContentWrapper	= this.createOptionsWrapper(tab, Language.$('optionPanel_module'), 'moduleOption');
 		this.createModuleContent(moduleContentWrapper);
 		
 		// Create the wrapper for the update settings.
-		var updateContentWrapper	= this.createOptionsWrapper(tab, Language.$('optionPanel_update'));
+		var updateContentWrapper	= this.createOptionsWrapper(tab, Language.$('optionPanel_update'), 'updateOption');
 		this.createUpdateContent(updateContentWrapper);
 		
 		// Create the wrapper for the resource information / missing resources.
-		var rimrContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_resInfoMissingRes'));
+		var rimrContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_resInfoMissingRes'), 'resInfoMissingResOption');
 		this.createResInfoMissingResContent(rimrContentWrapper);
 		
 		// Create the wrapper for the zoom settings.
-		var zoomContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_zoom'));
+		var zoomContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_zoom'), 'zoomOption');
 		this.createZoomContent(zoomContentWrapper);
+		
+		// Create the wrapper for the zoom settings.
+		var sigContentWrapper		= this.createOptionsWrapper(tab, Language.$('optionPanel_messageSignature'), 'messageSignatureOption');
+		this.createMessageSigContent(sigContentWrapper);
 	},
 	
 	/**
@@ -2380,20 +2491,29 @@ OptionPanel = {
 	 *   The tab where the wrapper should be added.
 	 * @param	String	headerText
 	 *   The text of the header.
+	 * @param	String	id
+	 *   The id of the option wrapper.
 	 * 
 	 * @return	element
 	 *   The wrapper for the content of the options.
 	 */
-	createOptionsWrapper: function(tab, headerText) {
+	createOptionsWrapper: function(tab, headerText, id) {
+		// Get the content show status.
+		var showContent = !!this.optionVisibility[id];
+		
 		// Create the wrapper.
-		var optionsWrapper	= myGM.addElement('div', tab, null, 'contentBox01h');
+		var optionsWrapper	= myGM.addElement('div', tab, id, 'contentBox01h');
 		
 		// Create the header.
 		var optionsHeader		= myGM.addElement('h3', optionsWrapper, null, 'header');
 		optionsHeader.innerHTML	= headerText;
 		
+		// Add the show / hide button.
+		var btn = myGM.addElement('div', optionsHeader, null, showContent ? 'minimizeImg' : 'maximizeImg', new Array(['cssFloat', 'left']));
+		btn.addEventListener('click', EventHandling.optionPanel.toggle, false);
+		
 		// Create the content wrapper.
-		var optionsWrapperContent	= myGM.addElement('div', optionsWrapper, null, 'content');
+		var optionsWrapperContent	= myGM.addElement('div', optionsWrapper, null, showContent ? 'content' : new Array('content', 'invisible'));
 		
 		// Create the footer.
 		myGM.addElement('div', optionsWrapper, null, 'footer');
@@ -2412,37 +2532,29 @@ OptionPanel = {
 		// Create options table.
 		var updateTable	= this.addOptionsTable(contentWrapper);
 		
-		// Get the ids.
+		// Set the checkbox data.
 		var cbData	= new Array(
-				{ id: 'update',					value: myGM.getValue('module_updateActive', true),			label: Language.$('optionPanel_label_updateActive'),			hrAfter: true	},
-				{ id: 'incomeOnTop',			value: myGM.getValue('module_incomeActive', true),			label: Language.$('optionPanel_label_incomeOnTopActive'),		hrAfter: false	},
-				{ id: 'upkeepReduction',		value: myGM.getValue('module_urtShortActive', true),		label: Language.$('optionPanel_label_upkeepReductionActive'),	hrAfter: false	},
-				{ id: 'missingResources',		value: myGM.getValue('module_missingResActive', true),		label: Language.$('optionPanel_label_missingResActive'),		hrAfter: false	},
-				{ id: 'resourceInformation',	value: myGM.getValue('module_resourceInfoActive', true),	label: Language.$('optionPanel_label_resourceInfoActive'),		hrAfter: false	},
-				{ id: 'zoom',					value: myGM.getValue('module_zoomActive', true),			label: Language.$('optionPanel_label_zoomActive'),				hrAfter: true	},
-				{ id: 'loadingCircleMove',		value: myGM.getValue('module_lcMoveActive', true),			label: Language.$('optionPanel_label_lcMoveActive'),			hrAfter: false	},
-				{ id: 'tooltipsAuto',			value: myGM.getValue('module_ttAutoActive', true),			label: Language.$('optionPanel_label_tooltipsAutoActive'),		hrAfter: false	},
-				{ id: 'hideBirds',				value: myGM.getValue('module_hideBirdsActive', true),		label: Language.$('optionPanel_label_hideBirdsActive'),			hrAfter: false	},
-				{ id: 'noCenterTownAdvisor',	value: myGM.getValue('module_nctAdvisorActive', true),		label: Language.$('optionPanel_label_nctAdvisorActive'),		hrAfter: false	},
-				{ id: 'niceAllyPage',			value: myGM.getValue('module_niceAllyPageActive', true),	label: Language.$('optionPanel_label_niceAllyPageActive'),		hrAfter: true	},
-				{ id: 'memberInformation',		value: myGM.getValue('module_memberInfoActive', false),		label: Language.$('optionPanel_label_memberInfoActive'),		hrAfter: false	}
+				{ id: 'update',					checked: myGM.getValue('module_updateActive', true),			label: Language.$('optionPanel_label_updateActive'),			hrAfter: true	},
+				{ id: 'incomeOnTop',			checked: myGM.getValue('module_incomeActive', true),			label: Language.$('optionPanel_label_incomeOnTopActive'),		hrAfter: false	},
+				{ id: 'upkeepReduction',		checked: myGM.getValue('module_urtShortActive', true),			label: Language.$('optionPanel_label_upkeepReductionActive'),	hrAfter: false	},
+				{ id: 'missingResources',		checked: myGM.getValue('module_missingResActive', true),		label: Language.$('optionPanel_label_missingResActive'),		hrAfter: false	},
+				{ id: 'resourceInformation',	checked: myGM.getValue('module_resourceInfoActive', true),		label: Language.$('optionPanel_label_resourceInfoActive'),		hrAfter: false	},
+				{ id: 'zoom',					checked: myGM.getValue('module_zoomActive', true),				label: Language.$('optionPanel_label_zoomActive'),				hrAfter: true	},
+				{ id: 'messageSignature',		checked: myGM.getValue('module_messageSigActive', true),		label: Language.$('optionPanel_label_messageSignatureActive'),	hrAfter: false	},
+				{ id: 'easyCircularMessage',	checked: myGM.getValue('module_easyCircularMsgActive', true),	label: Language.$('optionPanel_label_easyCircularMsgActive'),	hrAfter: false	},
+				{ id: 'replaceUrls',			checked: myGM.getValue('module_replaceUrlsActive', true),		label: Language.$('optionPanel_label_replaceUrlsActive'),		hrAfter: false	},
+				{ id: 'colonizingLinks',		checked: myGM.getValue('module_colonizingLinksActive', true),	label: Language.$('optionPanel_label_colonizingLinksActive'),	hrAfter: true	},
+				{ id: 'loadingCircleMove',		checked: myGM.getValue('module_lcMoveActive', true),			label: Language.$('optionPanel_label_lcMoveActive'),			hrAfter: false	},
+				{ id: 'tooltipsAuto',			checked: myGM.getValue('module_ttAutoActive', true),			label: Language.$('optionPanel_label_tooltipsAutoActive'),		hrAfter: false	},
+				{ id: 'directMilitaryTooltip',	checked: myGM.getValue('module_directMilitaryTtActive', true),	label: Language.$('optionPanel_label_directMilitaryTtActive'),	hrAfter: false	},
+				{ id: 'hideBirds',				checked: myGM.getValue('module_hideBirdsActive', true),			label: Language.$('optionPanel_label_hideBirdsActive'),			hrAfter: false	},
+				{ id: 'noCenterTownAdvisor',	checked: myGM.getValue('module_nctAdvisorActive', true),		label: Language.$('optionPanel_label_nctAdvisorActive'),		hrAfter: false	},
+				{ id: 'niceAllyPage',			checked: myGM.getValue('module_niceAllyPageActive', true),		label: Language.$('optionPanel_label_niceAllyPageActive'),		hrAfter: true	},
+				{ id: 'memberInformation',		checked: myGM.getValue('module_memberInfoActive', false),		label: Language.$('optionPanel_label_memberInfoActive'),		hrAfter: false	}
 			);
 		
 		// Create the checkboxes.
-		for(var i = 0; i < cbData.length; i++) {
-			// Create table row.
-			var tr	= this.addOptionsTableRow(updateTable, true);
-
-			// Create checkbox.
-			General.addCheckbox(tr.firstChild, cbData[i]['id'], cbData[i]['value'], cbData[i]['label']);
-			
-			// Add class for checkbox.
-			tr.firstChild.classList.add('left');
-			
-			if(cbData[i]['hrAfter'] == true) {
-				myGM.addElement('hr', updateTable);
-			}
-		}
+		this.addCheckboxes(updateTable, cbData);
 
 		// Add the button to save the settings.
 		this.addSaveButton(contentWrapper);
@@ -2505,13 +2617,7 @@ OptionPanel = {
 	 */
 	createUpdateContent: function(contentWrapper) {
 		// Create options table.
-		var updateTable	= this.addOptionsTable(contentWrapper);
-		var tr1			= this.addOptionsTableRow(updateTable, false);
-		var tr2			= this.addOptionsTableRow(updateTable, true);
-
-		// Create label.
-		var updateIntervalLabel			= myGM.addElement('span', tr1.firstChild);
-		updateIntervalLabel.innerHTML	= Language.$('optionPanel_label_updateInterval');
+		var updateTable		= this.addOptionsTable(contentWrapper);
 
 		// Array for update interval values and names.
 		opts = new Array(
@@ -2525,13 +2631,15 @@ OptionPanel = {
 			);
 
 		// Create the update interval select.
-		General.addSelect(tr1.lastChild, 'updateInterval', myGM.getValue('updater_updateInterval', 3600), opts);
+		this.addSelect(updateTable, 'updateInterval', myGM.getValue('updater_updateInterval', 3600), opts, Language.$('optionPanel_label_updateInterval'));
 		
-		// Prepare the table row.
-		tr2.firstChild.classList.add('center');
+		// Prepare the update link table row.
+		var updateLinkTr	= this.addOptionsTableRow(updateTable, true);
+		updateLinkTr.firstChild.classList.add('center');
+		updateLinkTr.firstChild.classList.remove('left');
 		
 		// Add the link for manual updates.
-		var updateLink			= myGM.addElement('a', tr2.firstChild);
+		var updateLink			= myGM.addElement('a', updateLinkTr.firstChild);
 		updateLink.href			= '#';
 		updateLink.innerHTML	= Language.$('optionPanel_label_manualUpdate1') + scriptInfo.name + Language.$('optionPanel_label_manualUpdate2');
 		updateLink.addEventListener('click', Updater.doManualUpdate, false);
@@ -2614,41 +2722,28 @@ OptionPanel = {
 	 */
 	createResInfoMissingResContent: function(contentWrapper) {
 		// Create options table.
-		var resInfoMissingResTable	= this.addOptionsTable(contentWrapper);
-		var tr1						= this.addOptionsTableRow(resInfoMissingResTable, false);
-
-		// Create label.
-		var hourlyIncomeStyleLabel			= myGM.addElement('span', tr1.firstChild);
-		hourlyIncomeStyleLabel.innerHTML	= Language.$('resourceInfo_label_hourlyIncomeStyle');
-
+		var resourceInformationTable	= this.addOptionsTable(contentWrapper);
+		var missingResourcesTable		= this.addOptionsTable(contentWrapper);
+		
 		// Array for update interval values and names.
 		opts = new Array(
-				{ value: 'alignRight',		name: Language.$('resourceInfo_align_right')					},
+				{ value: 'alignRight',		name: Language.$('resourceInfo_align_right')				},
 				{ value: 'alignLeft',		name: Language.$('resourceInfo_align_left')					},
 				{ value: 'withSeparation',	name: Language.$('resourceInfo_align_rightWithSeparation')	}
 			);
 		
 		// Create the hourly income style select.
-		General.addSelect(tr1.lastChild, 'hourlyIncomeStyle', myGM.getValue('resourceInfo_hourlyIncomeStyle', 'alignRight'), opts);
+		this.addSelect(resourceInformationTable, 'hourlyIncomeStyle', myGM.getValue('resourceInfo_hourlyIncomeStyle', 'alignRight'), opts, Language.$('resourceInfo_label_hourlyIncomeStyle'));
 		
 		// Get the checkbox data.
 		var cbData	= new Array(
-				{ id: 'showPositive',	value: myGM.getValue('missingRes_showPositive', true),	label: Language.$('missingRes_label_showPositive'),	},
-				{ id: 'showColoured',	value: myGM.getValue('missingRes_showColoured', true),	label: Language.$('missingRes_label_showColoured'),	}
+				{ id: 'showPositive',	checked: myGM.getValue('missingRes_showPositive', true),	label: Language.$('missingRes_label_showPositive'),	},
+				{ id: 'showColoured',	checked: myGM.getValue('missingRes_showColoured', true),	label: Language.$('missingRes_label_showColoured'),	}
 			);
 		
 		// Create the checkboxes.
-		for(var i = 0; i < cbData.length; i++) {
-			// Create table row.
-			var tr	= this.addOptionsTableRow(resInfoMissingResTable, true);
-
-			// Create checkbox.
-			General.addCheckbox(tr.firstChild, cbData[i]['id'], cbData[i]['value'], cbData[i]['label']);
-			
-			// Add class for checkbox.
-			tr.firstChild.classList.add('left');
-		}
-
+		this.addCheckboxes(missingResourcesTable, cbData);
+		
 		// Add the button to save the settings.
 		this.addSaveButton(contentWrapper);
 	},
@@ -2661,73 +2756,110 @@ OptionPanel = {
 	 */
 	createZoomContent: function(contentWrapper) {
 		// Create the options tables.
-		var zoomTableFactor			= this.addOptionsTable(contentWrapper);
-		var zoomTableScaleChildren	= this.addOptionsTable(contentWrapper);
-		var zoomTableAccessKeys		= this.addOptionsTable(contentWrapper);
+		var factorTable			= this.addOptionsTable(contentWrapper);
+		var scaleChildrenTable	= this.addOptionsTable(contentWrapper);
+		var accessKeysTable		= this.addOptionsTable(contentWrapper);
 		
-		// Add the description to the scale children table row.
-		var scDescriptionTr			= this.addOptionsTableRow(zoomTableScaleChildren, true);
-		scDescriptionTr.classList.add('content');
-		scDescriptionTr.firstChild.classList.add('left');
-		var scDescriptionP			= myGM.addElement('p', scDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
-		scDescriptionP.innerHTML	= Language.$('optionPanel_label_description_scaleChildren');
+		// Set the description data.
+		var descriptionRowData = new Array(
+				{ parent: scaleChildrenTable,	text: Language.$('optionPanel_label_description_scaleChildren')	},
+				{ parent: accessKeysTable,		text: Language.$('optionPanel_label_description_accessKeys')	}
+			);
 		
-		// Add the description to the access key table.
-		var akDescriptionTr			= this.addOptionsTableRow(zoomTableAccessKeys, true);
-		akDescriptionTr.classList.add('content');
-		akDescriptionTr.firstChild.classList.add('left');
-		var akDescriptionP			= myGM.addElement('p', akDescriptionTr.firstChild, null, null, new Array(['margin', '0']));
-		akDescriptionP.innerHTML	= Language.$('optionPanel_label_description_accessKeys');
+		// Add the descriptions.
+		for(var i = 0; i < descriptionRowData.length; i++) {
+			// Add the table row.
+			var descriptionTr	= this.addOptionsTableRow(descriptionRowData[i]['parent'], true);
+			
+			// Add the description.
+			var description			= myGM.addElement('p', descriptionTr.firstChild);
+			description.innerHTML	= descriptionRowData[i]['text'];
+		}
 		
-		// Arrays for zoom factor values and names.
+		// Set the data for the factor select fields.
+		var factorSelects = new Array(
+				{ id: 'zoomWorld',	selected: myGM.getValue('zoom_worldFactor', 100),	labelText: Language.$('optionPanel_label_world_zoomFactor')		},
+				{ id: 'zoomIsland',	selected: myGM.getValue('zoom_islandFactor', 100),	labelText: Language.$('optionPanel_label_island_zoomFactor')	},
+				{ id: 'zoomTown',	selected: myGM.getValue('zoom_townFactor', 100),	labelText: Language.$('optionPanel_label_town_zoomFactor')		}
+			);
+		
+		// Set the zoom factor values and names.
 		var opts = new Array();
-		
-		// Load the arrays.
 		for(var i = ZoomFunction.minZoom; i <= ZoomFunction.maxZoom; i = i + ZoomFunction.zoomStep) {
 			opts.push({ value: i, name: i + '%' });
 		}
-		
-		// The view names.
-		var viewName	= new Array(
-				['world', 'island', 'town'],
-				['World', 'Island', 'Town']
-			);
-		
-		// The view names with first letter capital.
-		var accessKey	= new Array(
-				['ctrl', 'alt', 'shift'],
-				['Ctrl', 'Alt', 'Shift']
-			);
-		
-		// Loop over all views.
-		for(var i = 0; i < viewName[0].length; i++) {
-			// Create the table row for the zoom factor.
-			var zoomFactorTr = this.addOptionsTableRow(zoomTableFactor, false);
-			
-			// Create the zoom factor label.
-			var zoomFactorLabel			= myGM.addElement('span', zoomFactorTr.firstChild);
-			zoomFactorLabel.innerHTML	= Language.$('optionPanel_label_' + viewName[0][i] + '_zoomFactor');
 
-			// Create the zoom factor select.
-			General.addSelect(zoomFactorTr.lastChild, 'zoom' + viewName[1][i], myGM.getValue('zoom_' + viewName[0][i] + 'Factor', 100), opts);
+		// Add all factor select fields.
+		for(var i = 0; i < factorSelects.length; i++) {
+			this.addSelect(factorTable, factorSelects[i]['id'], factorSelects[i]['selected'], opts, factorSelects[i]['labelText']);
+		}
+		
+		// Set the scale children checkbox data.
+		var scaleChildrenCbData	= new Array(
+				{ id: 'zoomScaleChildrenWorld',		checked: myGM.getValue('zoom_worldScaleChildren', true),	label: Language.$('optionPanel_label_world_scaleChildren')	},
+				{ id: 'zoomScaleChildrenIsland',	checked: myGM.getValue('zoom_islandScaleChildren', true),	label: Language.$('optionPanel_label_island_scaleChildren')	},
+				{ id: 'zoomScaleChildrenTown',		checked: myGM.getValue('zoom_townScaleChildren', true),		label: Language.$('optionPanel_label_town_scaleChildren')	}
+			);
+		
+		// Add the scale children checkboxes
+		this.addCheckboxes(scaleChildrenTable, scaleChildrenCbData);
+		
+		// Set the scale children checkbox data.
+		var accessKeysCbData	= new Array(
+				{ id: 'zoomCtrlPressed',	checked: myGM.getValue('zoom_ctrlPressed', true),	label: Language.$('general_ctrl')	},
+				{ id: 'zoomAltPressed',		checked: myGM.getValue('zoom_altPressed', false),	label: Language.$('general_alt')	},
+				{ id: 'zoomShiftPressed',	checked: myGM.getValue('zoom_shiftPressed', false),	label: Language.$('general_shift')	}
+			);
+		
+		// Add the scale children checkboxes
+		this.addCheckboxes(accessKeysTable, accessKeysCbData);
+		
+		// Add the button to save the settings.
+		this.addSaveButton(contentWrapper);
+	},
+	
+	/**
+	 * Create the content of the message signature part.
+	 * 
+	 * @param	element	contentWrapper
+	 *   The wrapper where the content should be added.
+	 */
+	createMessageSigContent: function(contentWrapper) {
+		// Create the options tables.
+		var settingsTable	= this.addOptionsTable(contentWrapper);
+		var globalSigTable	= this.addOptionsTable(contentWrapper);
+		var serverSigTable	= this.addOptionsTable(contentWrapper);
+		
+		// Get the checkbox data.
+		var cbData	= new Array(
+				{ id: 'useServerSignature',	checked: myGM.getValue('messageSignature_useServerSignature_' + General.getServerCode(), false),	label: Language.$('optionPanel_label_useServerSignature'),	},
+				{ id: 'placementTop',		checked: myGM.getValue('messageSignature_placementTop', true),										label: Language.$('optionPanel_label_placementTop'),		}
+			);
+		
+		// Create the checkboxes.
+		this.addCheckboxes(settingsTable, cbData);
+		
+		// Set the text area data.
+		var textAreaData = new Array(
+				{ id: 'globalSignatureText',	parent: globalSigTable,	text: Language.$('optionPanel_label_signatureText_global'),	value: myGM.getValue('messageSignature_globalSignature', '')							},
+				{ id: 'serverSignatureText',	parent: serverSigTable,	text: Language.$('optionPanel_label_signatureText_server'),	value: myGM.getValue('messageSignature_serverSignature_' + General.getServerCode(), '')	}
+			);
+		
+		// Add the text areas.
+		for(var i = 0; i < textAreaData.length; i++) {
+			// Add the label table row.
+			var labelTr		= this.addOptionsTableRow(textAreaData[i]['parent'], true);
 			
-			// Create the table row for the zoom factor.
-			var scaleChildrenTr = this.addOptionsTableRow(zoomTableScaleChildren, true);
+			// Add the label.
+			var label		= myGM.addElement('p', labelTr.firstChild);
+			label.innerHTML	= textAreaData[i]['text'];
 			
-			// Add class for checkbox.
-			scaleChildrenTr.firstChild.classList.add('left');
+			// Add the text field table row.
+			var textAreaTr	= this.addOptionsTableRow(textAreaData[i]['parent'], true);
 			
-			// Create checkbox.
-			General.addCheckbox(scaleChildrenTr.firstChild, 'zoomScaleChildren' + viewName[1][i], myGM.getValue('zoom_'  + viewName[0][i] + 'ScaleChildren', true), Language.$('optionPanel_label_' + viewName[0][i] + '_scaleChildren'));
-			
-			// Create the table row for the zoom factor.
-			var accessKeyTr = this.addOptionsTableRow(zoomTableAccessKeys, true);
-			
-			// Add class for checkbox.
-			accessKeyTr.firstChild.classList.add('left');
-			
-			// Create checkbox.
-			General.addCheckbox(accessKeyTr.firstChild, 'zoom' + accessKey[1][i] + 'Pressed', myGM.getValue('zoom_'  + accessKey[0][i] + 'Pressed', accessKey[0][i] == 'ctrl'), Language.$('general_' + accessKey[0][i]));
+			// Add the text area.
+			var textArea	= myGM.addElement('textarea', textAreaTr.firstChild, textAreaData[i]['id'], new Array('textfield', myGM.prefix + 'SignatureInput'));
+			textArea.value	= textAreaData[i]['value'];
 		}
 		
 		// Add the button to save the settings.
@@ -2774,6 +2906,7 @@ OptionPanel = {
 		if(oneCell) {
 			// Set width of cell to width of two cells.
 			td1.colSpan = 2;
+			td1.classList.add('left');
 			
 		// Otherwise.
 		} else {
@@ -2783,6 +2916,86 @@ OptionPanel = {
 
 		// Return the table row.
 		return tr;
+	},
+	
+	/**
+	 * Creates new checkboxes and adds it to a option table, specified as parentTable.
+	 * 
+	 * @param	element	parentTable
+	 *   The parent of the new checkboxes.
+	 * @param	mixed[]	cbData
+	 *   A array containing the data of the checkboxes.
+	 */
+	addCheckboxes: function(parentTable, cbData) {
+		// Create the checkboxes.
+		for(var i = 0; i < cbData.length; i++) {
+			// Create table row.
+			var tr	= this.addOptionsTableRow(parentTable, true);
+			
+			// Create the wrapper for the checkbox and the label.
+			var wrapper	= myGM.addElement('div', tr.firstChild, null, 'cbWrapper');
+			
+			// Create the checkbox and set the attributes.
+			var cb		= myGM.addElement('input', wrapper, cbData[i]['id'] + 'Cb', 'checkbox');
+			cb.type		= 'checkbox';
+			cb.title	= cbData[i]['label'];
+			cb.checked	= cbData[i]['checked'] ? 'checked' : '';
+			
+			if(cbData[i]['hrAfter'] == true) {
+				var spacer = this.addOptionsTableRow(parentTable, true);
+				myGM.addElement('hr', spacer.firstChild);
+			}
+		}
+		
+		// Replace the checkboxes for better appearance.
+		ika.controller.replaceCheckboxes();
+	},
+
+	/**
+	 * Creates a new select field and adds it to a option table, specified as parentTable.
+	 * 
+	 * @param	element	parentTable
+	 *   The parent table of the new select field.
+	 * @param	String	id
+	 *   The last part of the id of the select field.
+	 * @param	boolean	selected
+	 *   The value of the selected option.
+	 * @param	mixed[]	opts
+	 *   An array with the names an values of the options.
+	 * @param	String	labelText
+	 *   The text of the select label.
+	 */	
+	addSelect: function(parentTable, id, selected, opts, labelText) {
+		 // Create table row.
+		var tr					= this.addOptionsTableRow(parentTable, false);
+		
+		// Create label.
+		var selectLabel			= myGM.addElement('span', tr.firstChild);
+		selectLabel.innerHTML	= labelText;
+
+		// Create the wrapper for the select.
+		var wrapper	= myGM.addElement('div', tr.lastChild, id + 'SelectContainer', new Array('select_container', 'size175'), new Array(['position', 'relative']));
+		
+		// Create the select field.
+		var select	= myGM.addElement('select', wrapper, id + 'Select', 'dropdown');
+		
+		// Add the Options.
+		for(var i = 0; i < opts.length; i++) {
+			// Create an option.
+			var option			= myGM.addElement('option', select);
+
+			// Set the value and the name.
+			option.value		= opts[i]['value'];
+			option.innerHTML	= opts[i]['name'];
+
+			// If the option is selected, set selected to true.
+			if(option.value == selected) {
+				option.selected = 'selected';
+			}
+		}
+		
+		// Replace the dropdown for better appearance.
+		ika.controller.replaceDropdownMenus();
 	},
 	
 	/**
@@ -2814,26 +3027,31 @@ OptionPanel = {
 	 */
 	saveSettings: function() {
 		// Save the module settings.
-		myGM.setValue('module_updateActive',		myGM.$('#' + myGM.prefix + 'updateCb').checked);
-		myGM.setValue('module_incomeActive',		myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
-		myGM.setValue('module_urtShortActive',		myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
-		myGM.setValue('module_zoomActive',			myGM.$('#' + myGM.prefix + 'zoomCb').checked);
-		myGM.setValue('module_lcMoveActive',		myGM.$('#' + myGM.prefix + 'loadingCircleMoveCb').checked);
-		myGM.setValue('module_ttAutoActive',		myGM.$('#' + myGM.prefix + 'tooltipsAutoCb').checked);
-		myGM.setValue('module_hideBirdsActive',		myGM.$('#' + myGM.prefix + 'hideBirdsCb').checked);
-		myGM.setValue('module_nctAdvisorActive',	myGM.$('#' + myGM.prefix + 'noCenterTownAdvisorCb').checked);
-		myGM.setValue('module_missingResActive',	myGM.$('#' + myGM.prefix + 'missingResourcesCb').checked);
-		myGM.setValue('module_resourceInfoActive',	myGM.$('#' + myGM.prefix + 'resourceInformationCb').checked);
-		myGM.setValue('module_memberInfoActive',	myGM.$('#' + myGM.prefix + 'memberInformationCb').checked);
-		myGM.setValue('module_niceAllyPageActive',	myGM.$('#' + myGM.prefix + 'niceAllyPageCb').checked);
+		myGM.setValue('module_updateActive',			myGM.$('#' + myGM.prefix + 'updateCb').checked);
+		myGM.setValue('module_incomeActive',			myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
+		myGM.setValue('module_urtShortActive',			myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
+		myGM.setValue('module_missingResActive',		myGM.$('#' + myGM.prefix + 'missingResourcesCb').checked);
+		myGM.setValue('module_resourceInfoActive',		myGM.$('#' + myGM.prefix + 'resourceInformationCb').checked);
+		myGM.setValue('module_zoomActive',				myGM.$('#' + myGM.prefix + 'zoomCb').checked);
+		myGM.setValue('module_messageSigActive',		myGM.$('#' + myGM.prefix + 'messageSignatureCb').checked);
+		myGM.setValue('module_easyCircularMsgActive',	myGM.$('#' + myGM.prefix + 'easyCircularMessageCb').checked);
+		myGM.setValue('module_replaceUrlsActive',		myGM.$('#' + myGM.prefix + 'replaceUrlsCb').checked);
+		myGM.setValue('module_colonizingLinksActive',	myGM.$('#' + myGM.prefix + 'colonizingLinksCb').checked);
+		myGM.setValue('module_lcMoveActive',			myGM.$('#' + myGM.prefix + 'loadingCircleMoveCb').checked);
+		myGM.setValue('module_ttAutoActive',			myGM.$('#' + myGM.prefix + 'tooltipsAutoCb').checked);
+		myGM.setValue('module_directMilitaryTtActive',	myGM.$('#' + myGM.prefix + 'directMilitaryTooltipCb').checked);
+		myGM.setValue('module_hideBirdsActive',			myGM.$('#' + myGM.prefix + 'hideBirdsCb').checked);
+		myGM.setValue('module_nctAdvisorActive',		myGM.$('#' + myGM.prefix + 'noCenterTownAdvisorCb').checked);
+		myGM.setValue('module_niceAllyPageActive',		myGM.$('#' + myGM.prefix + 'niceAllyPageCb').checked);
+		myGM.setValue('module_memberInfoActive',		myGM.$('#' + myGM.prefix + 'memberInformationCb').checked);
 		
 		// Save the update settings.
 		myGM.setValue('updater_updateInterval',		General.getInt(General.getSelectValue('updateIntervalSelect')));
 		
 		// Save the resource information / missing resources settings.
-		myGM.setValue('resourceInfo_hourlyIncomeStyle',	General.getSelectValue('hourlyIncomeStyleSelect'));
 		myGM.setValue('missingRes_showPositive',		myGM.$('#' + myGM.prefix + 'showPositiveCb').checked);
 		myGM.setValue('missingRes_showColoured',		myGM.$('#' + myGM.prefix + 'showColouredCb').checked);
+		myGM.setValue('resourceInfo_hourlyIncomeStyle',	General.getSelectValue('hourlyIncomeStyleSelect'));
 		
 		// Save the zoom function settings.
 		myGM.setValue('zoom_worldFactor',			General.getInt(General.getSelectValue('zoomWorldSelect')));
@@ -2845,6 +3063,12 @@ OptionPanel = {
 		myGM.setValue('zoom_ctrlPressed',			myGM.$('#' + myGM.prefix + 'zoomCtrlPressedCb').checked);
 		myGM.setValue('zoom_altPressed',			myGM.$('#' + myGM.prefix + 'zoomAltPressedCb').checked);
 		myGM.setValue('zoom_shiftPressed',			myGM.$('#' + myGM.prefix + 'zoomShiftPressedCb').checked);
+		
+		// Save the message signature function settings.
+		myGM.setValue('messageSignature_useServerSignature_' + General.getServerCode(),	myGM.$('#' + myGM.prefix + 'useServerSignatureCb').checked);
+		myGM.setValue('messageSignature_placementTop',									myGM.$('#' + myGM.prefix + 'placementTopCb').checked);
+		myGM.setValue('messageSignature_globalSignature',								myGM.$('#' + myGM.prefix + 'globalSignatureText').value);
+		myGM.setValue('messageSignature_serverSignature_' + General.getServerCode(),	myGM.$('#' + myGM.prefix + 'serverSignatureText').value);
 		
 		// Show success hint.
 		General.showTooltip('cityAdvisor', 'confirm', Language.$('general_successful'));
@@ -2926,11 +3150,11 @@ ZoomFunction = {
 	 * Add the Buttons for zooming to the view.
 	 */
 	addZoomButtons: function() {
-		// Get the help element in the GF toolbar
-		gfToolbar	= myGM.$('#GF_toolbar');
+		// Get the the script toolbar
+		var scriptToolbar = myGM.$('#' + myGM.prefix + 'toolbar');
 		
 		// Create the zoom buttons.
-		var zoomWrapper	= myGM.addElement('div', gfToolbar, 'zoomWrapper');
+		var zoomWrapper	= myGM.addElement('div', scriptToolbar, 'zoomWrapper');
 		var zoomIn		= myGM.addElement('div', zoomWrapper, 'zoomIn', 'maximizeImg');
 		var zoomFactor	= myGM.addElement('div', zoomWrapper, 'zoomFactor');
 		var zoomOut		= myGM.addElement('div', zoomWrapper, 'zoomOut', 'minimizeImg');
@@ -3318,7 +3542,7 @@ ResourceInfo = {
 			// Get the vineyard.
 			var vineyard = myGM.$('.vineyard');
 			
-			// If a vineyard exists, reduce the vine spending.
+			// If a vineyard exists, reduce the wine spending.
 			if(vineyard) {
 				// Get the vineyard level.
 				var level = vineyard.className.match(/level([0-9]*)/i)[1];
@@ -3536,6 +3760,145 @@ MemberInfo = {
 		
 		// Show the time of the last reset.
 		this.addLastResetTime();
+	},
+};
+
+/**
+ * Functions for messages.
+ */
+Message = {
+	/**
+	 * Add a signature to each message.
+	 */
+	addSignature: function() {
+		// If the server signature should be used, get the server signature text.
+		if(myGM.getValue('messageSignature_useServerSignature_' + General.getServerCode(), false)) {
+			var signature = myGM.getValue('messageSignature_serverSignature_' + General.getServerCode(), '');
+		
+		// Otherwise: get the global signature text.
+		} else {
+			var signature = myGM.getValue('messageSignature_globalSignature', '');
+		}
+		
+		// If a signature text is set, add it to the message.
+		if(signature != '') {
+			// Get the message area.
+			var messageArea = myGM.$('#js_msgTextConfirm');
+			
+			// Get the message text and add the signature on the right placement.
+			var text = messageArea.value;
+			text = myGM.getValue('messageSignature_placementTop', true) ? ('\n\n' + signature + text) : (text + '\n\n' + signature);
+			messageArea.value = text;
+			
+			// Focus the message area on top.
+			messageArea.setSelectionRange(0,0);
+			messageArea.focus();
+		}
+	},
+	
+	/**
+	 * Add a link for circular messages to the toolbar.
+	 */
+	easyCircularMessage: function() {
+		// Get the script toolbar.
+		var scriptToolbar = myGM.$('#' + myGM.prefix + 'toolbar');
+		
+		// Add the message link wrapper.
+		var circularMessageLinkWrapper	= myGM.addElement('div', scriptToolbar, 'circularMessageLinkWrapper');
+		
+		// Prepare the message id, link, class and title.
+		var id		= myGM.prefix + 'circularMessageLink';
+		var href	= myGM.getValue('easyCircularMsg_href_' + General.getServerCode(), '/index.php?view=diplomacyAlly&activeTab=tab_diplomacyAlly');
+		var cl		= href.match(/diplomacyAlly/) ? 'notSet' : '';
+		var title	= href.match(/diplomacyAlly/) ? Language.$('easyCircularMsg_getLink') : Language.$('easyCircularMsg_send');
+		
+		// Add the message link (workaround for ajaxHandlerCall).
+		circularMessageLinkWrapper.innerHTML = '<a id="' + id + '" class="' + cl + '" href="' + href + '" title="' + title + '" onclick="ajaxHandlerCall(this.href); return false;"></a>';
+		
+		// Set the styles.
+		myGM.addStyle(
+				"#" + myGM.prefix + "circularMessageLinkWrapper			{ position: absolute; top: 5px; right: 70px; } \
+				 #" + myGM.prefix + "circularMessageLink				{ height: 9px; width: 13px; display: block; margin: 0px !important; background: url('skin/interface/icon_send_message.png') repeat scroll 0 0 transparent; } \
+				 #" + myGM.prefix + "circularMessageLink:hover			{ background-position: 0px -9px; } \
+				 #" + myGM.prefix + "circularMessageLink.notSet:hover	{ background-position: 0px -18px; }",
+			'easyCircularMessage', true);
+	},
+	
+	/**
+	 * Stores the circular message link.
+	 */
+	getCircularMessageLink: function() {
+		// Get the circular message link.
+		var href = myGM.$('#allyInfoSidebar .icon_msg').href;
+		
+		// Store the circular message link.
+		myGM.setValue('easyCircularMsg_href_' + General.getServerCode(), href);
+		
+		// Change the circular message link and title.
+		var circularMessageLink		= myGM.$('#' + myGM.prefix + 'circularMessageLink');
+		circularMessageLink.href	= href;
+		circularMessageLink.title	= Language.$('easyCircularMsg_send');
+		circularMessageLink.classList.remove('notSet');
+	},
+	
+	/**
+	 * Set the style for the replaced urls.
+	 */
+	setStyleForReplaceUrl: function() {
+		// Add the style.
+		myGM.addStyle(
+				"." + myGM.prefix + "replacedUrl			{ font-weight: bold; font-style: italic; } \
+				 ." + myGM.prefix + "replacedUrl:hover		{ text-decoration: underline; cursor: pointer; }"
+			);
+	},
+	
+	/**
+	 * Make all URLs in messsages clickable. But with a security check.
+	 */
+	replaceUrl: function() {
+		// Get all message texts.
+		var msgTexts = myGM.$$('.msgText');
+		
+		// Loop over all message texts.
+		for(var i = 0; i < msgTexts.length; i++) {
+			// Replace the URLs.
+			var text = msgTexts[i].innerHTML;
+			msgTexts[i].innerHTML = text.replace(/(?:^|\s)(http(s?)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/[^<\s]*)?)/g,  ' <span class="' + myGM.prefix + 'replacedUrl" title="$1">$1</span> ');
+		}
+		
+		// Get all replaced URLs.
+		var replacedUrls = myGM.$$('.' + myGM.prefix + 'replacedUrl');
+		
+		// Loop over all replaced URLs.
+		for(var i = 0; i < replacedUrls.length; i++) {
+			// Add a click event to each replaced URL.
+			replacedUrls[i].addEventListener('click', EventHandling.replacedUrl.click, true);
+		}
+	},
+};
+
+/**
+ * Functions for cities.
+ */
+City = {
+	/**
+	 * Set the links for cities that are colonizing.
+	 */
+	setColonizingLinks: function() {
+		// Get all cities with level 0 (colonizing cities).
+		var colonizingCities = myGM.$$('.level0');
+		
+		// Loop over the colonizing cities.
+		for(var i = 0; i < colonizingCities.length; i++) {
+			// Get the location id.
+			var locationId = colonizingCities[i].id.replace(/\D/g, '');
+			
+			// Get the city id.
+			var cityId = ika.getScreen().data.cities[locationId].id;
+			
+			// Set the city link.
+			myGM.$('#js_cityLocation' + locationId + 'Link').href = '?view=cityDetails&destinationCityId=' + cityId;
+		}
 	},
 };
 

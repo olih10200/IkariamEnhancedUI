@@ -49,7 +49,9 @@
 		"error":	"There was an error in your request.",
 		"ctrl":		"Ctrl",
 		"alt":		"Alt",
-		"shift":	"Shift"
+		"shift":	"Shift",
+		"yes":		"Yes",
+		"no":		"No"
 	},
 	"balance": {
 		"income": {
@@ -74,6 +76,7 @@
 		"module":		"Modules",
 		"resInfoMissingRes":	"Resource Information / Missing Resources",
 		"zoom":			"Zoom function",
+		"messageSignature":	"Message signature",
 		"save":			"Save settings!",
 		"label": {
 			"updateActive":			"Search for updates automatically",
@@ -82,8 +85,13 @@
 			"missingResActive":		"Show missing resources in construction view",
 			"resourceInfoActive":		"Show the hourly income directly in town view",
 			"zoomActive":			"Activate zoom in world view, island view, town view",
+			"messageSignatureActive":	"Enable message signatures",
+			"easyCircularMsgActive":	"Show button for faster sending of circular messages",
+			"replaceUrlsActive":		"Make links in messages clickable",
+			"colonizingLinksActive":	"Show information about colonizing cities",
 			"lcMoveActive":			"Move loading circle to position bar",
 			"tooltipsAutoActive":		"Show tooltips in alliance mebers view and military advisor automatically",
+			"directMilitaryTtActive":	"Show information about cargo / fleets in military view without tooltips",
 			"hideBirdsActive":		"Hide the bird swarm.",
 			"nctAdvisorActive":		"Don't center town information in the town advisor",
 			"niceAllyPageActive":		"Show the external allypages better formatted",
@@ -91,6 +99,12 @@
 			"updateInterval":		"Interval to search for updates:",
 			"manualUpdate1":		"Search for updates for \"",
 			"manualUpdate2":		"\"!",
+			"useServerSignature":	"Use local signature",
+			"placementTop":		"Insert signature above cited messages",
+			"signatureText": {
+				"global":	"Global signature, which could be used on every world:",
+				"server":	"Local signature, which only could be used on this world:"
+			},
 			"world": {
 				"zoomFactor":			"Zoom worldmap:",
 				"scaleChildren":		"Worldmap"
@@ -145,6 +159,17 @@
 		"label": {
 			"showPositive":	"Show also the remaining resources after an upgrade",
 			"showColoured":	"Show the remaining resources coloured"
+		}
+	},
+	"easyCircularMsg": {
+		"getLink":	"Save link for circular message",
+		"send":		"Send circular message"
+	},
+	"replacedUrl": {
+		"notification": {
+			"header":	"Attention!",
+			"text1":	"You're going to open the link ",
+			"text2":	". This happens on your own risk. Proceed?"
 		}
 	}
 }

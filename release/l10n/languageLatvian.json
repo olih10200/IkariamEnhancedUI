@@ -49,7 +49,9 @@
 		"error":	"Jūsu veiktajā pieprasījumā radās kļūda.",
 		"ctrl":		"Ctrl",
 		"alt":		"Alt",
-		"shift":	"Shift"
+		"shift":	"Shift",
+		"yes":		"Jā",
+		"no":		"Nē"
 	},	
 	"balance": {	
 		"income": {	
@@ -74,6 +76,7 @@
 		"module":		"Moduļi",
 		"resInfoMissingRes":	"Informācija par resursiem / Trūkstošie resursi",
 		"zoom":			"Zoom funkcija",
+		"messageSignature":	"Vēstules paraksts",
 		"save":			"Saglabāt iestatījumus!",
 		"label": {
 			"updateActive":			"Meklēt atjauninājumus automātiski",
@@ -82,8 +85,13 @@
 			"missingResActive":		"Rādīt trūkstošos resursus celtniecības skatā",
 			"resourceInfoActive":		"Rādīt ikstundas resursu produkciju pilsētas skatā",
 			"zoomActive":			"Aktivizēt zoom funkciju pasaules skatā, salas skatā, pilsētas skatā",
+			"messageSignatureActive":	"Ieslēgt parakstus vēstulēs",
+			"easyCircularMsgActive":	"Rādīt pogu ātrākai alianses vēstuļu sūtīšanai",
+			"replaceUrlsActive":		"Pārveidot saites vēstulēs klikšķināmas",
+			"colonizingLinksActive":	"Rādīt informāciju par topošajām kolonijām",
 			"lcMoveActive":			"Pārvietot uz augšējo joslu apli, kas parādās pie procesu apstrādes",
 			"tooltipsAutoActive":		"Rādīt uznirstošos lodziņus alianses biedru skatā un karaspēka padomdevējā automātiski",
+			"directMilitaryTtActive":	"Rādīt informāciju par kravu floti karaspēka pārskatā bez uznirstošajiem logiem",
 			"hideBirdsActive":		"Paslēpt putnu baru.",
 			"nctAdvisorActive":		"Necentrēt pilsētas informāciju pilsētas padomdevējā",
 			"niceAllyPageActive":		"Rādīt labāk noformētas ārējās alianšu lapas",
@@ -91,6 +99,12 @@
 			"updateInterval":		"Intervāls starp atjauninājumu meklēšanu:",
 			"manualUpdate1":		"Meklēt atjauninājumus \"",
 			"manualUpdate2":		"\"!",
+			"useServerSignature":		"Lietot lokālu parakstu",
+			"placementTop":			"Ievietot parakstu vēstulēs virs citātiem",
+			"signatureText": {
+				"global":		"Globāls paraksts, kuru var lietot katrā serverī:",
+				"server":		"Lokāls paraksts, kuru var lietot tikai šajā serverī:"
+			},
 			"world": {
 				"zoomFactor":		"Zoom pasaules skatā:",
 				"scaleChildren":	"Pasaules skats"
@@ -145,6 +159,17 @@
 		"label": {
 			"showPositive":	"Rādīt atlikušos resursus arī pēc uzlabojuma",
 			"showColoured":	"Rādīt atlikušos resursus ar izkrāsojumu"
+		}
+	},
+	"easyCircularMsg": {
+		"getLink":    "Saglabāt saiti alianses vēstulei",
+		"send":        "Sūtīt alianses vēstuli"
+	},
+	"replacedUrl": {
+		"notification": {
+			"header":    "Uzmanību!",
+			"text1":    "Jūs grasāties atvērt saiti ",
+			"text2":    ". Tas notiek uz Jūsu paša atbildību. Turpināt?"
 		}
 	}
 }
