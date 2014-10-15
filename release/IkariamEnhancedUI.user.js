@@ -3,16 +3,16 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			9.00
+// @version			9.01
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://m*.*.ikariam.*/*
 // 
 // @exclude			http://support.*.ikariam.*/*
 // 
-// @resource		languageGerman	http://resources.ikascripts.de/74221/v9.00/languageGerman.json
-// @resource		languageEnglish	http://resources.ikascripts.de/74221/v9.00/languageEnglish.json
-// @resource		languageLatvian	http://resources.ikascripts.de/74221/v9.00/languageLatvian.json
+// @resource		languageGerman	http://resources.ikascripts.de/74221/v9.01/languageGerman.json
+// @resource		languageEnglish	http://resources.ikascripts.de/74221/v9.01/languageEnglish.json
+// @resource		languageLatvian	http://resources.ikascripts.de/74221/v9.01/languageLatvian.json
 // 
 // @bug				Opera	Zooming with the mouse is only possible with "Alt" or without any key. No fix possible as I know.
 // @bug				Opera	No update checks and different language settings are possible due to missing comands.
@@ -22,6 +22,11 @@
 // @bug				Chrome	Latvian special chars are not shown correct.
 // @bug				All		The selected island is not centered in world view.
 // @bug				All		If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			9.01	Feature: Smaller icons in direct military tooltip. (desktop)
+// @history			9.01	Bugfix: Problems with update check and version numbers >= 10. (mobile & desktop)
+// @history			9.01	Bugfix: Problems with another script. (desktop)
+// @history			9.01	Bugfix: Problems with a wrong style in island view. (desktop)
 // 
 // @history			9.00	Feature: Message signature can be set. (desktop)
 // @history			9.00	Feature: Button for faster sending of circular messages. (desktop)
@@ -128,7 +133,7 @@
  * Information about the Script.
  */
 const scriptInfo = {
-	version:	'9.00',
+	version:	'9.01',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
@@ -972,7 +977,7 @@ Updater = {
 					var metadata = Updater.formatMetadata(response.responseText);
 					
 					// If a new Update is available and the update hint should be shown.
-					if(scriptInfo.version < metadata.version && (myGM.getValue('updater_hideUpdate', scriptInfo.version) < metadata.version || Updater.manualUpdate)) {
+					if(Updater.newerVersion(scriptInfo.version, metadata.version) && (Updater.newerVersion(myGM.getValue('updater_hideUpdate', scriptInfo.version), metadata.version) || Updater.manualUpdate)) {
 						// Show update dialogue.
 						Updater.showUpdateInfo(metadata);
 
@@ -989,6 +994,61 @@ Updater = {
 					}
 				},
 			});
+	},
+	
+	/**
+	 * Show the update information panel.
+	 * 
+	 * @param	String	versionOld
+	 *   The old version number.
+	 * @param	String	versionNew
+	 *   The new version number.
+	 * @param	int		maxPartsToCompare
+	 *   The number of parts to compare at most. (optional, default "compare all parts")
+	 * 
+	 * @return	boolean
+	 *   If a new version is available.
+	 */
+	newerVersion: function(versionOld, versionNew, maxPartsToCompare) {
+		// Stores if a new version is available.
+		var newVersion = false;
+		
+		// Force both versions to be a string.
+		versionOld += '';
+		versionNew += '';
+
+		// The parts of the versions.
+		var versionOldParts = versionOld.split('.');
+		var versionNewParts = versionNew.split('.');
+		
+		// The bigger number of parts of the versions.
+		var biggerNumberOfParts = versionOldParts.length > versionNewParts.length ? versionOldParts.length : versionNewParts.length;
+		
+		// If all parts should be compared, set maxPartsToCompare to all parts.
+		if(!maxPartsToCompare || maxPartsToCompare < 1) {
+			maxPartsToCompare = biggerNumberOfParts + 1;
+		}
+		
+		// Loop over all parts of the version with less parts.
+		for(var i = 0; i < biggerNumberOfParts; i++) {
+			// Get the value of the parts.
+			var versionPartOld = parseInt(versionOldParts[i] || 0);
+			var versionPartNew = parseInt(versionNewParts[i] || 0);
+			
+			// If the old part is smaller than the new, return true.
+			if(versionPartOld < versionPartNew) {
+				newVersion = true;
+				break;
+			
+			// Else if the old part is bigger than the new it is now new version; return false.
+			} else if(versionPartOld > versionPartNew || i == maxPartsToCompare - 1) {
+				newVersion = false;
+				break;
+			}
+		}
+		
+		// No new version, return false.
+		return newVersion;
 	},
 	
 	/**
@@ -2173,11 +2233,13 @@ Tooltips = {
 	 * Shows the military tooltip without mouseover.
 	 */
 	initDirectMilitaryTooltip: function() {
-		// Add the style.
+		// Add the styles.
 		myGM.addStyle(
 				"#js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon				{ background-image: none; cursor: default; width: 240px; } \
 				 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip		{ display: inline; position: relative; padding: 0px; border: none; } \
-				 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip h5	{ display: none; }"
+				 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip h5	{ display: none; } \
+				 #js_MilitaryMovementsFleetMovementsTable .military_event_table .icon40						{ background-size: 25px 25px; padding: 26px 3px 0px 3px; width: 30px; } \
+				 #js_MilitaryMovementsFleetMovementsTable .military_event_table .icon40.resource_icon		{ background-size: 20x 16px; }"
 			);
 	},
 	
@@ -3540,7 +3602,7 @@ ResourceInfo = {
 		// Bugfix for the first running of the script on the page: wineSpending is not reduced by vineyard.
 		if(firstRun) {
 			// Get the vineyard.
-			var vineyard = myGM.$('.vineyard');
+			var vineyard = myGM.$('#locations .vineyard');
 			
 			// If a vineyard exists, reduce the wine spending.
 			if(vineyard) {
@@ -3616,8 +3678,8 @@ MemberInfo = {
 		// Add the styles.
 		myGM.addStyle(
 				"#" + myGM.prefix + "resetInfo	{ float: right; margin-top: -6px; margin-right: 6px; } \
-				 .score span					{ float: right; text-align: right; width: 70px; } \
-				 .place span					{ float: right; text-align: right; width: 30px; } \
+				 .highscore .score span			{ float: right; text-align: right; width: 70px; } \
+				 .highscore .place span			{ float: right; text-align: right; width: 30px; } \
 				 .highscore th:nth-child(4)		{ width: 30% !important; } \
 				 .highscore th:nth-child(5)		{ width: 10% !important; } \
 				 #tab_highscore	.centerButton	{ margin: 10px 0px; }",
