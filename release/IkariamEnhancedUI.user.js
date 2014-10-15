@@ -3,8 +3,7 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			11.00
-// @version2		2.4
+// @version			2.5
 //
 // @include			http://s*.*.ikariam.*/*
 // @include			http://s*.ikariam.gameforge.com/*
@@ -23,11 +22,11 @@
 // @grant			GM_getResourceText
 // @grant			GM_xmlhttpRequest
 // 
-// @bug				Opera & Chrome	Zooming with the mouse is only possible with "Alt" or without any key. No fix possible as I know.
-// @bug				Opera			No updating of the missing resources is possible due to a missing modification listener.
-// @bug				Chrome			Some smaller graphical bugs caused by a second execution of Ikariam functions by the script.
-// @bug				All				The selected island is not centered in world view.
-// @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// @history			2.5		Bugfix: Game language is recognized again.
+// @history			2.5		Bugfix: Works now in Greasemonkey 2.0+
+// @history			2.5		Checks now for updates on Greasy Fork.
+// @history			2.5		Removed code parts for mobile version.
+// @history			2.5		Removed alliance page improvement, as fixed in Ikariam v0.5.13
 // 
 // @history			2.4		New Ikariam domain -> script can now be used with this domain
 // 
@@ -152,8 +151,8 @@
  * Information about the Script.
  */
 var scriptInfo = {
-	version:	'2.4',
-	id:			74221,
+	version:	'2.5',
+	id:			4369,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
 	debug:		false
@@ -186,8 +185,8 @@ var win = typeof unsafeWindow != 'undefined' ? unsafeWindow : window;
 **************************/
 
 // For more information about commands that are available for the Firebug console see http://getfirebug.com/wiki/index.php/Console_API.
-if(scriptInfo.debug && win.console) {
-	var conTmp = win.console;
+if(scriptInfo.debug && win.debugConsole) {
+	var conTmp = win.debugConsole;
 } else {
 	var conTmp = {
 		// Non static functions are set to 'null'.
@@ -453,8 +452,10 @@ myGM = {
 	 *   The value to store.
 	 */
 	setValue: function(key, value) {
+		var toStore = '';
+		
 		// Stringify the value to store also arrays.
-		var toStore = win.JSON.stringify(value);
+		toStore = JSON.stringify(value);
 
 		// If the use of the default GM_setValue ist possible, use it.
 		if(this.canUseGmStorage) {
@@ -496,9 +497,8 @@ myGM = {
 	 * @return	mixed
 	 *   The stored value.
 	 */
-	getValue: function(key, defaultValue) {
-		// Put the default value to JSON.
-		defaultValue = win.JSON.stringify(defaultValue);
+	getValue: function(key, defaultValueOld) {
+		defaultValue = JSON.stringify(defaultValueOld);
 		
 		// Storage for the value.
 		var value = defaultValue;
@@ -536,9 +536,9 @@ myGM = {
 				}
 			}
 		}
-
+		
 		// Return the value (parsed for the correct return type).
-		return win.JSON.parse(value);
+		return JSON.parse(value);
 	},
 
 	/**
@@ -732,9 +732,8 @@ myGM = {
 				onload: function(response) { return false; }
 			});
 		}
-
-		// Return the parsed resource text.
-		return win.JSON.parse(responseText.trim(), safeParse);
+		
+		return JSON.parse(responseText.trim(), safeParse);
 	},
 
 	/**
@@ -1060,7 +1059,7 @@ Updater = {
 		// Send a request to the userscripts.org server to get the metadata of the script to check if there is a new Update.
 		myGM.xhr({
 				method: 'GET',
-				url: 'http://userscripts.org/scripts/source/' + scriptInfo.id + '.meta.js',
+				url: 'https://greasyfork.org/scripts/' + scriptInfo.id + '/code.meta.js',
 				headers: {'User-agent': 'Mozilla/5.0', 'Accept': 'text/html'},
 				onload: function(response) {
 					// Extract the metadata from the response.
@@ -1330,24 +1329,11 @@ Language = {
 	 * Init the language and set the used language code.
 	 */
 	init: function() {
-		// Split the host string.
-		var lang = top.location.host.split('.');
-
-		// Set the default language code.
-		var langCode = 'en';
-
-		// Change the language code, if lang exists.
-		if(lang) {
-			for(var i = 0; i < lang.length; i++) {
-				if(lang[i] == 'ikariam') {
-					langCode = lang[i - 1];
-					break;
-				}
-			}
-		}
-
+		// Get the language code.
+		var langCode = top.location.host.match(/^s[0-9]+-([a-zA-Z]+)\.ikariam\.gameforge\.com$/)[1];
+		
 		// Set the language name.
-		this.setLangName(langCode);
+		this.setLangName(!!langCode ? langCode : 'en');
 
 		// Set the text in the used language.
 		this.setText();
@@ -1675,17 +1661,7 @@ General = {
 	},
 
 	/**
-	 * Returns if the user is logged in to the mobile version.
-	 *
-	 * @return	boolean
-	 *   The login-status to mobile.
-	 */
-	isMobileVersion: function() {
-		return (top.location.href.search(/http:\/\/m/) > -1);
-	},
-
-	/**
-	 * Shows a hint to the user (desktop).
+	 * Shows a hint to the user.
 	 *
 	 * @param	String	located
 	 *   The location of the hint. Possible are all advisors, a clicked element or a committed element.
@@ -1765,14 +1741,8 @@ General = {
 		// Switch the button title.
 		if(button.title == Language.$('general_hide')) {
 			button.title	= Language.$('general_show');
-			
-			// If mobile version, switch also the inner html.
-			if(General.isMobileVersion())	button.innerHTML	= '+';
 		} else {
 			button.title	= Language.$('general_hide');
-			
-			// If mobile version, switch also the inner html.
-			if(General.isMobileVersion())	button.innerHTML	= '-';
 		}
 	}
 };
@@ -1915,11 +1885,7 @@ EventHandling = {
 		 * Save the settings in the option panel.
 		 */
 		saveSettings: function() {
-			if(General.isMobileVersion()) {
-				OptionPanel.saveSettingsMobile();
-			} else {
-				OptionPanel.saveSettings();
-			}
+			OptionPanel.saveSettings();
 		}
 	},
 
@@ -2046,35 +2012,20 @@ EventHandling = {
 EnhancedView = {
 	/**
 	 * Inits the enhanced view.
-	 * Decides if the version of ikariam is mobile or desktop.
-	 */
-	init: function() {
-		// If the version is mobile.
-		if(General.isMobileVersion()) {
-			this.initMobile();
-
-		// Otherwise; the version is desktop.
-		} else {
-			this.initDesktop();
-		}
-	},
-
-	/**
-	 * Inits the desktop version.
 	 * Adds the event listener to the loadingPreview.
 	 */
-	initDesktop: function() {
+	init: function() {
 		// Wait for a popup.
 		myGM.$('#loadingPreview').addEventListener('DOMAttrModified', EventHandling.loadingPreview.attrModified, false);
 
 		// Init parts which are not shown in popups.
-		this.initDesktopStatic();
+		this.initStatic();
 	},
 
 	/**
 	 * Inits the modifications on the website which are not shown in popups.
 	 */
-	initDesktopStatic: function() {
+	initStatic: function() {
 		// Hide the Bird animation.
 		if(myGM.getValue('module_hideBirdsActive', true))			View.hideBirds();
 
@@ -2100,9 +2051,6 @@ EnhancedView = {
 		// Don't center town advisor.
 		if(myGM.getValue('module_nctAdvisorActive', true))			View.noCenterTownAdvisor();
 
-		// Init the function for showing the missing resources.
-		if(myGM.getValue('module_niceAllyPageActive', true))		View.niceAllyPage();
-
 		// If the military tooltip should be shown without mouseover or click, add the styles.
 		if(myGM.getValue('module_directMilitaryTtActive', true))	Tooltips.initDirectMilitaryTooltip();
 
@@ -2115,25 +2063,6 @@ EnhancedView = {
 
 		// Init the function for showing the missing resources.
 		if(myGM.getValue('module_memberInfoActive', false))			MemberInfo.init();
-	},
-
-	/**
-	 * Inits the mobile version.
-	 */
-	initMobile: function() {
-		// Get the param string.
-		var params = top.location.search;
-
-		// If the view is finances.
-		if(params.search(/view=finances/) > -1) {
-			if(myGM.getValue('module_incomeActive', true))		Balance.incomeOnTopMobile();
-			if(myGM.getValue('module_urtShortActive', true))	Balance.shortUpkeepReductionTable();
-		}
-
-		// If the view is game options.
-		if(params.search(/view=options&page=game/) > -1) {
-			OptionPanel.mobile();
-		}
 	},
 
 	/**
@@ -2169,7 +2098,7 @@ EnhancedView = {
 		switch(popupId) {
 			// Options popup.
 			case 'options':
-				OptionPanel.desktop();
+				OptionPanel.show();
 			  break;
 
 			// Finance popup.
@@ -2265,16 +2194,6 @@ View = {
 		// Add the style.
 		myGM.addStyle(
 				"#inboxCity td	{ vertical-align: top !important; }"
-			);
-	},
-
-	/**
-	 * Format the allypage better.
-	 */
-	niceAllyPage: function() {
-		// Add the style.
-		myGM.addStyle(
-				"#allyPage_c .allypage	{ padding: 4px 12px; text-align: left; }"
 			);
 	}
 };
@@ -2392,7 +2311,7 @@ Tooltips = {
  */
 Balance = {
 	/**
-	 * Shows the actual income also on top of the site. (desktop)
+	 * Shows the actual income also on top of the site.
 	 */
 	incomeOnTop: function() {
 		// Get the table for the summary.
@@ -2403,17 +2322,6 @@ Balance = {
 
 		// Adjust the size of the Scrollbar.
 		ika.controller.adjustSizes();
-	},
-
-	/**
-	 * Shows the actual income also on top of the site. (mobile)
-	 */
-	incomeOnTopMobile: function() {
-		// Get the table for the summary.
-		var summaryTable = myGM.$('#balance');
-
-		// Show the income on top.
-		this.showIncomeOnTop(summaryTable);
 	},
 
 	/**
@@ -2528,11 +2436,6 @@ Balance = {
 			var th = myGM.$('th', tr[0]);
 			var btn = myGM.addElement('div', th, null, 'maximizeImg', new Array(['cssFloat', 'left']), th.firstChild);
 			btn.title = Language.$('general_show');
-			
-			// If mobile version.
-			if(General.isMobileVersion()){
-				btn.innerHTML = '+';
-			}
 
 			// Add the event listener.
 			btn.addEventListener('click', EventHandling.upkeepReductionTable.toggle, false);
@@ -2578,16 +2481,16 @@ OptionPanel = {
 	},
 
 	/**
-	 * Adds the tab for the script options in the desktop version.
+	 * Adds the tab for the script options.
 	 */
-	desktop: function() {
+	show: function() {
 		// Get the script options tab.
 		var tabGMOptions = myGM.$('#tabScriptOptions');
 		
 		// If the script options tab doesn't exists, create it.
 		if(!tabGMOptions) {
 			// Set the styles.
-			this.setStylesDesktop();
+			this.setStyles();
 
 			// Add the GM tab link to the tab menu.
 			var tabmenu					= myGM.$('.tabmenu');
@@ -2605,35 +2508,9 @@ OptionPanel = {
 	},
 
 	/**
-	 * Shows the options for the script in the mobile version.
-	 */
-	mobile: function() {
-		// Get the mainview.
-		var mainview = myGM.$('#mainview');
-
-		// Create the options wrapper.
-		var wrapper = this.createOptionsWrapper(mainview, scriptInfo.name);
-
-		// Add the checkboxes for the enabling / disabling of modules.
-		this.createModuleContentMobile(wrapper);
-
-		// Add the options for updates.
-		this.createUpdateContentMobile(wrapper);
-
-		// Horizontal row.
-		myGM.addElement('hr', wrapper);
-
-		// Prepare placeholder for save hint.
-		myGM.addElement('p', wrapper, 'saveHint');
-
-		// Add the button to save the settings.
-		this.addSaveButton(wrapper);
-	},
-
-	/**
 	 * Sets the styles that are used for the update-panel.
 	 */
-	setStylesDesktop: function() {
+	setStyles: function() {
 		// Add all styles to the ikariam page.
 		myGM.addStyle(
 				"#js_tabGameOptions, #js_tabAccountOptions, #js_tabFacebookOptions, #js_tabOpenIDOptions, #js_tabScriptOptions	{ width: 130px !important; margin-left: 5px !important; border-radius: 5px 5px 0px 0px } \
@@ -2743,7 +2620,6 @@ OptionPanel = {
 				{ id: 'unitInfo', 				checked: myGM.getValue('module_unitInfoActive', true),			label: Language.$('optionPanel_section_module_label_unitInfoActive'),			hrAfter: true	},
 				{ id: 'hideBirds',				checked: myGM.getValue('module_hideBirdsActive', true),			label: Language.$('optionPanel_section_module_label_hideBirdsActive'),			hrAfter: false	},
 				{ id: 'noCenterTownAdvisor',	checked: myGM.getValue('module_nctAdvisorActive', true),		label: Language.$('optionPanel_section_module_label_nctAdvisorActive'),			hrAfter: false	},
-				{ id: 'niceAllyPage',			checked: myGM.getValue('module_niceAllyPageActive', true),		label: Language.$('optionPanel_section_module_label_niceAllyPageActive'),		hrAfter: true	},
 				{ id: 'memberInformation',		checked: myGM.getValue('module_memberInfoActive', false),		label: Language.$('optionPanel_section_module_label_memberInfoActive'),			hrAfter: false	}
 			);
 
@@ -2752,55 +2628,6 @@ OptionPanel = {
 
 		// Add the button to save the settings.
 		this.addSaveButton(contentWrapper);
-	},
-
-	/**
-	 * Creates the content of the module part of the mobile version.
-	 *
-	 * @param	element	contentWrapper
-	 *   The wrapper where the content should be added.
-	 */
-	createModuleContentMobile: function(contentWrapper) {
-		// Create the header.
-		var moduleHeader		= myGM.addElement('h3', contentWrapper);
-		moduleHeader.innerHTML	= Language.$('optionPanel_section_module_title');
-
-		// Get the ids.
-		var id		= new Array(
-				'update',
-				'incomeOnTop',
-				'upkeepReduction'
-			);
-
-		// Get the values.
-		var value	= new Array(
-				myGM.getValue('module_updateActive', true),
-				myGM.getValue('module_incomeActive', true),
-				myGM.getValue('module_urtShortActive', true)
-			);
-
-		// Get the labels.
-		var label	= new Array(
-				'&nbsp;&nbsp;' + Language.$('optionPanel_section_module_label_updateActive'),
-				'&nbsp;&nbsp;' + Language.$('optionPanel_section_module_label_incomeOnTopActive'),
-				'&nbsp;&nbsp;' + Language.$('optionPanel_section_module_label_upkeepReductionActive')
-			);
-
-		// Create the checkboxes and labels.
-		for(var i = 0; i < id.length; i++) {
-			// Create the checkbox wrapper.
-			var p	= myGM.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'left']));
-
-			// Create the checkbox.
-			var cb		= myGM.addElement('input', p, id[i] + 'Cb');
-			cb.type		= 'checkbox';
-			cb.checked	= value[i];
-
-			// Create the checkbox label.
-			var cbLabel			= myGM.addElement('label', p, id[i] + 'Label');
-			cbLabel.innerHTML	= label[i];
-			cbLabel.htmlFor		= myGM.prefix + id[i] + 'Cb';
-		}
 	},
 
 	/**
@@ -2840,72 +2667,6 @@ OptionPanel = {
 
 		// Add the button to save the settings.
 		this.addSaveButton(contentWrapper);
-	},
-
-	/**
-	 * Creates the content of the update part for the mobile version.
-	 *
-	 * @param	element	contentWrapper
-	 *   The wrapper where the content should be added.
-	 */
-	createUpdateContentMobile: function(contentWrapper) {
-		// Create the header.
-		var updateHeader = myGM.addElement('h3', contentWrapper);
-		updateHeader.innerHTML = Language.$('optionPanel_section_update_title');
-
-		// Create the select wrapper.
-		var p1	= myGM.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
-
-		// Create the select label.
-		var selectLabel			= myGM.addElement('label', p1, 'updateIntervalLabel');
-		selectLabel.innerHTML	= Language.$('optionPanel_section_update_label_interval_description');
-		selectLabel.htmlFor		= myGM.prefix + 'updateIntervalSelect';
-
-		// Create the select field.
-		var select	= myGM.addElement('select', p1, 'updateIntervalSelect');
-
-		// Array for update interval values and names.
-		var opts = new Array();
-		opts.value	= new Array(
-				3600,
-				43200,
-				86400,
-				259200,
-				604800,
-				1209600,
-				2419200
-			);
-		opts.name	= new Array(
-				Language.$('optionPanel_section_update_label_interval_option_hour'),
-				Language.$('optionPanel_section_update_label_interval_option_hour12'),
-				Language.$('optionPanel_section_update_label_interval_option_day'),
-				Language.$('optionPanel_section_update_label_interval_option_day3'),
-				Language.$('optionPanel_section_update_label_interval_option_week'),
-				Language.$('optionPanel_section_update_label_interval_option_week2'),
-				Language.$('optionPanel_section_update_label_interval_option_week4')
-			);
-
-		// Create the select options.
-		for(var i = 0; i < opts['name'].length; i++) {
-			// Create new option.
-			var option			= myGM.addElement('option', select);
-			option.value		= opts['value'][i];
-			option.innerHTML	= opts['name'][i];
-
-			// If the option is the actual option, select it.
-			if(opts['value'][i] == myGM.getValue('updater_updateInterval', 3600)) {
-				option.selected	= true;
-			}
-		}
-
-		// Create the update link wrapper.
-		var p2	= myGM.addElement('p', contentWrapper, null, null, new Array(['textAlign', 'center']));
-
-		// Add the link for manual updates.
-		var updateLink			= myGM.addElement('a', p2);
-		updateLink.href			= '#';
-		updateLink.innerHTML	= Language.$('optionPanel_section_update_label_manual_text1') + scriptInfo.name + Language.$('optionPanel_section_update_label_manual_text2');
-		updateLink.addEventListener('click', Updater.doManualUpdate, false);
 	},
 
 	/**
@@ -3251,7 +3012,6 @@ OptionPanel = {
 		myGM.setValue('module_unitInfoActive',			myGM.$('#' + myGM.prefix + 'unitInfoCb').checked);
 		myGM.setValue('module_hideBirdsActive',			myGM.$('#' + myGM.prefix + 'hideBirdsCb').checked);
 		myGM.setValue('module_nctAdvisorActive',		myGM.$('#' + myGM.prefix + 'noCenterTownAdvisorCb').checked);
-		myGM.setValue('module_niceAllyPageActive',		myGM.$('#' + myGM.prefix + 'niceAllyPageCb').checked);
 		myGM.setValue('module_memberInfoActive',		myGM.$('#' + myGM.prefix + 'memberInformationCb').checked);
 
 		// Save the update settings.
@@ -3284,37 +3044,11 @@ OptionPanel = {
 
 		// Show success hint.
 		General.showTooltip('cityAdvisor', 'confirm', Language.$('general_successful'));
-	},
-
-	/**
-	 * Save the settings (mobile).
-	 */
-	saveSettingsMobile: function() {
-		// Save the module settings.
-		myGM.setValue('module_updateActive',	myGM.$('#' + myGM.prefix + 'updateCb').checked);
-		myGM.setValue('module_incomeActive',	myGM.$('#' + myGM.prefix + 'incomeOnTopCb').checked);
-		myGM.setValue('module_urtShortActive',	myGM.$('#' + myGM.prefix + 'upkeepReductionCb').checked);
-
-		// Save the update settings.
-		myGM.setValue('updater_updateInterval',	General.getInt(General.getSelectValue('updateIntervalSelect')));
-
-		// Show success hint.
-		myGM.$('#' + myGM.prefix + 'saveHint').innerHTML	= Language.$('general_successful');
-
-		// Delete the hint after 3 seconds.
-		setTimeout(OptionPanel.deleteSaveHintMobile, 3000);
-	},
-
-	/**
-	 * Delete the save hint.
-	 */
-	deleteSaveHintMobile: function() {
-		myGM.$('#' + myGM.prefix + 'saveHint').innerHTML	= '';
 	}
 };
 
 /**
- * Functions for zooming mobile, desktop and town view.
+ * Functions for zooming world, island and town view.
  */
 ZoomFunction = {
 	/**
