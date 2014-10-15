@@ -3,13 +3,13 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			10.00
-// @version2		2.3
+// @version			11.00
+// @version2		2.4
 //
 // @include			http://s*.*.ikariam.*/*
-// @include			http://m*.*.ikariam.*/*
+// @include			http://s*.ikariam.gameforge.com/*
 //
-// @exclude			http://support.*.ikariam.*/*
+// @exclude			http://support.*.ikariam.gameforge.com/*
 //
 // @resource		languageGerman	http://resources.ikascripts.de/74221/v2.3/languageGerman.json
 // @resource		languageEnglish	http://resources.ikascripts.de/74221/v2.3/languageEnglish.json
@@ -28,6 +28,8 @@
 // @bug				Chrome			Some smaller graphical bugs caused by a second execution of Ikariam functions by the script.
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			2.4		New Ikariam domain -> script can now be used with this domain
 // 
 // @history			2.3		Feature: Formatting troop lists for posting in forums / personal messages. (desktop).
 // @history			2.3		Feature: Filling level of warehouse as bar in town view. (desktop).
@@ -150,7 +152,7 @@
  * Information about the Script.
  */
 var scriptInfo = {
-	version:	'2.3',
+	version:	'2.4',
 	id:			74221,
 	name:		'Ikariam Enhanced UI',
 	author:		'Tobbe',
