@@ -1,0 +1,35 @@
+#--------------------------------------------------
+# Script requires / resources
+#--------------------------------------------------
+
+resource.language.url.release	= 
+resource.language.url.test		= 
+
+resource.ikariamCore.language.url.test	= 
+
+require.ikariamCore.test	= 
+
+#--------------------------------------------------
+#  Transifex options
+#--------------------------------------------------
+
+transifex.user		= 
+transifex.password	= 
+transifex.url		= 
+
+#--------------------------------------------------
+#  Deployment options
+#--------------------------------------------------
+
+ftp.name.server.release	= 
+ftp.name.server.test	= 
+
+ftp.name.user.release	= 
+ftp.name.user.test		= 
+
+ftp.password.release	= 
+ftp.password.test		= 
+
+# FTP server side paths
+dir.ftp.release			= 
+dir.ftp.test			= 
