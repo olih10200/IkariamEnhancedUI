@@ -1,0 +1,198 @@
+{
+    "view": {
+        "options": {
+            "wrapperTitle": "Anzeige",
+            "moveLoadingCircle": "Ladekreis in Positionsleiste verschieben",
+            "hideBirds": "Den Vogelschwarm nicht anzeigen",
+            "noVerticalCenterInTownAdvisor": "Städteinformationen im Städteberater vertikal nicht zentrieren"
+        }
+    },
+    "island": {
+        "options": {
+            "showColonizingCityInfo": "Informationen über kolonisierende Städte anzeigen"
+        }
+    },
+    "finance": {
+        "options": {
+            "showIncomeOnTop": "Einkommen in der Bilanz auch oben anzeigen",
+            "shortUpkeepReductionTable": "Eine gekürzte Version der Einkommensreduktion anzeigen"
+        },
+        "income": {
+            "perHour": "Einkommen pro Stunde",
+            "perDay": "Einkommen pro Tag",
+            "start": "Einkommen ohne Abzüge"
+        },
+        "upkeep": {
+            "reason": {
+                "0": "Truppen",
+                "1": "Schiffe",
+                "2": "Truppen & Schiffe"
+            },
+            "basic": "Grundkosten",
+            "supply": "Versorgungskosten",
+            "result": "Gesamtkosten"
+        }
+    },
+    "missingResources": {
+        "options": {
+            "wrapperTitle": "Fehlende Ressourcen",
+            "show": "Fehlende Ressourcen anzeigen",
+            "showPositive": "Auch die nach einem Upgrade noch verbleibenden Ressourcen anzeigen",
+            "showColoured": "Die verbleibenden Ressourcen farbig anzeigen"
+        }
+    },
+    "tooltips": {
+        "options": {
+            "autoshow": "Tooltips in Allianzmitgliederliste und Militärberater automatisch anzeigen",
+            "showDirectInMilitaryAdvisor": "Informationen über Ladungen / Flotten im Militärberater ohne Tooltip anzeigen"
+        }
+    },
+    "zoom": {
+        "options": {
+            "wrapperTitle": "Zoom Funktion",
+            "zoomView": "Zoomen in Weltansicht, Inselansicht und Stadtansicht aktivieren",
+            "factor": {
+                "world": "Zoom in der Weltkarte:",
+                "island": "Zoom in der Inselansicht:",
+                "town": "Zoom in der Stadtansicht:"
+            },
+            "scaleChildren": {
+                "label": "Beschriftungen und Symbole beim Zoomen in folgenden Ansichten in Normalgröße belassen:",
+                "world": "Weltkarte",
+                "island": "Inselansicht",
+                "town": "Stadtansicht"
+            },
+            "accessKeyLabel": "Folgende Tasten müssen gedrückt sein, um mit der Maus zoomen zu können:"
+        },
+        "zoomIn": "Reinzoomen",
+        "factor": "Zoom Faktor",
+        "zoomOut": "Rauszoomen"
+    },
+    "resourceInformation": {
+        "options": {
+            "wrapperTitle": "Einkommen in Stadtansicht",
+            "resourceQuicklinkEnhancements": "Ressourcenanzahl zu Rathaus und Minen verlinken",
+            "directIncome": {
+                "show": "Tageseinkommen in der Stadtansicht anzeigen",
+                "style": {
+                    "label": "Darstellung des Einkommens in der Stadtansicht:",
+                    "alignRight": "Rechtsbündig",
+                    "alignLeft": "Linksbündig",
+                    "withSeparation": "Rechtsbündig & Separator"
+                }
+            },
+            "capacityBar": {
+                "show": "Informationsbalken für Lagerhausfüllstand anzeigen",
+                "hasBorder": "Mit Rahmen",
+                "showBranchOfficeResources": "Auch Ressourcen in Kontor anzeigen",
+                "orientation": {
+                    "label": "Orientierung des Balkens",
+                    "vertical": "Vertikal",
+                    "horizontal": "Horizontal",
+                    "horizontalFull": "Horizontal, volle Länge"
+                }
+            }
+        },
+        "dailyProduction": "Tagesproduktion %$1:"
+    },
+    "highscore": {
+        "options": {
+            "showMemberInformation": "Speichern von Highscoreständen von Allianzmitgliedern ermöglichen"
+        },
+        "memberInformation": {
+            "show": "Alli Infos",
+            "reset": "Zurücksetzen",
+            "lastReset": "Zeit seit dem letzten Zurücksetzen:",
+            "noReset": "Bisher nicht zurückgesetzt."
+        }
+    },
+    "message": {
+        "options": {
+            "wrapperTitle": "Nachrichten",
+            "replaceURL": "Links in Nachrichten anklickbar machen",
+            "easyCircularMessage": "Button für schnelleres Versenden von Allianzrundmails anzeigen",
+            "signature": {
+                "use": "Nachrichtensignaturen aktivieren",
+                "placementTop": "Signatur oberhalb von Zitaten einfügen",
+                "global": "Globale Signatur, die auf allen Welten verwendet werden kann:",
+                "useServerSpecific": "Lokale Signatur verwenden",
+                "server": "Lokale Signatur, die nur auf dieser Welt verwendet wird:"
+            }
+        },
+        "replacedUrl": {
+            "notification": {
+                "header": "Achtung!",
+                "text": "Du bist dabei, den Link %$1 zu öffnen. Das öffnen dieses Links erfolgt auf eigenes Risiko. Trotzdem fortfahren?"
+            }
+        },
+        "easyCircular": {
+            "send": "Rundmail senden"
+        }
+    },
+    "troopInformation": {
+        "options": {
+            "show": "Truppeninformationen anzeigen"
+        },
+        "units": {
+            "label": "Einheiten in %$1",
+            "own": "Eigene Einheiten",
+            "friends": "Befreundete Einheiten",
+            "enemies": "Feindliche Einheiten"
+        },
+        "ships": {
+            "label": "Schiffe in %$1",
+            "own": "Eigene Schiffe",
+            "friends": "Befreundete Schiffe",
+            "enemies": "Feindliche Schiffe"
+        },
+        "button": "Truppeninformationen",
+        "header": "Truppen in %$1",
+        "noTroops": "Es befinden sich keine Truppen in %$1"
+    },
+    "diverse": {
+        "options": {
+            "wrapperTitle": "Verschiedenes"
+        },
+        "name": {
+            "resource": {
+                "gold": "Gold",
+                "wood": "Baumaterial",
+                "wine": "Wein",
+                "marble": "Marmor",
+                "glass": "Kristallglas",
+                "sulfur": "Schwefel"
+            },
+            "unit": {
+                "swordsman": "Schwertkämpfer",
+                "phalanx": "Hoplit",
+                "archer": "Bogenschütze",
+                "marksman": "Schwefelbüchsen-Schütze",
+                "mortar": "Mörser",
+                "slinger": "Steinschleuderer",
+                "catapult": "Katapult",
+                "ram": "Rammbock",
+                "steamgiant": "Dampfgigant",
+                "bombardier": "Ballon-Bombardier",
+                "cook": "Koch",
+                "medic": "Arzt",
+                "girocopter": "Gyrokopter",
+                "spearman": "Speerträger",
+                "spartan": "Spartaner"
+            },
+            "ship": {
+                "ballista": "Ballistaschiff",
+                "catapult": "Katapultschiff",
+                "flamethrower": "Feuerschiff",
+                "mortar": "Mörserschiff",
+                "ram": "Rammschiff",
+                "steamboat": "Dampframme",
+                "rocketship": "Raketenschiff",
+                "submarine": "Tauchboot",
+                "paddlespeedship": "Schaufelschnellboot",
+                "ballooncarrier": "Ballonträger",
+                "tender": "Tender",
+                "transport": "Handelsschiff"
+            }
+        }
+    }
+}

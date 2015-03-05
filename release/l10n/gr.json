@@ -1,0 +1,198 @@
+{
+    "view": {
+        "options": {
+            "wrapperTitle": "",
+            "moveLoadingCircle": "",
+            "hideBirds": "",
+            "noVerticalCenterInTownAdvisor": ""
+        }
+    },
+    "island": {
+        "options": {
+            "showColonizingCityInfo": ""
+        }
+    },
+    "finance": {
+        "options": {
+            "showIncomeOnTop": "",
+            "shortUpkeepReductionTable": ""
+        },
+        "income": {
+            "perHour": "",
+            "perDay": "",
+            "start": ""
+        },
+        "upkeep": {
+            "reason": {
+                "0": "",
+                "1": "",
+                "2": ""
+            },
+            "basic": "",
+            "supply": "",
+            "result": ""
+        }
+    },
+    "missingResources": {
+        "options": {
+            "wrapperTitle": "",
+            "show": "",
+            "showPositive": "",
+            "showColoured": ""
+        }
+    },
+    "tooltips": {
+        "options": {
+            "autoshow": "",
+            "showDirectInMilitaryAdvisor": ""
+        }
+    },
+    "zoom": {
+        "options": {
+            "wrapperTitle": "",
+            "zoomView": "",
+            "factor": {
+                "world": "",
+                "island": "",
+                "town": ""
+            },
+            "scaleChildren": {
+                "label": "",
+                "world": "",
+                "island": "",
+                "town": ""
+            },
+            "accessKeyLabel": ""
+        },
+        "zoomIn": "",
+        "factor": "",
+        "zoomOut": ""
+    },
+    "resourceInformation": {
+        "options": {
+            "wrapperTitle": "",
+            "resourceQuicklinkEnhancements": "",
+            "directIncome": {
+                "show": "",
+                "style": {
+                    "label": "",
+                    "alignRight": "",
+                    "alignLeft": "",
+                    "withSeparation": ""
+                }
+            },
+            "capacityBar": {
+                "show": "",
+                "hasBorder": "",
+                "showBranchOfficeResources": "",
+                "orientation": {
+                    "label": "",
+                    "vertical": "",
+                    "horizontal": "",
+                    "horizontalFull": ""
+                }
+            }
+        },
+        "dailyProduction": ""
+    },
+    "highscore": {
+        "options": {
+            "showMemberInformation": ""
+        },
+        "memberInformation": {
+            "show": "",
+            "reset": "",
+            "lastReset": "",
+            "noReset": ""
+        }
+    },
+    "message": {
+        "options": {
+            "wrapperTitle": "",
+            "replaceURL": "",
+            "easyCircularMessage": "",
+            "signature": {
+                "use": "",
+                "placementTop": "",
+                "global": "",
+                "useServerSpecific": "",
+                "server": ""
+            }
+        },
+        "replacedUrl": {
+            "notification": {
+                "header": "",
+                "text": ""
+            }
+        },
+        "easyCircular": {
+            "send": ""
+        }
+    },
+    "troopInformation": {
+        "options": {
+            "show": ""
+        },
+        "units": {
+            "label": "",
+            "own": "",
+            "friends": "",
+            "enemies": ""
+        },
+        "ships": {
+            "label": "",
+            "own": "",
+            "friends": "",
+            "enemies": ""
+        },
+        "button": "",
+        "header": "",
+        "noTroops": ""
+    },
+    "diverse": {
+        "options": {
+            "wrapperTitle": ""
+        },
+        "name": {
+            "resource": {
+                "gold": "",
+                "wood": "",
+                "wine": "",
+                "marble": "",
+                "glass": "",
+                "sulfur": ""
+            },
+            "unit": {
+                "swordsman": "",
+                "phalanx": "",
+                "archer": "",
+                "marksman": "",
+                "mortar": "",
+                "slinger": "",
+                "catapult": "",
+                "ram": "",
+                "steamgiant": "",
+                "bombardier": "",
+                "cook": "",
+                "medic": "",
+                "girocopter": "",
+                "spearman": "",
+                "spartan": ""
+            },
+            "ship": {
+                "ballista": "",
+                "catapult": "",
+                "flamethrower": "",
+                "mortar": "",
+                "ram": "",
+                "steamboat": "",
+                "rocketship": "",
+                "submarine": "",
+                "paddlespeedship": "",
+                "ballooncarrier": "",
+                "tender": "",
+                "transport": ""
+            }
+        }
+    }
+}

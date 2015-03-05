@@ -1,0 +1,198 @@
+{
+    "view": {
+        "options": {
+            "wrapperTitle": "",
+            "moveLoadingCircle": "Pārvietot uz augšējo joslu apli, kas parādās pie procesu apstrādes",
+            "hideBirds": "Paslēpt putnu baru",
+            "noVerticalCenterInTownAdvisor": "Necentrēt pilsētas informāciju pilsētas padomdevējā"
+        }
+    },
+    "island": {
+        "options": {
+            "showColonizingCityInfo": "Rādīt informāciju par topošajām kolonijām"
+        }
+    },
+    "finance": {
+        "options": {
+            "showIncomeOnTop": "Rādīt ienākumus bilances pārskata augšdaļā",
+            "shortUpkeepReductionTable": "Rādīt apgādes samazinājumu īso versiju"
+        },
+        "income": {
+            "perHour": "Ienākumi stundā",
+            "perDay": "Ienākumi dienā",
+            "start": "Ienākumi bez samazinājumiem"
+        },
+        "upkeep": {
+            "reason": {
+                "0": "Kareivji",
+                "1": "Kara kuģi",
+                "2": "Kareivji & Kara kuģi"
+            },
+            "basic": "Pamata izmaksas",
+            "supply": "Apgādes izmaksas",
+            "result": "Kopējās izmaksas"
+        }
+    },
+    "missingResources": {
+        "options": {
+            "wrapperTitle": "Informācija par resursiem",
+            "show": "Rādīt trūkstošos resursus celtniecības skatā",
+            "showPositive": "Rādīt atlikušos resursus arī pēc uzlabojuma",
+            "showColoured": "Rādīt atlikušos resursus ar izkrāsojumu"
+        }
+    },
+    "tooltips": {
+        "options": {
+            "autoshow": "Rādīt uznirstošos lodziņus alianses biedru skatā un karaspēka padomdevējā automātiski",
+            "showDirectInMilitaryAdvisor": "Rādīt informāciju par kravu floti karaspēka pārskatā bez uznirstošajiem logiem"
+        }
+    },
+    "zoom": {
+        "options": {
+            "wrapperTitle": "Zoom funkcija",
+            "zoomView": "Aktivizēt zoom funkciju pasaules skatā, salas skatā, pilsētas skatā",
+            "factor": {
+                "world": "Zoom pasaules skatā:",
+                "island": "Zoom salas skatā:",
+                "town": "Zoom pilsētas skatā:"
+            },
+            "scaleChildren": {
+                "label": "Atstāt banerus un simbolus normālā izmērā, kad izmanto zoom funkciju šajā skatā:",
+                "world": "Pasaules skats",
+                "island": "Salas skats",
+                "town": "Pilsētas skats"
+            },
+            "accessKeyLabel": "Lai veiktu zoom funkciju ar peli, ir jāpietur taustiņš:"
+        },
+        "zoomIn": "Samazināt",
+        "factor": "Mērogs",
+        "zoomOut": "Palielināt"
+    },
+    "resourceInformation": {
+        "options": {
+            "wrapperTitle": "Trūkstošie resursi",
+            "resourceQuicklinkEnhancements": "Saite no resursu daudzuma uz rātsnamu / raktuvēm",
+            "directIncome": {
+                "show": "Rādīt ikstundas resursu produkciju pilsētas skatā",
+                "style": {
+                    "label": "Ik stundas ienākumu noformējums pilsētas skatā:",
+                    "alignRight": "Centrēt pa labi",
+                    "alignLeft": "Centrēt pa kreisi",
+                    "withSeparation": "Centrēt pa labi ar sadalījumu"
+                }
+            },
+            "capacityBar": {
+                "show": "Rādīt informāciju par noliktavas ietilpību",
+                "hasBorder": "Ir rāmītis",
+                "showBranchOfficeResources": "Rādīt resursus tirgū",
+                "orientation": {
+                    "label": "Joslas novietojums",
+                    "vertical": "Vertikāli",
+                    "horizontal": "Horizontāli",
+                    "horizontalFull": "Horizontāli, pilns garums"
+                }
+            }
+        },
+        "dailyProduction": "Ikdienas %$1 produkcija:"
+    },
+    "highscore": {
+        "options": {
+            "showMemberInformation": "Ieslēgt iespēju saglabāt TOP listes datus par alianses biedriem"
+        },
+        "memberInformation": {
+            "show": "Alianses info",
+            "reset": "Notīrīt",
+            "lastReset": "Laiks kopš pēdējās notīrīšanas:",
+            "noReset": "Pagaidām nav veikta tīrīšana."
+        }
+    },
+    "message": {
+        "options": {
+            "wrapperTitle": "",
+            "replaceURL": "Pārveidot saites vēstulēs klikšķināmas",
+            "easyCircularMessage": "Rādīt pogu ātrākai alianses vēstuļu sūtīšanai",
+            "signature": {
+                "use": "Ieslēgt parakstus vēstulēs",
+                "placementTop": "Ievietot parakstu vēstulēs virs citātiem",
+                "global": "Globāls paraksts, kuru var lietot katrā serverī:",
+                "useServerSpecific": "Lietot lokālu parakstu",
+                "server": "Lokāls paraksts, kuru var lietot tikai šajā serverī:"
+            }
+        },
+        "replacedUrl": {
+            "notification": {
+                "header": "Uzmanību!",
+                "text": "Jūs grasāties atvērt saiti %$1. Tas notiek uz Jūsu paša atbildību. Turpināt?"
+            }
+        },
+        "easyCircular": {
+            "send": "Sūtīt alianses vēstuli"
+        }
+    },
+    "troopInformation": {
+        "options": {
+            "show": "Rādīt informāciju par vienībām"
+        },
+        "units": {
+            "label": "Kareivji %$1",
+            "own": "Paša kareivji",
+            "friends": "Sabiedroto kareivji",
+            "enemies": "Ienaidnieku kareivji"
+        },
+        "ships": {
+            "label": "Kara kuģi %$1",
+            "own": "Paša kuģi",
+            "friends": "Sabiedroto kuģi",
+            "enemies": "Ienaidnieku kuģi"
+        },
+        "button": "Informācija par vienībām",
+        "header": "Vienības %$1",
+        "noTroops": ""
+    },
+    "diverse": {
+        "options": {
+            "wrapperTitle": ""
+        },
+        "name": {
+            "resource": {
+                "gold": "Zelts",
+                "wood": "Kokmateriāli",
+                "wine": "Vīns",
+                "marble": "Marmors",
+                "glass": "Kristāls",
+                "sulfur": "Sērs"
+            },
+            "unit": {
+                "swordsman": "Paukotājs",
+                "phalanx": "Šķēpnesis",
+                "archer": "Lokšāvējs",
+                "marksman": "Šāvējs",
+                "mortar": "Mīnemtējs",
+                "slinger": "Metējs",
+                "catapult": "Katapulta",
+                "ram": "Tarāns",
+                "steamgiant": "Tvaika milzis",
+                "bombardier": "Balons bombardieris",
+                "cook": "Pavārs",
+                "medic": "Ārsts",
+                "girocopter": "Helikopters",
+                "spearman": "Pīķnesis",
+                "spartan": ""
+            },
+            "ship": {
+                "ballista": "Ballistiskais kugis",
+                "catapult": "Katapultas kuģis",
+                "flamethrower": "Ugunsmetējs",
+                "mortar": "Mīnmetēja kuģis",
+                "ram": "Tarāna kuģis",
+                "steamboat": "Dzenrata kuģis",
+                "rocketship": "Raķešu kuģis",
+                "submarine": "Zemūdene",
+                "paddlespeedship": "Tvaikonis",
+                "ballooncarrier": "Balonu bāzes kuģis",
+                "tender": "Atbalsta kuģis",
+                "transport": "Tirdzniecības kuģis"
+            }
+        }
+    }
+}

@@ -33,7 +33,7 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
-// @history			3.0		Release: ???
+// @history			3.0		Release: 05.03.2015
 // @history			3.0		Language: Russian translation added (incomplete).
 // @history			3.0		Language: Italian translation added (incomplete).
 // @history			3.0		Language: Greek translation added (incomplete).
