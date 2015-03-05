@@ -1,0 +1,198 @@
+{
+	"view": {
+		"options": {
+			"wrapperTitle":						"View",
+			"moveLoadingCircle":				"Move loading circle to position bar",
+			"hideBirds":						"Hide the bird swarm",
+			"noVerticalCenterInTownAdvisor":	"Don't center town information in the town advisor"
+		}
+	},
+	"island": {
+		"options": {
+			"showColonizingCityInfo":	"Show information about colonizing cities"
+		}
+	},
+	"finance": {
+		"options": {
+			"showIncomeOnTop":				"Show income on top in balance view",
+			"shortUpkeepReductionTable":	"Show a short version of the upkeep reduction"
+		},
+		"income": {
+			"perHour":	"Income per hour",
+			"perDay":	"Income per day",
+			"start":	"Income without reduction"
+		},
+		"upkeep": {
+			"reason": {
+				"0":	"Troops",
+				"1":	"Ships",
+				"2":	"Troops & Ships"
+			},
+			"basic":	"Basic Costs",
+			"supply":	"Supply Costs",
+			"result":	"Total Costs"
+		}
+	},
+	"missingResources": {
+		"options": {
+			"wrapperTitle":	"Missing Resources",
+			"show":			"Show missing resources in construction view",
+			"showPositive":	"Show also the remaining resources after an upgrade",
+			"showColoured":	"Show the remaining resources coloured"
+		}
+	},
+	"tooltips": {
+		"options": {
+			"autoshow":						"Show tooltips in alliance mebers view and military advisor automatically",
+			"showDirectInMilitaryAdvisor":	"Show information about cargo / fleets in military view without tooltips"
+		}
+	},
+	"zoom": {
+		"options": {
+			"wrapperTitle":	"Zoom function",
+			"zoomView":		"Activate zoom in world view, island view, town view",
+			"factor": {
+				"world":	"Zoom worldmap:",
+				"island":	"Zoom island view:",
+				"town":		"Zoom town view:"
+			},
+			"scaleChildren": {
+				"label":	"Let banners and symbols in normal size when zooming when zooming in this view:",
+				"world":	"Worldmap",
+				"island":	"Island view",
+				"town":		"Town view"
+			},
+			"accessKeyLabel":	"This keys must be pressed to zoom with the mouse:"
+		},
+		"zoomIn":	"Zoom in",
+		"factor":	"Zoom factor",
+		"zoomOut":	"Zoom out"
+	},
+	"resourceInformation": {
+		"options": {
+			"wrapperTitle":						"Resource Information",
+			"resourceQuicklinkEnhancements":	"Link resource number to town hall / mines",
+			"directIncome": {
+				"show":	"Show the hourly income directly in town view",
+				"style": {
+					"label":			"Style of the hourly income in town view:",
+					"alignRight":		"Right align",
+					"alignLeft":		"Left align",
+					"withSeparation":	"Right align with separation"
+				}
+			},
+			"capacityBar": {
+				"show":							"Show info bar for warehouse capacity",
+				"hasBorder":					"Has border",
+				"showBranchOfficeResources":	"Show resources in trading post",
+				"orientation": {
+					"label":			"Orientation of the bar",
+					"vertical":			"Vertical",
+					"horizontal":		"Horizontal",
+					"horizontalFull":	"Horizontal, full length"
+				}
+			}
+		},
+		"dailyProduction":	"Daily production %$1:"
+	},
+	"highscore": {
+		"options": {
+			"showMemberInformation":	"Enable the possibility to save highscore data of alliance members"
+		},
+		"memberInformation": {
+			"show":			"Alliance info",
+			"reset":		"Reset",
+			"lastReset":	"Time since the last reset: %$1",
+			"noReset":		"No reset so far."
+		}
+	},
+	"message": {
+		"options": {
+			"wrapperTitle":			"Messages",
+			"replaceURL":			"Make links in messages clickable",
+			"easyCircularMessage":	"Show button for faster sending of circular messages",
+			"signature": {
+				"use":					"Enable message signatures",
+				"placementTop":			"Insert signature above cited messages",
+				"global":				"Global signature, which would be used on every world:",
+				"useServerSpecific":	"Use local signature",
+				"server":				"Local signature, which only would be used on this world:"
+			}
+		},
+		"replacedUrl": {
+			"notification": {
+				"header":	"Attention!",
+				"text":		"You're going to open the link %$1. This happens on your own risk. Proceed?"
+			}
+		},
+		"easyCircular": {
+			"send":	"Send circular message"
+		}
+	},
+	"troopInformation": {
+		"options": {
+			"show":	"Show troop info"
+		},
+		"units": {
+			"label":	"Units in %$1",
+			"own":		"Own units",
+			"friends":	"Allied units",
+			"enemies":	"Enemy units"
+		},
+		"ships": {
+			"label":	"Ships in %$1",
+			"own":		"Own ships",
+			"friends":	"Allied ships",
+			"enemies":	"Enemy ships"
+		},
+		"button":	"Troop information",
+		"header":	"Troops in %$1",
+		"noTroops":	"There are no troops in %$1"
+	},
+	"diverse": {
+		"options": {
+			"wrapperTitle":	"Diverse"
+		},
+		"name": {
+			"resource": {
+				"gold":		"Gold",
+				"wood":		"Building Material",
+				"wine":		"Wine",
+				"marble":	"Marble",
+				"glass":	"Crystal Glass",
+				"sulfur":	"Sulphur"
+			},
+			"unit": {
+				"swordsman":	"Swordsman",
+				"phalanx":		"Hoplite",
+				"archer":		"Archer",
+				"marksman":		"Sulphur Carabineer",
+				"mortar":		"Mortar",
+				"slinger":		"Slinger",
+				"catapult":		"Catapult",
+				"ram":			"Battering Ram",
+				"steamgiant":	"Steam Giant",
+				"bombardier":	"Balloon-Bombardier",
+				"cook":			"Cook",
+				"medic":		"Doctor",
+				"girocopter":	"Gyrocopter",
+				"spearman":		"Spearman",
+				"spartan":		"Spartan"
+			},
+			"ship": {
+				"ballista":			"Ballista Ship",
+				"catapult":			"Catapult Ship",
+				"flamethrower":		"Fire Ship",
+				"mortar":			"Mortar Ship",
+				"ram":				"Ram Ship",
+				"steamboat":		"Steam Ram",
+				"rocketship":		"Rocket Ship",
+				"submarine":		"Diving Boat",
+				"paddlespeedship":	"Paddle Speedboat",
+				"ballooncarrier":	"Balloon Carrier",
+				"tender":			"Tender",
+				"transport":		"Merchant Ship"
+			}
+		}
+	}
+}
