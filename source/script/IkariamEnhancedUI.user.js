@@ -33,19 +33,33 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
-// @history			3.0		Release: TODO Datum einfuegen
-// @history			3.0		Feature: Implementation of Ikariam Core - rewrote the complete code.
-// @history			3.0		Feature: Cleared the update history TODO was ist der unterschied?
-// @history			3.0		Removed alliance page improvement, as fixed in Ikariam v0.5.13
-// TODO: Update History to use all Features of Ikariam Core
-// TODO: Use of Ikariam Core
-// TODO: Check for more changed things!
+// @history			3.0		Release: ???
+// @history			3.0		Language: Russian translation added (incomplete).
+// @history			3.0		Language: Italian translation added (incomplete).
+// @history			3.0		Language: Greek translation added (incomplete).
+// @history			3.0		Change: Implementation of Ikariam Core - rewrote the complete code.
+// @history			3.0		Change: Cleared the update history to use the Ikariam Core labels.
+// @history			3.0		Bugfix:	Diverse graphic errors.
+// @history			3.0		Bugfix: Broken in Firefox and Chrome.
+//
+// @history			2.6		Release: 12.10.2014
+// @history			2.6		Bugfix: Script options were broken.
+// 
+// @history			2.6		Release: 19.08.2014
+// @history			2.5		Bugfix: Game language is recognized again.
+// @history			2.5		Bugfix: Works now in Greasemonkey 2.0+
+// @history			2.5		Change: Checks now for updates on Greasy Fork.
+// @history			2.5		Removed code parts for mobile version.
+// @history			2.5		Removed alliance page improvement, as fixed in Ikariam v0.5.13
+// 
+// @history			2.6		Release: 11.09.2013
+// @history			2.4		Bugfix: New Ikariam domain -> script can now be used with this domain
 // 
 // @history			2.3		Release: 12.04.2013
 // @history			2.3		Feature: Formatting troop lists for posting in forums / personal messages.
 // @history			2.3		Feature: Filling level of warehouse as bar in town view.
 // @history			2.3		Feature: Link to mines / town hall when clicking on resources / citizens.
-// @history			2.3		Feature: New versioning system.
+// @history			2.3		Change: New versioning system.
 // @history			2.3		Bugfix: Some characters in links were not decoded correctly.
 // @history			2.3		Bugfix: Watching a foreign city causes a abortion of the script.
 // @history			2.3		Bugfix: The city dropdown sometimes was zoomed in world view.
@@ -63,7 +77,7 @@
 // @history			2.2		Feature: Message signature can be set.
 // @history			2.2		Feature: Button for faster sending of circular messages.
 // @history			2.2		Feature: Make links in messages clickable.
-// @history			2.2		Feature: Show town infos of colonizing cities.
+// @history			2.2		Feature: Show town information of colonizing cities.
 // @history			2.2		Feature: Information about cargo / fleets is displayed directly in military view.
 // @history			2.2		Feature: Script options: Sections on the script tab can be folded.
 // @history			2.2		Bugfix: Tooltips with mouseover were not clickable anymore.
@@ -73,10 +87,10 @@
 // @history			2.1.1	Feature: Different styles for income in town view.
 // @history			2.1.1	Feature: Remaining resources after upgrade.
 // @history			2.1.1	Feature: Improved style for external alliance pages.
-// @history			2.1.1	Feature: Refresh the missing / remaining resources in ruction view automatically.
+// @history			2.1.1	Feature: Refresh the missing / remaining resources in construction view automatically.
 // 
 // @history			2.1		Release: 23.09.2012
-// @history			2.1		Feature: Show the missing resources in ruction view.
+// @history			2.1		Feature: Show the missing resources in construction view.
 // @history			2.1		Feature: Show the hourly income directly in town view and add the daily production as popup.
 // @history			2.1		Feature: Don't center town information in the town advisor.
 // @history			2.1		Feature: Save the highscore data of alliance members and compare it with the actual value.
@@ -91,8 +105,8 @@
 // @history			2.0.1	Bugfix: Tooltips in in Alliance / Military view were not shown correctly.
 // 
 // @history			2.0		Release: 18.07.2012
-// @history			2.0		Feature: Cross-browser compatibility. (Firefox, Chrome, Opera)
-// @history			2.0		Feature: Latvian translation - thanks to Draxo.
+// @history			2.0		Language: Latvian translation
+// @history			2.0		Feature: Cross-browser compatibility.
 // @history			2.0		Feature: Possibility to hide the update hint for a new script version.
 // @history			2.0		Bugfix: Resizing the owner state in world view was broken.
 // @history			2.0		Some changes in the code for easier copying of functions which should be used by more than one script.
@@ -101,7 +115,7 @@
 // @history			1.7		Feature: Resizing banners when zooming is possible in city view, too.
 // @history			1.7		Feature: The zoom buttons are available in world view, too.
 // @history			1.7		Feature: Zooming with the mouse scroll is possible again (now with key, standard is ctrl).
-// @history			1.7		Feature: Changes in the option panel due to the new zooming function features.
+// @history			1.7		Change: Changes in the option panel due to the new zooming function features.
 // @history			1.7		Bugfix: If resizing is enabled, zooming with the buttons will resize the banners, too.
 // @history			1.7		Bugfix: The chat will not cause to much executions of script functions.
 // @history			1.7		The language texts are integrated as resources, so that there is shorter code.
@@ -124,10 +138,10 @@
 // @history			1.5		Feature: Options panel to enable/disable funtions and set settings.
 // @history			1.5		Feature: Update interval can be set.
 // @history			1.5		Feature: Manually check for updates.
-// @history			1.5		Feature: Zoom funtion without resizing the whole view.
+// @history			1.5		Feature: Zoom function without resizing the whole view.
 // @history			1.5		Feature: Move loading circle to another position.
-// @history			1.5		Feature: Show tooltip in Alliance / Military view on mouseover.
-// @history			1.5		Feature: Code better commented. More comments, so that it is easier to understand.
+// @history			1.5		Feature: Show tooltip in alliance / military view on mouseover.
+// @history			1.5		Change: Code better commented. More comments, so that it is easier to understand.
 // @history			1.5		Bugfix: Changed *.gif to *.png.
 // @history			1.5		Version numbers adjusted.
 // 
@@ -139,9 +153,9 @@
 // @history			1.4		Feature: Ready for 0.5.0, but also supports 0.4.5 furthermore.
 // @history			1.4		Feature: Implemented support for different languages.
 // @history			1.4		Feature: Enhanced script updater.
-// @history			1.4		Feature: Cleaned up code.
-// @history			1.4		Feature: Rename the script to "Enhanced UI".
-// @history			1.4		Feature: Change the namespace to "Tobbe".
+// @history			1.4		Change: Cleaned up code.
+// @history			1.4		Change: Rename the script to "Enhanced UI".
+// @history			1.4		Change: Change the namespace to "Tobbe".
 // @history			1.4		Because of the change of namespace and name you have to delete the old script manually!
 // 
 // @history			1.3.3	Release: 11.04.2011
@@ -149,21 +163,21 @@
 // 
 // @history			1.3.2	Release: 15.01.2011
 // @history			1.3.2	Feature: Own script updater.
-// @history			1.3.2	Bugfix: Remove everything what refered to other scripts.
+// @history			1.3.2	Change: Remove everything what refered to other scripts.
 // 
 // @history			1.3.1	Release: 15.01.2011
-// @history			1.3.1	Feature: New script updater.
+// @history			1.3.1	Change: New script updater.
 // 
 // @history			1.3		Release: 14.01.2011
-// @history			1.3		Remove the script updater (Because of the problem with Greasemonkey scripts).
+// @history			1.3		Change: Remove the script updater (Because of the problem with Greasemonkey scripts).
 // 
 // @history			1.2.1	Release: 28.12.2010
-// @history			1.2.1	Feature: New style of update panel.
+// @history			1.2.1	Change: New style of update panel.
 // @history			1.2.1	Bugfix: Bug with ',' as seperator fixed.
 // 
 // @history			1.2		Release: 09.10.2010
 // @history			1.2		Feature: Income in 24h added.
-// @history			1.2		Feature: Cleaned up code.
+// @history			1.2		Change: Cleaned up code.
 // 
 // @history			1.1		Release: 13.04.2010
 // @history			1.1		Feature: Update check implemented.
