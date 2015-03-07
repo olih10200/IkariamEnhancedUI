@@ -3,7 +3,7 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			3.0
+// @version			3.0.1
 // @license			MIT License
 //
 // @name:de			Ikariam Enhanced UI
@@ -19,11 +19,11 @@
 // @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=39332
 //
 // 
-// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0/de.json
-// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0/gr.json
-// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0/it.json
-// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0/lv.json
-// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0/ru.json
+// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/de.json
+// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/gr.json
+// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/it.json
+// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/lv.json
+// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/ru.json
 // @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.0/core_de.json
 // @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.0/core_de_settings.json
 // @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.0/core_gr.json
@@ -48,6 +48,11 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
+// @history			3.0.1	Release: 07.03.2015
+// @history			3.0.1	Language: Updated Greek translation.
+// @history			3.0.1	Bugfix:	Language key in message options.
+// @history			3.0.1	Bugfix: Alliance member data stored at same place for all alliance members.
+//
 // @history			3.0		Release: 05.03.2015
 // @history			3.0		Language: Russian translation added (incomplete).
 // @history			3.0		Language: Italian translation added (incomplete).
@@ -2175,7 +2180,7 @@ function EnhancedUI(IC) {
 			};
 			
 			/**
-			 * Add the button to resset the stored data.
+			 * Add the button to reset the stored data.
 			 */
 			var _lf_addResetButton = function() {
 				var le_button = IC.myGM.addButton(IC.myGM.$('#tab_highscore .content p'), IC.Language.$('highscore.memberInformation.reset'), _lf_clickReset, true);
@@ -2263,6 +2268,7 @@ function EnhancedUI(IC) {
 					ls_lastReset = li_days + 'd ' + li_hours + 'h ' + li_minutes + 'min';
 				}
 				
+				IC.myGM.addElement('br', IC.myGM.$('#tab_highscore .content p'));
 				IC.myGM.addElement('span', IC.myGM.$('#tab_highscore .content p'), {
 					'classes':		['bold', 'brown'],
 					'innerHTML':	IC.Language.$('highscore.memberInformation.lastReset', [ls_lastReset])
@@ -2273,8 +2279,8 @@ function EnhancedUI(IC) {
 			 * Prepare the highscore popup to show the data and show the data if requested.
 			 */
 			var _lf_doPreparePopup = function() {
-				_ls_dataKey = IC.Ikariam.getServerCode + '_memberInfo_data_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
-				_ls_timeKey = IC.Ikariam.getServerCode + '_memberInfo_time_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
+				_ls_dataKey = IC.Ikariam.serverCode + '_' + IC.ika.getModel().avatarAllyId + '_memberInfo_data_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
+				_ls_timeKey = IC.Ikariam.serverCode + '_' + IC.ika.getModel().avatarAllyId + '_memberInfo_time_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
 				
 				_lf_addShowButton();
 				
@@ -2491,7 +2497,7 @@ function EnhancedUI(IC) {
 			};
 		};
 		
-		IC.Options.addWrapper('messages', IC.Language.$('messages.options.wrapperTitle'));
+		IC.Options.addWrapper('messages', IC.Language.$('message.options.wrapperTitle'));
 		
 		// Replace urls.
 		IC.Options.addCheckbox('replaceURL', 'messages', 1, true, IC.Language.$('message.options.replaceURL'), { changeCallback: _go_replaceURL.updateSettings });
@@ -3008,7 +3014,7 @@ function EnhancedUI(IC) {
  */
 function main() {
 	// Get the Ikariam core.
-	var IC = new IkariamCore('3.0', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
+	var IC = new IkariamCore('3.0.1', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
 	
 	if(IC.myGM.alreadyExecuted === true)
 		return;
@@ -3019,7 +3025,7 @@ function main() {
 	
 	var la_language = ['de', 'gr', 'it', 'lv', 'ru'];
 	for(var i = 0; i < la_language.length; i++) {
-		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.0/' + la_language[i] + '.json');
+		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/' + la_language[i] + '.json');
 	}
 	
 	// Instantiate the ui script.
