@@ -59,7 +59,7 @@
 			};
 			
 			/**
-			 * Add the button to resset the stored data.
+			 * Add the button to reset the stored data.
 			 */
 			var _lf_addResetButton = function() {
 				var le_button = IC.myGM.addButton(IC.myGM.$('#tab_highscore .content p'), IC.Language.$('highscore.memberInformation.reset'), _lf_clickReset, true);
@@ -157,8 +157,8 @@
 			 * Prepare the highscore popup to show the data and show the data if requested.
 			 */
 			var _lf_doPreparePopup = function() {
-				_ls_dataKey = IC.Ikariam.getServerCode + '_memberInfo_data_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
-				_ls_timeKey = IC.Ikariam.getServerCode + '_memberInfo_time_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
+				_ls_dataKey = IC.Ikariam.serverCode + '_' + IC.ika.getModel().avatarAllyId + '_memberInfo_data_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
+				_ls_timeKey = IC.Ikariam.serverCode + '_' + IC.ika.getModel().avatarAllyId + '_memberInfo_time_' + IC.myGM.getSelectValue('js_highscoreType', true, true);
 				
 				_lf_addShowButton();
 				
