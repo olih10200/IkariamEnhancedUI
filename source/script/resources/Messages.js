@@ -170,7 +170,7 @@
 			};
 		};
 		
-		IC.Options.addWrapper('messages', IC.Language.$('messages.options.wrapperTitle'));
+		IC.Options.addWrapper('messages', IC.Language.$('message.options.wrapperTitle'));
 		
 		// Replace urls.
 		IC.Options.addCheckbox('replaceURL', 'messages', 1, true, IC.Language.$('message.options.replaceURL'), { changeCallback: _go_replaceURL.updateSettings });
