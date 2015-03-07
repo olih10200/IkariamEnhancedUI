@@ -147,6 +147,7 @@
 					ls_lastReset = li_days + 'd ' + li_hours + 'h ' + li_minutes + 'min';
 				}
 				
+				IC.myGM.addElement('br', IC.myGM.$('#tab_highscore .content p'));
 				IC.myGM.addElement('span', IC.myGM.$('#tab_highscore .content p'), {
 					'classes':		['bold', 'brown'],
 					'innerHTML':	IC.Language.$('highscore.memberInformation.lastReset', [ls_lastReset])
