@@ -102,7 +102,7 @@
         "memberInformation": {
             "show": "Alli Infos",
             "reset": "Zurücksetzen",
-            "lastReset": "Zeit seit dem letzten Zurücksetzen:",
+            "lastReset": "Zeit seit dem letzten Zurücksetzen: %$1",
             "noReset": "Bisher nicht zurückgesetzt."
         }
     },

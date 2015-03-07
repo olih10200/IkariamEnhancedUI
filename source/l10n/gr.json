@@ -1,197 +1,197 @@
 {
     "view": {
         "options": {
-            "wrapperTitle": "",
-            "moveLoadingCircle": "",
-            "hideBirds": "",
-            "noVerticalCenterInTownAdvisor": ""
+            "wrapperTitle": "Προβολή",
+            "moveLoadingCircle": "Μετακίνηση κύκλου φόρτωσης στη γραμμή θέσης",
+            "hideBirds": "Απόκρυψη του σμήνους πουλιών",
+            "noVerticalCenterInTownAdvisor": "Μη κεντράρισμα πληροφοριών πόλης στον σύμβουλο πόλης"
         }
     },
     "island": {
         "options": {
-            "showColonizingCityInfo": ""
+            "showColonizingCityInfo": "Προβολή πληροφοριών για τον αποικισμό πόλεων"
         }
     },
     "finance": {
         "options": {
-            "showIncomeOnTop": "",
-            "shortUpkeepReductionTable": ""
+            "showIncomeOnTop": "Προβολή εισοδήματος στην κορυφή στο παράθυρο ισοζυγίου",
+            "shortUpkeepReductionTable": "Προβολή μιας μικρής έκδοσης της μείωσης κόστους"
         },
         "income": {
-            "perHour": "",
-            "perDay": "",
-            "start": ""
+            "perHour": "Εισόδημα ανά ώρα",
+            "perDay": "Εισόδημα ανά ημέρα",
+            "start": "Εισόδημα χωρίς μείωση"
         },
         "upkeep": {
             "reason": {
-                "0": "",
-                "1": "",
-                "2": ""
+                "0": "Μονάδες στρατού",
+                "1": "Πλοία",
+                "2": "Μονάδες Στρατού και Πλοία"
             },
-            "basic": "",
-            "supply": "",
-            "result": ""
+            "basic": "Βασικά Κόστη",
+            "supply": "Κόστη Προμήθειας",
+            "result": "Συνολικά Κόστη"
         }
     },
     "missingResources": {
         "options": {
-            "wrapperTitle": "",
-            "show": "",
-            "showPositive": "",
-            "showColoured": ""
+            "wrapperTitle": "Χαμένοι Πόροι",
+            "show": "Προβολή χαμένων πόρων στην προβολή κατασκευής",
+            "showPositive": "Προβολή επίσης των απομένοντων πόρων μετά από αναβάθμιση",
+            "showColoured": "Προβολή των απομένοντων πόρων χρωματισμένων"
         }
     },
     "tooltips": {
         "options": {
-            "autoshow": "",
-            "showDirectInMilitaryAdvisor": ""
+            "autoshow": "Προβολή επεξηγήσεων στο παράθυρο προβολής μελών της συμμαχίας και στον στρατιωτικό σύμβουλο αυτόματα",
+            "showDirectInMilitaryAdvisor": "Προβολή πληροφοριών για εμπορικές μεταφορές / μεταγωγές στο παράθυρο στρατού χωρίς επεξηγήσεις"
         }
     },
     "zoom": {
         "options": {
-            "wrapperTitle": "",
-            "zoomView": "",
+            "wrapperTitle": "Λειτουργία εστίασης",
+            "zoomView": "Ενεργοποιήση εστίασης σε παγκόσμια, νησιωτική και αστική προβολή",
             "factor": {
-                "world": "",
-                "island": "",
-                "town": ""
+                "world": "Εστίαση παγκόσμιου χάρτη:",
+                "island": "Εστίαση νησιωτικής προβολής:",
+                "town": "Εστίαση στην αστική προβολή:"
             },
             "scaleChildren": {
-                "label": "",
-                "world": "",
-                "island": "",
-                "town": ""
+                "label": "Διατήρηση διαφημίσεων και συμβόλων σε κανονικό μέγεθος κατά την εστίαση σε αυτή την προβολή:",
+                "world": "Παγκόσμιος χάρτης",
+                "island": "Νησιωτική προβολή",
+                "town": "Αστική προβολή"
             },
-            "accessKeyLabel": ""
+            "accessKeyLabel": "Αυτά τα κλειδιά πρέπει να πατιούνται για εστίαση με το ποντίκι:"
         },
-        "zoomIn": "",
-        "factor": "",
-        "zoomOut": ""
+        "zoomIn": "Μεγέθυνση",
+        "factor": "Συντελεστής εστίασης",
+        "zoomOut": "Σμίκρυνση"
     },
     "resourceInformation": {
         "options": {
-            "wrapperTitle": "",
-            "resourceQuicklinkEnhancements": "",
+            "wrapperTitle": "Πληροφορίες πόρου",
+            "resourceQuicklinkEnhancements": "Σύνδεση αριθμού πόρου στο δημαρχείο / ορυχεία",
             "directIncome": {
-                "show": "",
+                "show": "Προβολή του ωριαίου εισοδήματος άμεσα στην αστική προβολή",
                 "style": {
-                    "label": "",
-                    "alignRight": "",
-                    "alignLeft": "",
-                    "withSeparation": ""
+                    "label": "Στυλ του ωριαίου εισοδήματος στην αστική προβολή:",
+                    "alignRight": "Δεξιά ευθυγράμμιση",
+                    "alignLeft": "Αριστερή ευθυγράμμιση",
+                    "withSeparation": "Δεξιά ευθυγράμμιση με διαχωρισμό"
                 }
             },
             "capacityBar": {
-                "show": "",
-                "hasBorder": "",
-                "showBranchOfficeResources": "",
+                "show": "Προβολή γραμμής πληροφοριών για τη χωρητικότητα της αποθήκης",
+                "hasBorder": "Έχει όριο",
+                "showBranchOfficeResources": "Προβολή πόρων στο εμπορικό ανταλλακτήριο",
                 "orientation": {
-                    "label": "",
-                    "vertical": "",
-                    "horizontal": "",
-                    "horizontalFull": ""
+                    "label": "Προσανατολισμός της γραμμής",
+                    "vertical": "Κάθετος",
+                    "horizontal": "Οριζόντιος",
+                    "horizontalFull": "Οριζόντιος, πλήρες μήκος"
                 }
             }
         },
-        "dailyProduction": ""
+        "dailyProduction": "Ημερήσια παραγωγή %$1:"
     },
     "highscore": {
         "options": {
-            "showMemberInformation": ""
+            "showMemberInformation": "Ενεργοποίηση της πιθανότητας αποθήκευσης δεδομένων βαθμολογίας των μελών της συμμαχίας"
         },
         "memberInformation": {
-            "show": "",
-            "reset": "",
-            "lastReset": "",
-            "noReset": ""
+            "show": "Πληροφορίες συμμαχίας",
+            "reset": "Επαναφορά",
+            "lastReset": "Χρόνος από την τελευταία επαναφορά: %$1",
+            "noReset": "Καμιά επαναφορά μέχρι στιγμής."
         }
     },
     "message": {
         "options": {
-            "wrapperTitle": "",
-            "replaceURL": "",
-            "easyCircularMessage": "",
+            "wrapperTitle": "Μηνύματα",
+            "replaceURL": "Δημιουργία ενεργών συνδέσμων στα μηνύματα",
+            "easyCircularMessage": "Προβολή κουμπιού για γρηγορότερη αποστολή κυκλικών μηνυμάτων",
             "signature": {
-                "use": "",
-                "placementTop": "",
-                "global": "",
-                "useServerSpecific": "",
-                "server": ""
+                "use": "Ενεργοποιηση υπογραφών μηνυμάτων",
+                "placementTop": "Εισαγωγή υπογραφής πάνω από τα συνημμένα μηνύματα",
+                "global": "Γενική υπογραφή, που θα χρησιμοποιείται σε κάθε κόσμο:",
+                "useServerSpecific": "Χρήση τοπικής υπογραφής",
+                "server": "Τοπική υπογραφή, που θα χρησιμοποιείται σε αυτόν το κόσμο:"
             }
         },
         "replacedUrl": {
             "notification": {
-                "header": "",
-                "text": ""
+                "header": "Προσοχή!",
+                "text": "Πρόκειται να ανοίξετε τον σύνδεσμο %$1. Αυτό θα συνεχίσει με δική σας ευθύνη. Συνέχεια;"
             }
         },
         "easyCircular": {
-            "send": ""
+            "send": "Αποστολή κυκλικού μηνύματος"
         }
     },
     "troopInformation": {
         "options": {
-            "show": ""
+            "show": "Πληροφορίες πληροφοριών στρατού"
         },
         "units": {
-            "label": "",
-            "own": "",
-            "friends": "",
-            "enemies": ""
+            "label": "Μονάδες στην πόλη %$1",
+            "own": "Οι δικές μου μονάδες",
+            "friends": "Μονάδες συμμαχίας",
+            "enemies": "Μονάδες εχθρού"
         },
         "ships": {
-            "label": "",
-            "own": "",
-            "friends": "",
-            "enemies": ""
+            "label": "Πλοία στην πόλη %$1",
+            "own": "Τα δικά μου πλοία",
+            "friends": "Συμμαχικά πλοία",
+            "enemies": "Εχθρικά πλοία"
         },
-        "button": "",
-        "header": "",
-        "noTroops": ""
+        "button": "Πληροφορίες στρατού",
+        "header": "Στρατός στην πόλη %$1",
+        "noTroops": "Δεν υπάρχουν μονάδες στρατού στην πόλη %$1"
     },
     "diverse": {
         "options": {
-            "wrapperTitle": ""
+            "wrapperTitle": "Διαφοροποίηση"
         },
         "name": {
             "resource": {
-                "gold": "",
-                "wood": "",
-                "wine": "",
-                "marble": "",
-                "glass": "",
-                "sulfur": ""
+                "gold": "Χρυσός",
+                "wood": "Ξύλο",
+                "wine": "Κρασί",
+                "marble": "Μάρμαρο",
+                "glass": "Κρύσταλλο",
+                "sulfur": "Θείο"
             },
             "unit": {
-                "swordsman": "",
-                "phalanx": "",
-                "archer": "",
-                "marksman": "",
-                "mortar": "",
-                "slinger": "",
-                "catapult": "",
-                "ram": "",
-                "steamgiant": "",
-                "bombardier": "",
-                "cook": "",
-                "medic": "",
-                "girocopter": "",
-                "spearman": "",
-                "spartan": ""
+                "swordsman": "Ξιφομάχος",
+                "phalanx": "Οπλίτης",
+                "archer": "Τοξότης",
+                "marksman": "Πυροβολιτής θείου",
+                "mortar": "Κανόνι",
+                "slinger": "Εκτοξευτής",
+                "catapult": "Καταπέλτης",
+                "ram": "Κριός",
+                "steamgiant": "Ατμογίγαντας",
+                "bombardier": "Βομβαρδιστικό Αερόστατο",
+                "cook": "Μάγειρας",
+                "medic": "Ιατρός",
+                "girocopter": "Γυροκόπτερο",
+                "spearman": "Λογχοφόρος",
+                "spartan": "Σπαρτιάτης"
             },
             "ship": {
-                "ballista": "",
-                "catapult": "",
-                "flamethrower": "",
-                "mortar": "",
-                "ram": "",
-                "steamboat": "",
-                "rocketship": "",
-                "submarine": "",
-                "paddlespeedship": "",
-                "ballooncarrier": "",
-                "tender": "",
-                "transport": ""
+                "ballista": "Βαλιστροφόρο",
+                "catapult": "Καταπελτοφόρο",
+                "flamethrower": "Φλογοβόλο",
+                "mortar": "Κανονιοφόρο",
+                "ram": "Σκάφος-Έμβολο",
+                "steamboat": "Έμβολο Ατμού",
+                "rocketship": "Πυραυλάκατος",
+                "submarine": "Βάρκα κατάδυσης",
+                "paddlespeedship": "Κωπήλατη Τορπιλάκατος",
+                "ballooncarrier": "Μεταφορικό Αερόστατων",
+                "tender": "Βοηθητικό σκάφος",
+                "transport": "Εμπορικό Πλοίο"
             }
         }
     }

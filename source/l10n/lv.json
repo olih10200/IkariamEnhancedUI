@@ -102,7 +102,7 @@
         "memberInformation": {
             "show": "Alianses info",
             "reset": "Notīrīt",
-            "lastReset": "Laiks kopš pēdējās notīrīšanas:",
+            "lastReset": "Laiks kopš pēdējās notīrīšanas: %$1",
             "noReset": "Pagaidām nav veikta tīrīšana."
         }
     },
