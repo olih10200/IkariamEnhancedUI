@@ -193,16 +193,16 @@
 
 /**
  * Instantiate a new set of enhancement functions.
- * {@link https://greasyfork.org/scripts/4369-enhanced-ui Script on Greasy Fork}
- * {@link https://github.com/tobias-engelmann/IkariamEnhancedUI Script on GitHub}
+ * {@link @SCRIPT_LINK_GREASY_FORK@ Script on Greasy Fork}
+ * {@link @SCRIPT_LINK_GITHUB@ Script on GitHub}
  * 
- * @version	2.6.0.0.167
- * @author	Tobbe	<contact@ikascripts.de>
+ * @version	@SCRIPT_VERSION@
+ * @author	@SCRIPT_AUTHOR_NAME@	<@SCRIPT_AUTHOR_EMAIL@>
  * 
  * @global
  * 
  * @class
- * @classdesc	Enhancements for the user interface of Ikariam.
+ * @classdesc	@SCRIPT_DESCRIPTION_DEFAULT@
  * 
  * @param	{IkariamCore}	$
  *   A instance of the Ikariam Core.
