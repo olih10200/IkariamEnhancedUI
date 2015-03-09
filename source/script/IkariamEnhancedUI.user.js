@@ -33,6 +33,10 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
+// @history			3.0.2	Release: 08.03.2015
+// @history			3.0.2	Bugfix:	Wrong time display for last reset of highscore information.
+// @history			3.0.2	Bugfix: Start piracy raid icon was resized.
+//
 // @history			3.0.1	Release: 07.03.2015
 // @history			3.0.1	Language: Updated Greek translation.
 // @history			3.0.1	Bugfix:	Language key in message options.
@@ -46,6 +50,7 @@
 // @history			3.0		Change: Cleared the update history to use the Ikariam Core labels.
 // @history			3.0		Bugfix:	Diverse graphic errors.
 // @history			3.0		Bugfix: Broken in Firefox and Chrome.
+// @history			3.0		Due to rename of script: Manually deleting old script necessary.
 //
 // @history			2.6		Release: 12.10.2014
 // @history			2.6		Bugfix: Script options were broken.

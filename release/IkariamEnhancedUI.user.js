@@ -3,7 +3,7 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			3.0.1
+// @version			3.0.2
 // @license			MIT License
 //
 // @name:de			Ikariam Enhanced UI
@@ -19,11 +19,11 @@
 // @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=39332
 //
 // 
-// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/de.json
-// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/gr.json
-// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/it.json
-// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/lv.json
-// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/ru.json
+// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.2/de.json
+// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.2/gr.json
+// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.2/it.json
+// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.2/lv.json
+// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.2/ru.json
 // @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.0/core_de.json
 // @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.0/core_de_settings.json
 // @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.0/core_gr.json
@@ -48,6 +48,10 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
+// @history			3.0.2	Release: 08.03.2015
+// @history			3.0.2	Bugfix:	Wrong time display for last reset of highscore information.
+// @history			3.0.2	Bugfix: Start piracy raid icon was resized.
+//
 // @history			3.0.1	Release: 07.03.2015
 // @history			3.0.1	Language: Updated Greek translation.
 // @history			3.0.1	Bugfix:	Language key in message options.
@@ -61,6 +65,7 @@
 // @history			3.0		Change: Cleared the update history to use the Ikariam Core labels.
 // @history			3.0		Bugfix:	Diverse graphic errors.
 // @history			3.0		Bugfix: Broken in Firefox and Chrome.
+// @history			3.0		Due to rename of script: Manually deleting old script necessary.
 //
 // @history			2.6		Release: 12.10.2014
 // @history			2.6		Bugfix: Script options were broken.
@@ -209,9 +214,9 @@
 /**
  * Instantiate a new set of enhancement functions.
  * {@link https://greasyfork.org/scripts/4369-enhanced-ui Script on Greasy Fork}
- * {@link https://github.com/tobias-engelmann/IkariamEnhancedUI Script on GitHub}
+ * {@link https://github.com/IkaScripts/IkariamEnhancedUI Script on GitHub}
  * 
- * @version	2.6.0.0.167
+ * @version	3.0.2
  * @author	Tobbe	<contact@ikascripts.de>
  * 
  * @global
@@ -1149,7 +1154,7 @@ function EnhancedUI(IC) {
 				if(IC.Ikariam.view == 'island') {
 					var ls_movePiracy = 'transform: translate(0px, -' + (1 - in_zoomFactorNumber) * 20 + 'px) scale(' + 1 / in_zoomFactorNumber + ');';
 					ls_style =	'.cityLocation .scroll_img, .cityLocationScroll .scroll_img	{ ' + ls_transformString + ' } \
-								 .piracyRaid												{ ' + ls_movePiracy + ' }';
+								 .cityLocation .piracyRaid									{ ' + ls_movePiracy + ' }';
 				}
 				
 				if(IC.Ikariam.view == 'town')
@@ -2262,8 +2267,8 @@ function EnhancedUI(IC) {
 				
 				if(li_lastResetTime > 0) {
 					var li_days	= Math.floor(li_differenceInSec / 86400);
-					var li_hours	= Math.floor(li_differenceInSec / 3600);
-					var li_minutes	= Math.floor(li_differenceInSec / 60);
+					var li_hours	= Math.floor(li_differenceInSec / 3600) % 24;
+					var li_minutes	= Math.floor(li_differenceInSec / 60) % 60;
 					
 					ls_lastReset = li_days + 'd ' + li_hours + 'h ' + li_minutes + 'min';
 				}
@@ -3014,7 +3019,7 @@ function EnhancedUI(IC) {
  */
 function main() {
 	// Get the Ikariam core.
-	var IC = new IkariamCore('3.0.1', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
+	var IC = new IkariamCore('3.0.2', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
 	
 	if(IC.myGM.alreadyExecuted === true)
 		return;
@@ -3025,7 +3030,7 @@ function main() {
 	
 	var la_language = ['de', 'gr', 'it', 'lv', 'ru'];
 	for(var i = 0; i < la_language.length; i++) {
-		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.1/' + la_language[i] + '.json');
+		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.2/' + la_language[i] + '.json');
 	}
 	
 	// Instantiate the ui script.
