@@ -117,7 +117,7 @@
 				if(IC.Ikariam.view == 'island') {
 					var ls_movePiracy = 'transform: translate(0px, -' + (1 - in_zoomFactorNumber) * 20 + 'px) scale(' + 1 / in_zoomFactorNumber + ');';
 					ls_style =	'.cityLocation .scroll_img, .cityLocationScroll .scroll_img	{ ' + ls_transformString + ' } \
-								 .piracyRaid												{ ' + ls_movePiracy + ' }';
+								 .cityLocation .piracyRaid									{ ' + ls_movePiracy + ' }';
 				}
 				
 				if(IC.Ikariam.view == 'town')
