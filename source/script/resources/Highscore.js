@@ -141,8 +141,8 @@
 				
 				if(li_lastResetTime > 0) {
 					var li_days	= Math.floor(li_differenceInSec / 86400);
-					var li_hours	= Math.floor(li_differenceInSec / 3600);
-					var li_minutes	= Math.floor(li_differenceInSec / 60);
+					var li_hours	= Math.floor(li_differenceInSec / 3600) % 24;
+					var li_minutes	= Math.floor(li_differenceInSec / 60) % 60;
 					
 					ls_lastReset = li_days + 'd ' + li_hours + 'h ' + li_minutes + 'min';
 				}
