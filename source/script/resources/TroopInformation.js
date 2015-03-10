@@ -416,12 +416,12 @@
 			 */
 			var _ls_showPopup = function(io_data) {
 				var la_output = [];
-				var ls_townInformation = function() {
+				var ls_townInformation = (function() {
 					var lo_allTowns		= IC.ika.getModel().relatedCityData;
 					var lo_selectedTown	= lo_allTowns[lo_allTowns.selectedCity];
 					
 					return lo_selectedTown.name + ' ' + lo_selectedTown.coords;
-				};
+				})();
 				
 				if(!!io_data === true) {
 					if(!!io_data.units.isEmpty === false)
