@@ -186,7 +186,7 @@
 		IC.Options.addTextArea('globalSignature', 'messages', 3, '', IC.Language.$('message.options.signature.global'), {});
 		
 		// Use the server signature.
-		IC.Options.addCheckbox('useServerSignature', 'messages', 4, false, IC.Language.$('message.options.signature.useServerSpecific'), { 'serverSpecific': true });
+		IC.Options.addCheckbox('useServerSignature', 'messages', 4, false, IC.Language.$('message.options.signature.useServerSpecific'), { 'specificity': IC.Options.SpecificityLevel.SERVER });
 		// Define a server specific signature.
-		IC.Options.addTextArea('serverSignature', 'messages', 4, '', IC.Language.$('message.options.signature.server'), { 'serverSpecific': true });
+		IC.Options.addTextArea('serverSignature', 'messages', 4, '', IC.Language.$('message.options.signature.server'), { 'specificity': IC.Options.SpecificityLevel.SERVER });
 	})();
