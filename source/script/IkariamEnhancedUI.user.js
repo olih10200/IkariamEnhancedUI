@@ -33,6 +33,9 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
+// @history			3.0.3	Release: 20.03.2015
+// @history			3.0.3	Bugfix:	Town name in unit information incorrect.
+// 
 // @history			3.0.2	Release: 08.03.2015
 // @history			3.0.2	Bugfix:	Wrong time display for last reset of highscore information.
 // @history			3.0.2	Bugfix: Start piracy raid icon was resized.

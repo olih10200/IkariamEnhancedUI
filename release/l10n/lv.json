@@ -1,7 +1,7 @@
 {
     "view": {
         "options": {
-            "wrapperTitle": "",
+            "wrapperTitle": "Skats",
             "moveLoadingCircle": "Pārvietot uz augšējo joslu apli, kas parādās pie procesu apstrādes",
             "hideBirds": "Paslēpt putnu baru",
             "noVerticalCenterInTownAdvisor": "Necentrēt pilsētas informāciju pilsētas padomdevējā"
@@ -108,7 +108,7 @@
     },
     "message": {
         "options": {
-            "wrapperTitle": "",
+            "wrapperTitle": "Vēstules",
             "replaceURL": "Pārveidot saites vēstulēs klikšķināmas",
             "easyCircularMessage": "Rādīt pogu ātrākai alianses vēstuļu sūtīšanai",
             "signature": {
@@ -147,11 +147,11 @@
         },
         "button": "Informācija par vienībām",
         "header": "Vienības %$1",
-        "noTroops": ""
+        "noTroops": "Pašlaik nav vienību %$1"
     },
     "diverse": {
         "options": {
-            "wrapperTitle": ""
+            "wrapperTitle": "Dažādi"
         },
         "name": {
             "resource": {
@@ -177,7 +177,7 @@
                 "medic": "Ārsts",
                 "girocopter": "Helikopters",
                 "spearman": "Pīķnesis",
-                "spartan": ""
+                "spartan": "Spartietis"
             },
             "ship": {
                 "ballista": "Ballistiskais kugis",
