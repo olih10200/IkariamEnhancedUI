@@ -78,10 +78,21 @@
 			 * Add the signature to a new message.
 			 */
 			var _lf_addSignature = function() {
-				var ls_signature = IC.Options.getOption('messages', 'globalSignature');
+				var ls_signature = '';
 				
-				if(IC.Options.getOption('messages', 'useServerSignature') === true)
-					ls_signature = IC.Options.getOption('messages', 'serverSignature');
+				switch(IC.Options.getOption('messages', 'useMessageSignature')) {
+					case IC.Options.SpecificityLevel.GLOBAL:
+						ls_signature = IC.Options.getOption('messages', 'globalSignature');
+					  break;
+					
+					case IC.Options.SpecificityLevel.SERVER:
+						ls_signature = IC.Options.getOption('messages', 'serverSignature');
+					  break;
+					
+					case IC.Options.SpecificityLevel.PLAYER:
+						ls_signature = IC.Options.getOption('messages', 'playerSignature');
+					  break;
+				}
 				
 				if(ls_signature === '')
 					return;
@@ -90,7 +101,7 @@
 				
 				var ls_text = le_textarea.value;
 				
-				if(IC.Options.getOption('messages', 'placementTop'))
+				if(IC.Options.getOption('messages', 'signaturePlacementTop'))
 					ls_text = '\n\n' + ls_signature + ls_text;
 				else
 					ls_text = ls_text + '\n\n' + ls_signature;
@@ -107,8 +118,10 @@
 			 * @param	{boolean}	ib_addMessageSignature
 			 *   If the user selected the checkbox to add signatures to messages.
 			 */
-			this.updateSettings = function(ib_addMessageSignature) {
-				if(ib_addMessageSignature === true) {
+			this.updateSettings = function(is_useMessageSignature) {
+				if(is_useMessageSignature === IC.Options.SpecificityLevel.GLOBAL
+						|| is_useMessageSignature === IC.Options.SpecificityLevel.SERVER
+						|| is_useMessageSignature === IC.Options.SpecificityLevel.PLAYER) {
 					IC.RefreshHandler.add('sendIKMessage', 'addMessageSignature', _lf_addSignature);
 					return;
 				}
@@ -177,16 +190,22 @@
 		// Provide link for easy circular messages.
 		IC.Options.addCheckbox('easyCircularMessage', 'messages', 1, true, IC.Language.$('message.options.easyCircularMessage'), { changeCallback: _go_easyCircularMessageLink.updateSettings });
 		
-		// Add a signature.
-		IC.Options.addCheckbox('messageSignature', 'messages', 2, true, IC.Language.$('message.options.signature.use'), { changeCallback: _go_messageSignature.updateSettings });
+		// TODO: Test!
+		var la_options = [
+			{ value: 'none', label: IC.Language.$('message.options.signature.use.none') },
+			{ value: IC.Options.SpecificityLevel.GLOBAL, label: IC.Language.$('message.options.signature.use.global') },
+			{ value: IC.Options.SpecificityLevel.SERVER, label: IC.Language.$('message.options.signature.use.server') },
+			{ value: IC.Options.SpecificityLevel.PLAYER, label: IC.Language.$('message.options.signature.use.player') }
+		];
+		IC.Options.addSelect('useMessageSignature', 'messages', 2, IC.Options.SpecificityLevel.GLOBAL, IC.Language.$('message.options.signature.use.description'), la_options, { changeCallback: _go_messageSignature.updateSettings, 'specificity': IC.Options.SpecificityLevel.PLAYER });
+		
 		// Place the signature on top.
 		IC.Options.addCheckbox('signaturePlacementTop', 'messages', 2, true, IC.Language.$('message.options.signature.placementTop'), {});
 		
 		// Define a global signature.
 		IC.Options.addTextArea('globalSignature', 'messages', 3, '', IC.Language.$('message.options.signature.global'), {});
-		
-		// Use the server signature.
-		IC.Options.addCheckbox('useServerSignature', 'messages', 4, false, IC.Language.$('message.options.signature.useServerSpecific'), { 'specificity': IC.Options.SpecificityLevel.SERVER });
 		// Define a server specific signature.
 		IC.Options.addTextArea('serverSignature', 'messages', 4, '', IC.Language.$('message.options.signature.server'), { 'specificity': IC.Options.SpecificityLevel.SERVER });
+		// Define a server specific signature.
+		IC.Options.addTextArea('playerSignature', 'messages', 4, '', IC.Language.$('message.options.signature.player'), { 'specificity': IC.Options.SpecificityLevel.PLAYER });
 	})();
