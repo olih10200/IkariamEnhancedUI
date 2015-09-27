@@ -110,7 +110,6 @@
 		"options": {
 			"wrapperTitle":			"Messages",
 			"replaceURL":			"Make links in messages clickable",
-			"easyCircularMessage":	"Show button for faster sending of circular messages",
 			"signature": {
 				"use": {
 					"description":	"Use this signature:",
@@ -130,9 +129,6 @@
 				"header":	"Attention!",
 				"text":		"You're going to open the link %$1. This happens on your own risk. Proceed?"
 			}
-		},
-		"easyCircular": {
-			"send":	"Send circular message"
 		}
 	},
 	"troopInformation": {

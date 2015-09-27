@@ -130,67 +130,12 @@
 			};
 		};
 		
-		/**
-		 * Storage for the easy circular message link functions.
-		 * 
-		 * @type	{object}
-		 */
-		var _go_easyCircularMessageLink = new function() {
-			/**
-			 * Add the circular message link and style.
-			 */
-			var _lf_addLink = function() {
-				if(IC.ika.getModel().hasAlly !== true)
-					return;
-				
-				// Add the message link (workaround for ajaxHandlerCall).
-				var ls_id		= IC.myGM.prefix + 'circularMessageLink';
-				var ls_href		= '?view=sendIKMessage&msgType=51&allyId=' + IC.ika.getModel().avatarAllyId;
-				var ls_title	= IC.Language.$('message.easyCircular.send');
-				IC.myGM.addElement('div', ge_toolbar, {
-					'id':			'circularMessageLinkWrapper',
-					'innerHTML':	'<a id="' + ls_id + '" href="' + ls_href + '" title="' + ls_title + '" onclick="ajaxHandlerCall(this.href); return false;"></a>'
-				});
-				
-				IC.myGM.addStyle(
-					'#' + IC.myGM.prefix + 'circularMessageLink			{ height: 9px; width: 13px; margin: 0px !important; background: url("skin/interface/icon_send_message.png") repeat scroll 0 0 transparent; }\
-					 #' + IC.myGM.prefix + 'circularMessageLink:hover	{ background-position: 0px -9px; }',
-					'easyCircularMessage', true
-				);
-			};
-			
-			/**
-			 * Remove the circular message link and style.
-			 */
-			var _lf_removeLink = function() {
-				IC.myGM.removeElement(IC.myGM.$('#' + IC.myGM.prefix + 'circularMessageLinkWrapper'));
-				IC.myGM.removeStyle('easyCircularMessage');
-			};
-			
-			/**
-			 * Update the settings to execute the callback or delete the handler.
-			 * 
-			 * @param	{boolean}	ib_addEasyCircularMessageLink
-			 *   If the user selected the checkbox to add signatures to messages.
-			 */
-			this.updateSettings = function(ib_addEasyCircularMessageLink) {
-				if(ib_addEasyCircularMessageLink === true) {
-					_lf_addLink();
-					return;
-				}
-				
-				_lf_removeLink();
-			};
-		};
-		
 		IC.Options.addWrapper('messages', IC.Language.$('message.options.wrapperTitle'));
 		
 		// Replace urls.
 		IC.Options.addCheckbox('replaceURL', 'messages', 1, true, IC.Language.$('message.options.replaceURL'), { changeCallback: _go_replaceURL.updateSettings });
-		// Provide link for easy circular messages.
-		IC.Options.addCheckbox('easyCircularMessage', 'messages', 1, true, IC.Language.$('message.options.easyCircularMessage'), { changeCallback: _go_easyCircularMessageLink.updateSettings });
 		
-		// TODO: Test!
+		// Player specific signatures.
 		var la_options = [
 			{ value: 'none', label: IC.Language.$('message.options.signature.use.none') },
 			{ value: IC.Options.SpecificityLevel.GLOBAL, label: IC.Language.$('message.options.signature.use.global') },
