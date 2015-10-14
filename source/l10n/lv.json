@@ -110,13 +110,18 @@
         "options": {
             "wrapperTitle": "Vēstules",
             "replaceURL": "Pārveidot saites vēstulēs klikšķināmas",
-            "easyCircularMessage": "Rādīt pogu ātrākai alianses vēstuļu sūtīšanai",
             "signature": {
-                "use": "Ieslēgt parakstus vēstulēs",
+                "use": {
+                    "description": "",
+                    "none": "",
+                    "global": "",
+                    "server": "",
+                    "player": ""
+                },
                 "placementTop": "Ievietot parakstu vēstulēs virs citātiem",
                 "global": "Globāls paraksts, kuru var lietot katrā serverī:",
-                "useServerSpecific": "Lietot lokālu parakstu",
-                "server": "Lokāls paraksts, kuru var lietot tikai šajā serverī:"
+                "server": "",
+                "player": ""
             }
         },
         "replacedUrl": {
@@ -124,9 +129,6 @@
                 "header": "Uzmanību!",
                 "text": "Jūs grasāties atvērt saiti %$1. Tas notiek uz Jūsu paša atbildību. Turpināt?"
             }
-        },
-        "easyCircular": {
-            "send": "Sūtīt alianses vēstuli"
         }
     },
     "troopInformation": {
