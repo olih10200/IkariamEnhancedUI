@@ -33,6 +33,12 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
+// @history			3.1		Release: 14.10.2015
+// @history			3.1		Core: Update to Version 2.2 - Bug fixes and user specific options
+// @history			3.1		Feature: Player specific signatures in messages.
+// @history			3.1		Change: Remove easy circular message functionality as it is implemented directly in Ikariam now.
+// @history			3.1		Language: Turkish translation added (incomplete).
+// 
 // @history			3.0.3	Release: 20.03.2015
 // @history			3.0.3	Bugfix:	Town name in unit information incorrect.
 // 

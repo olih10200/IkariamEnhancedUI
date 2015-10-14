@@ -110,13 +110,18 @@
         "options": {
             "wrapperTitle": "Nachrichten",
             "replaceURL": "Links in Nachrichten anklickbar machen",
-            "easyCircularMessage": "Button für schnelleres Versenden von Allianzrundmails anzeigen",
             "signature": {
-                "use": "Nachrichtensignaturen aktivieren",
+                "use": {
+                    "description": "Diese Signatur verwenden:",
+                    "none": "Keine Signatur",
+                    "global": "Globale Signatur",
+                    "server": "Server Signatur",
+                    "player": "Spieler Signatur"
+                },
                 "placementTop": "Signatur oberhalb von Zitaten einfügen",
                 "global": "Globale Signatur, die auf allen Welten verwendet werden kann:",
-                "useServerSpecific": "Lokale Signatur verwenden",
-                "server": "Lokale Signatur, die nur auf dieser Welt verwendet wird:"
+                "server": "Server Signatur, welcher nur auf dieser Welt genutzt wird:",
+                "player": "Spieler Signatur, welche nur für diesen Spieler genutzt wird:"
             }
         },
         "replacedUrl": {
@@ -124,9 +129,6 @@
                 "header": "Achtung!",
                 "text": "Du bist dabei, den Link %$1 zu öffnen. Das öffnen dieses Links erfolgt auf eigenes Risiko. Trotzdem fortfahren?"
             }
-        },
-        "easyCircular": {
-            "send": "Rundmail senden"
         }
     },
     "troopInformation": {

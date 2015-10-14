@@ -3,7 +3,7 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			3.0.3
+// @version			3.1
 // @license			MIT License
 //
 // @name:de			Ikariam Enhanced UI
@@ -16,24 +16,27 @@
 // 
 // @exclude			http://support.*.ikariam.gameforge.com/*
 // 
-// @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=39332
+// @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=76818
 //
 // 
-// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.3/de.json
-// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.3/gr.json
-// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.3/it.json
-// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.3/lv.json
-// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.3/ru.json
-// @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.0/core_de.json
-// @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.0/core_de_settings.json
-// @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.0/core_gr.json
-// @resource		core_gr_settings	http://resources.ikascripts.de/IkariamCore/v2.0/core_gr_settings.json
-// @resource		core_it				http://resources.ikascripts.de/IkariamCore/v2.0/core_it.json
-// @resource		core_it_settings	http://resources.ikascripts.de/IkariamCore/v2.0/core_it_settings.json
-// @resource		core_lv				http://resources.ikascripts.de/IkariamCore/v2.0/core_lv.json
-// @resource		core_lv_settings	http://resources.ikascripts.de/IkariamCore/v2.0/core_lv_settings.json
-// @resource		core_ru				http://resources.ikascripts.de/IkariamCore/v2.0/core_ru.json
-// @resource		core_ru_settings	http://resources.ikascripts.de/IkariamCore/v2.0/core_ru_settings.json
+// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/de.json
+// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/gr.json
+// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/it.json
+// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/lv.json
+// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/ru.json
+// @resource		tr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/tr.json
+// @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.2/core_de.json
+// @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_de_settings.json
+// @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.2/core_gr.json
+// @resource		core_gr_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_gr_settings.json
+// @resource		core_it				http://resources.ikascripts.de/IkariamCore/v2.2/core_it.json
+// @resource		core_it_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_it_settings.json
+// @resource		core_lv				http://resources.ikascripts.de/IkariamCore/v2.2/core_lv.json
+// @resource		core_lv_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_lv_settings.json
+// @resource		core_ru				http://resources.ikascripts.de/IkariamCore/v2.2/core_ru.json
+// @resource		core_ru_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_ru_settings.json
+// @resource		core_tr				http://resources.ikascripts.de/IkariamCore/v2.2/core_tr.json
+// @resource		core_tr_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_tr_settings.json
 // 
 // @grant			unsafeWindow
 // @grant			GM_setValue
@@ -47,6 +50,12 @@
 // @bug				Opera & Chrome	No updating of the missing resources is possible due to a missing modification listener.
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			3.1		Release: 14.10.2015
+// @history			3.1		Core: Update to Version 2.2 - Bug fixes and user specific options
+// @history			3.1		Feature: Player specific signatures in messages.
+// @history			3.1		Change: Remove easy circular message functionality as it is implemented directly in Ikariam now.
+// @history			3.1		Language: Turkish translation added (incomplete).
 // 
 // @history			3.0.3	Release: 20.03.2015
 // @history			3.0.3	Bugfix:	Town name in unit information incorrect.
@@ -219,7 +228,7 @@
  * {@link https://greasyfork.org/scripts/4369-enhanced-ui Script on Greasy Fork}
  * {@link https://github.com/IkaScripts/IkariamEnhancedUI Script on GitHub}
  * 
- * @version	3.0.3
+ * @version	3.1
  * @author	Tobbe	<contact@ikascripts.de>
  * 
  * @global
@@ -2413,10 +2422,21 @@ function EnhancedUI(IC) {
 			 * Add the signature to a new message.
 			 */
 			var _lf_addSignature = function() {
-				var ls_signature = IC.Options.getOption('messages', 'globalSignature');
+				var ls_signature = '';
 				
-				if(IC.Options.getOption('messages', 'useServerSignature') === true)
-					ls_signature = IC.Options.getOption('messages', 'serverSignature');
+				switch(IC.Options.getOption('messages', 'useMessageSignature')) {
+					case IC.Options.SpecificityLevel.GLOBAL:
+						ls_signature = IC.Options.getOption('messages', 'globalSignature');
+					  break;
+					
+					case IC.Options.SpecificityLevel.SERVER:
+						ls_signature = IC.Options.getOption('messages', 'serverSignature');
+					  break;
+					
+					case IC.Options.SpecificityLevel.PLAYER:
+						ls_signature = IC.Options.getOption('messages', 'playerSignature');
+					  break;
+				}
 				
 				if(ls_signature === '')
 					return;
@@ -2425,7 +2445,7 @@ function EnhancedUI(IC) {
 				
 				var ls_text = le_textarea.value;
 				
-				if(IC.Options.getOption('messages', 'placementTop'))
+				if(IC.Options.getOption('messages', 'signaturePlacementTop'))
 					ls_text = '\n\n' + ls_signature + ls_text;
 				else
 					ls_text = ls_text + '\n\n' + ls_signature;
@@ -2442,8 +2462,10 @@ function EnhancedUI(IC) {
 			 * @param	{boolean}	ib_addMessageSignature
 			 *   If the user selected the checkbox to add signatures to messages.
 			 */
-			this.updateSettings = function(ib_addMessageSignature) {
-				if(ib_addMessageSignature === true) {
+			this.updateSettings = function(is_useMessageSignature) {
+				if(is_useMessageSignature === IC.Options.SpecificityLevel.GLOBAL
+						|| is_useMessageSignature === IC.Options.SpecificityLevel.SERVER
+						|| is_useMessageSignature === IC.Options.SpecificityLevel.PLAYER) {
 					IC.RefreshHandler.add('sendIKMessage', 'addMessageSignature', _lf_addSignature);
 					return;
 				}
@@ -2452,78 +2474,29 @@ function EnhancedUI(IC) {
 			};
 		};
 		
-		/**
-		 * Storage for the easy circular message link functions.
-		 * 
-		 * @type	{object}
-		 */
-		var _go_easyCircularMessageLink = new function() {
-			/**
-			 * Add the circular message link and style.
-			 */
-			var _lf_addLink = function() {
-				if(IC.ika.getModel().hasAlly !== true)
-					return;
-				
-				// Add the message link (workaround for ajaxHandlerCall).
-				var ls_id		= IC.myGM.prefix + 'circularMessageLink';
-				var ls_href		= '?view=sendIKMessage&msgType=51&allyId=' + IC.ika.getModel().avatarAllyId;
-				var ls_title	= IC.Language.$('message.easyCircular.send');
-				IC.myGM.addElement('div', ge_toolbar, {
-					'id':			'circularMessageLinkWrapper',
-					'innerHTML':	'<a id="' + ls_id + '" href="' + ls_href + '" title="' + ls_title + '" onclick="ajaxHandlerCall(this.href); return false;"></a>'
-				});
-				
-				IC.myGM.addStyle(
-					'#' + IC.myGM.prefix + 'circularMessageLink			{ height: 9px; width: 13px; margin: 0px !important; background: url("skin/interface/icon_send_message.png") repeat scroll 0 0 transparent; }\
-					 #' + IC.myGM.prefix + 'circularMessageLink:hover	{ background-position: 0px -9px; }',
-					'easyCircularMessage', true
-				);
-			};
-			
-			/**
-			 * Remove the circular message link and style.
-			 */
-			var _lf_removeLink = function() {
-				IC.myGM.removeElement(IC.myGM.$('#' + IC.myGM.prefix + 'circularMessageLinkWrapper'));
-				IC.myGM.removeStyle('easyCircularMessage');
-			};
-			
-			/**
-			 * Update the settings to execute the callback or delete the handler.
-			 * 
-			 * @param	{boolean}	ib_addEasyCircularMessageLink
-			 *   If the user selected the checkbox to add signatures to messages.
-			 */
-			this.updateSettings = function(ib_addEasyCircularMessageLink) {
-				if(ib_addEasyCircularMessageLink === true) {
-					_lf_addLink();
-					return;
-				}
-				
-				_lf_removeLink();
-			};
-		};
-		
 		IC.Options.addWrapper('messages', IC.Language.$('message.options.wrapperTitle'));
 		
 		// Replace urls.
 		IC.Options.addCheckbox('replaceURL', 'messages', 1, true, IC.Language.$('message.options.replaceURL'), { changeCallback: _go_replaceURL.updateSettings });
-		// Provide link for easy circular messages.
-		IC.Options.addCheckbox('easyCircularMessage', 'messages', 1, true, IC.Language.$('message.options.easyCircularMessage'), { changeCallback: _go_easyCircularMessageLink.updateSettings });
 		
-		// Add a signature.
-		IC.Options.addCheckbox('messageSignature', 'messages', 2, true, IC.Language.$('message.options.signature.use'), { changeCallback: _go_messageSignature.updateSettings });
+		// Player specific signatures.
+		var la_options = [
+			{ value: 'none', label: IC.Language.$('message.options.signature.use.none') },
+			{ value: IC.Options.SpecificityLevel.GLOBAL, label: IC.Language.$('message.options.signature.use.global') },
+			{ value: IC.Options.SpecificityLevel.SERVER, label: IC.Language.$('message.options.signature.use.server') },
+			{ value: IC.Options.SpecificityLevel.PLAYER, label: IC.Language.$('message.options.signature.use.player') }
+		];
+		IC.Options.addSelect('useMessageSignature', 'messages', 2, IC.Options.SpecificityLevel.GLOBAL, IC.Language.$('message.options.signature.use.description'), la_options, { changeCallback: _go_messageSignature.updateSettings, 'specificity': IC.Options.SpecificityLevel.PLAYER });
+		
 		// Place the signature on top.
 		IC.Options.addCheckbox('signaturePlacementTop', 'messages', 2, true, IC.Language.$('message.options.signature.placementTop'), {});
 		
 		// Define a global signature.
 		IC.Options.addTextArea('globalSignature', 'messages', 3, '', IC.Language.$('message.options.signature.global'), {});
-		
-		// Use the server signature.
-		IC.Options.addCheckbox('useServerSignature', 'messages', 4, false, IC.Language.$('message.options.signature.useServerSpecific'), { 'serverSpecific': true });
 		// Define a server specific signature.
-		IC.Options.addTextArea('serverSignature', 'messages', 4, '', IC.Language.$('message.options.signature.server'), { 'serverSpecific': true });
+		IC.Options.addTextArea('serverSignature', 'messages', 4, '', IC.Language.$('message.options.signature.server'), { 'specificity': IC.Options.SpecificityLevel.SERVER });
+		// Define a server specific signature.
+		IC.Options.addTextArea('playerSignature', 'messages', 4, '', IC.Language.$('message.options.signature.player'), { 'specificity': IC.Options.SpecificityLevel.PLAYER });
 	})();
 	
 	IC.con.timeStamp('IkariamEnhancedUI: message functions created');
@@ -3022,18 +2995,18 @@ function EnhancedUI(IC) {
  */
 function main() {
 	// Get the Ikariam core.
-	var IC = new IkariamCore('3.0.3', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
+	var IC = new IkariamCore('3.1', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
 	
 	if(IC.myGM.alreadyExecuted === true)
 		return;
 	
 	IC.Language.setDefaultLanguage('en');
 	
-	IC.Language.addLanguageText('en', {"view": {"options": {"wrapperTitle":"View","moveLoadingCircle":"Move loading circle to position bar","hideBirds":"Hide the bird swarm","noVerticalCenterInTownAdvisor":"Don't center town information in the town advisor"}},"island": {"options": {"showColonizingCityInfo":"Show information about colonizing cities"}},"finance": {"options": {"showIncomeOnTop":"Show income on top in balance view","shortUpkeepReductionTable":"Show a short version of the upkeep reduction"},"income": {"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep": {"reason": {"0":"Troops","1":"Ships","2":"Troops & Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"missingResources": {"options": {"wrapperTitle":"Missing Resources","show":"Show missing resources in construction view","showPositive":"Show also the remaining resources after an upgrade","showColoured":"Show the remaining resources coloured"}},"tooltips": {"options": {"autoshow":"Show tooltips in alliance mebers view and military advisor automatically","showDirectInMilitaryAdvisor":"Show information about cargo / fleets in military view without tooltips"}},"zoom": {"options": {"wrapperTitle":"Zoom function","zoomView":"Activate zoom in world view, island view, town view","factor": {"world":"Zoom worldmap:","island":"Zoom island view:","town":"Zoom town view:"},"scaleChildren": {"label":"Let banners and symbols in normal size when zooming when zooming in this view:","world":"Worldmap","island":"Island view","town":"Town view"},"accessKeyLabel":"This keys must be pressed to zoom with the mouse:"},"zoomIn":"Zoom in","factor":"Zoom factor","zoomOut":"Zoom out"},"resourceInformation": {"options": {"wrapperTitle":"Resource Information","resourceQuicklinkEnhancements":"Link resource number to town hall / mines","directIncome": {"show":"Show the hourly income directly in town view","style": {"label":"Style of the hourly income in town view:","alignRight":"Right align","alignLeft":"Left align","withSeparation":"Right align with separation"}},"capacityBar": {"show":"Show info bar for warehouse capacity","hasBorder":"Has border","showBranchOfficeResources":"Show resources in trading post","orientation": {"label":"Orientation of the bar","vertical":"Vertical","horizontal":"Horizontal","horizontalFull":"Horizontal, full length"}}},"dailyProduction":"Daily production %$1:"},"highscore": {"options": {"showMemberInformation":"Enable the possibility to save highscore data of alliance members"},"memberInformation": {"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset: %$1","noReset":"No reset so far."}},"message": {"options": {"wrapperTitle":"Messages","replaceURL":"Make links in messages clickable","easyCircularMessage":"Show button for faster sending of circular messages","signature": {"use":"Enable message signatures","placementTop":"Insert signature above cited messages","global":"Global signature, which would be used on every world:","useServerSpecific":"Use local signature","server":"Local signature, which only would be used on this world:"}},"replacedUrl": {"notification": {"header":"Attention!","text":"You're going to open the link %$1. This happens on your own risk. Proceed?"}},"easyCircular": {"send":"Send circular message"}},"troopInformation": {"options": {"show":"Show troop info"},"units": {"label":"Units in %$1","own":"Own units","friends":"Allied units","enemies":"Enemy units"},"ships": {"label":"Ships in %$1","own":"Own ships","friends":"Allied ships","enemies":"Enemy ships"},"button":"Troop information","header":"Troops in %$1","noTroops":"There are no troops in %$1"},"diverse": {"options": {"wrapperTitle":"Diverse"},"name": {"resource": {"gold":"Gold","wood":"Building Material","wine":"Wine","marble":"Marble","glass":"Crystal Glass","sulfur":"Sulphur"},"unit": {"swordsman":"Swordsman","phalanx":"Hoplite","archer":"Archer","marksman":"Sulphur Carabineer","mortar":"Mortar","slinger":"Slinger","catapult":"Catapult","ram":"Battering Ram","steamgiant":"Steam Giant","bombardier":"Balloon-Bombardier","cook":"Cook","medic":"Doctor","girocopter":"Gyrocopter","spearman":"Spearman","spartan":"Spartan"},"ship": {"ballista":"Ballista Ship","catapult":"Catapult Ship","flamethrower":"Fire Ship","mortar":"Mortar Ship","ram":"Ram Ship","steamboat":"Steam Ram","rocketship":"Rocket Ship","submarine":"Diving Boat","paddlespeedship":"Paddle Speedboat","ballooncarrier":"Balloon Carrier","tender":"Tender","transport":"Merchant Ship"}}}});
+	IC.Language.addLanguageText('en', {"view": {"options": {"wrapperTitle":"View","moveLoadingCircle":"Move loading circle to position bar","hideBirds":"Hide the bird swarm","noVerticalCenterInTownAdvisor":"Don't center town information in the town advisor"}},"island": {"options": {"showColonizingCityInfo":"Show information about colonizing cities"}},"finance": {"options": {"showIncomeOnTop":"Show income on top in balance view","shortUpkeepReductionTable":"Show a short version of the upkeep reduction"},"income": {"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep": {"reason": {"0":"Troops","1":"Ships","2":"Troops & Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"missingResources": {"options": {"wrapperTitle":"Missing Resources","show":"Show missing resources in construction view","showPositive":"Show also the remaining resources after an upgrade","showColoured":"Show the remaining resources coloured"}},"tooltips": {"options": {"autoshow":"Show tooltips in alliance mebers view and military advisor automatically","showDirectInMilitaryAdvisor":"Show information about cargo / fleets in military view without tooltips"}},"zoom": {"options": {"wrapperTitle":"Zoom function","zoomView":"Activate zoom in world view, island view, town view","factor": {"world":"Zoom worldmap:","island":"Zoom island view:","town":"Zoom town view:"},"scaleChildren": {"label":"Let banners and symbols in normal size when zooming when zooming in this view:","world":"Worldmap","island":"Island view","town":"Town view"},"accessKeyLabel":"This keys must be pressed to zoom with the mouse:"},"zoomIn":"Zoom in","factor":"Zoom factor","zoomOut":"Zoom out"},"resourceInformation": {"options": {"wrapperTitle":"Resource Information","resourceQuicklinkEnhancements":"Link resource number to town hall / mines","directIncome": {"show":"Show the hourly income directly in town view","style": {"label":"Style of the hourly income in town view:","alignRight":"Right align","alignLeft":"Left align","withSeparation":"Right align with separation"}},"capacityBar": {"show":"Show info bar for warehouse capacity","hasBorder":"Has border","showBranchOfficeResources":"Show resources in trading post","orientation": {"label":"Orientation of the bar","vertical":"Vertical","horizontal":"Horizontal","horizontalFull":"Horizontal, full length"}}},"dailyProduction":"Daily production %$1:"},"highscore": {"options": {"showMemberInformation":"Enable the possibility to save highscore data of alliance members"},"memberInformation": {"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset: %$1","noReset":"No reset so far."}},"message": {"options": {"wrapperTitle":"Messages","replaceURL":"Make links in messages clickable","signature": {"use": {"description":"Use this signature:","none":"No signature","global":"Global signature","server":"Server signature","player":"Player signature"},"placementTop":"Insert signature above cited messages","global":"Global signature, which would be used on every world:","server":"Server signature, which only would be used on this world:","player":"Player signature, which only would be used for this player:"}},"replacedUrl": {"notification": {"header":"Attention!","text":"You're going to open the link %$1. This happens on your own risk. Proceed?"}}},"troopInformation": {"options": {"show":"Show troop info"},"units": {"label":"Units in %$1","own":"Own units","friends":"Allied units","enemies":"Enemy units"},"ships": {"label":"Ships in %$1","own":"Own ships","friends":"Allied ships","enemies":"Enemy ships"},"button":"Troop information","header":"Troops in %$1","noTroops":"There are no troops in %$1"},"diverse": {"options": {"wrapperTitle":"Diverse"},"name": {"resource": {"gold":"Gold","wood":"Building Material","wine":"Wine","marble":"Marble","glass":"Crystal Glass","sulfur":"Sulphur"},"unit": {"swordsman":"Swordsman","phalanx":"Hoplite","archer":"Archer","marksman":"Sulphur Carabineer","mortar":"Mortar","slinger":"Slinger","catapult":"Catapult","ram":"Battering Ram","steamgiant":"Steam Giant","bombardier":"Balloon-Bombardier","cook":"Cook","medic":"Doctor","girocopter":"Gyrocopter","spearman":"Spearman","spartan":"Spartan"},"ship": {"ballista":"Ballista Ship","catapult":"Catapult Ship","flamethrower":"Fire Ship","mortar":"Mortar Ship","ram":"Ram Ship","steamboat":"Steam Ram","rocketship":"Rocket Ship","submarine":"Diving Boat","paddlespeedship":"Paddle Speedboat","ballooncarrier":"Balloon Carrier","tender":"Tender","transport":"Merchant Ship"}}}});
 	
-	var la_language = ['de', 'gr', 'it', 'lv', 'ru'];
+	var la_language = ['de', 'gr', 'it', 'lv', 'ru', 'tr'];
 	for(var i = 0; i < la_language.length; i++) {
-		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.0.3/' + la_language[i] + '.json');
+		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/' + la_language[i] + '.json');
 	}
 	
 	// Instantiate the ui script.

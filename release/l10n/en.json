@@ -110,13 +110,18 @@
 		"options": {
 			"wrapperTitle":			"Messages",
 			"replaceURL":			"Make links in messages clickable",
-			"easyCircularMessage":	"Show button for faster sending of circular messages",
 			"signature": {
-				"use":					"Enable message signatures",
+				"use": {
+					"description":	"Use this signature:",
+					"none":			"No signature",
+					"global":		"Global signature",
+					"server":		"Server signature",
+					"player":		"Player signature"
+				},
 				"placementTop":			"Insert signature above cited messages",
 				"global":				"Global signature, which would be used on every world:",
-				"useServerSpecific":	"Use local signature",
-				"server":				"Local signature, which only would be used on this world:"
+				"server":				"Server signature, which only would be used on this world:",
+				"player":				"Player signature, which only would be used for this player:"
 			}
 		},
 		"replacedUrl": {
@@ -124,9 +129,6 @@
 				"header":	"Attention!",
 				"text":		"You're going to open the link %$1. This happens on your own risk. Proceed?"
 			}
-		},
-		"easyCircular": {
-			"send":	"Send circular message"
 		}
 	},
 	"troopInformation": {
