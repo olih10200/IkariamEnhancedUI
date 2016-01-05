@@ -9,6 +9,8 @@
 // @name:de			@SCRIPT_NAME@
 // @description:de	@SCRIPT_DESCRIPTION_DE@
 //
+// @run-at			document-idle
+//
 // @updateURL		about:blank
 // @downloadURL		about:blank
 // 
