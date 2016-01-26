@@ -14,9 +14,7 @@
 // @updateURL		about:blank
 // @downloadURL		about:blank
 // 
-// @include			http://s*.ikariam.gameforge.com/*
-// 
-// @exclude			http://support.*.ikariam.gameforge.com/*
+// @include			/https?:\/\/s[0-9]*-[a-z]{2}\.ikariam\.gameforge\.com\/.*/
 // 
 // @require			@REQUIRE_IKARIAM_CORE@
 //
