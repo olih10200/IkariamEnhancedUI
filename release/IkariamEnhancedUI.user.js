@@ -3,40 +3,43 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			3.1
+// @version			3.2
 // @license			MIT License
 //
 // @name:de			Ikariam Enhanced UI
 // @description:de	Verbesserungen der Oberfläche von Ikariam.
 //
+// @run-at			document-idle
+//
 // @updateURL		about:blank
 // @downloadURL		about:blank
 // 
-// @include			http://s*.ikariam.gameforge.com/*
+// @include			/https?:\/\/s[0-9]*-[a-z]{2}\.ikariam\.gameforge\.com\/.*/
 // 
-// @exclude			http://support.*.ikariam.gameforge.com/*
-// 
-// @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=76818
+// @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=103823
 //
 // 
-// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/de.json
-// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/gr.json
-// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/it.json
-// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/lv.json
-// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/ru.json
-// @resource		tr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/tr.json
-// @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.2/core_de.json
-// @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_de_settings.json
-// @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.2/core_gr.json
-// @resource		core_gr_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_gr_settings.json
-// @resource		core_it				http://resources.ikascripts.de/IkariamCore/v2.2/core_it.json
-// @resource		core_it_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_it_settings.json
-// @resource		core_lv				http://resources.ikascripts.de/IkariamCore/v2.2/core_lv.json
-// @resource		core_lv_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_lv_settings.json
-// @resource		core_ru				http://resources.ikascripts.de/IkariamCore/v2.2/core_ru.json
-// @resource		core_ru_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_ru_settings.json
-// @resource		core_tr				http://resources.ikascripts.de/IkariamCore/v2.2/core_tr.json
-// @resource		core_tr_settings	http://resources.ikascripts.de/IkariamCore/v2.2/core_tr_settings.json
+// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/de.json
+// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/gr.json
+// @resource		fr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/fr.json
+// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/it.json
+// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/lv.json
+// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/ru.json
+// @resource		tr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/tr.json
+// @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.3/core_de.json
+// @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.3/core_de_settings.json
+// @resource		core_fr				http://resources.ikascripts.de/IkariamCore/v2.3/core_fr.json
+// @resource		core_fr_settings	http://resources.ikascripts.de/IkariamCore/v2.3/core_fr_settings.json
+// @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.3/core_gr.json
+// @resource		core_gr_settings	http://resources.ikascripts.de/IkariamCore/v2.3/core_gr_settings.json
+// @resource		core_it				http://resources.ikascripts.de/IkariamCore/v2.3/core_it.json
+// @resource		core_it_settings	http://resources.ikascripts.de/IkariamCore/v2.3/core_it_settings.json
+// @resource		core_lv				http://resources.ikascripts.de/IkariamCore/v2.3/core_lv.json
+// @resource		core_lv_settings	http://resources.ikascripts.de/IkariamCore/v2.3/core_lv_settings.json
+// @resource		core_ru				http://resources.ikascripts.de/IkariamCore/v2.3/core_ru.json
+// @resource		core_ru_settings	http://resources.ikascripts.de/IkariamCore/v2.3/core_ru_settings.json
+// @resource		core_tr				http://resources.ikascripts.de/IkariamCore/v2.3/core_tr.json
+// @resource		core_tr_settings	http://resources.ikascripts.de/IkariamCore/v2.3/core_tr_settings.json
 // 
 // @grant			unsafeWindow
 // @grant			GM_setValue
@@ -50,6 +53,12 @@
 // @bug				Opera & Chrome	No updating of the missing resources is possible due to a missing modification listener.
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			3.2		Release: 26.01.2016
+// @history			3.2		Core: Update to Version 2.3 - Bug fixes
+// @history			3.2		Feature: Let the script also run on SSL encripted Ikariam page.
+// @history			3.2		Bugfix: In very rare cases it was possible that the script was to fast and thus did not work.
+// @history			3.2		Language: French translation added (incomplete).
 // 
 // @history			3.1		Release: 14.10.2015
 // @history			3.1		Core: Update to Version 2.2 - Bug fixes and user specific options
@@ -228,7 +237,7 @@
  * {@link https://greasyfork.org/scripts/4369-enhanced-ui Script on Greasy Fork}
  * {@link https://github.com/IkaScripts/IkariamEnhancedUI Script on GitHub}
  * 
- * @version	3.1
+ * @version	3.2
  * @author	Tobbe	<contact@ikascripts.de>
  * 
  * @global
@@ -2995,7 +3004,7 @@ function EnhancedUI(IC) {
  */
 function main() {
 	// Get the Ikariam core.
-	var IC = new IkariamCore('3.1', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
+	var IC = new IkariamCore('3.2', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
 	
 	if(IC.myGM.alreadyExecuted === true)
 		return;
@@ -3004,9 +3013,9 @@ function main() {
 	
 	IC.Language.addLanguageText('en', {"view": {"options": {"wrapperTitle":"View","moveLoadingCircle":"Move loading circle to position bar","hideBirds":"Hide the bird swarm","noVerticalCenterInTownAdvisor":"Don't center town information in the town advisor"}},"island": {"options": {"showColonizingCityInfo":"Show information about colonizing cities"}},"finance": {"options": {"showIncomeOnTop":"Show income on top in balance view","shortUpkeepReductionTable":"Show a short version of the upkeep reduction"},"income": {"perHour":"Income per hour","perDay":"Income per day","start":"Income without reduction"},"upkeep": {"reason": {"0":"Troops","1":"Ships","2":"Troops & Ships"},"basic":"Basic Costs","supply":"Supply Costs","result":"Total Costs"}},"missingResources": {"options": {"wrapperTitle":"Missing Resources","show":"Show missing resources in construction view","showPositive":"Show also the remaining resources after an upgrade","showColoured":"Show the remaining resources coloured"}},"tooltips": {"options": {"autoshow":"Show tooltips in alliance mebers view and military advisor automatically","showDirectInMilitaryAdvisor":"Show information about cargo / fleets in military view without tooltips"}},"zoom": {"options": {"wrapperTitle":"Zoom function","zoomView":"Activate zoom in world view, island view, town view","factor": {"world":"Zoom worldmap:","island":"Zoom island view:","town":"Zoom town view:"},"scaleChildren": {"label":"Let banners and symbols in normal size when zooming when zooming in this view:","world":"Worldmap","island":"Island view","town":"Town view"},"accessKeyLabel":"This keys must be pressed to zoom with the mouse:"},"zoomIn":"Zoom in","factor":"Zoom factor","zoomOut":"Zoom out"},"resourceInformation": {"options": {"wrapperTitle":"Resource Information","resourceQuicklinkEnhancements":"Link resource number to town hall / mines","directIncome": {"show":"Show the hourly income directly in town view","style": {"label":"Style of the hourly income in town view:","alignRight":"Right align","alignLeft":"Left align","withSeparation":"Right align with separation"}},"capacityBar": {"show":"Show info bar for warehouse capacity","hasBorder":"Has border","showBranchOfficeResources":"Show resources in trading post","orientation": {"label":"Orientation of the bar","vertical":"Vertical","horizontal":"Horizontal","horizontalFull":"Horizontal, full length"}}},"dailyProduction":"Daily production %$1:"},"highscore": {"options": {"showMemberInformation":"Enable the possibility to save highscore data of alliance members"},"memberInformation": {"show":"Alliance info","reset":"Reset","lastReset":"Time since the last reset: %$1","noReset":"No reset so far."}},"message": {"options": {"wrapperTitle":"Messages","replaceURL":"Make links in messages clickable","signature": {"use": {"description":"Use this signature:","none":"No signature","global":"Global signature","server":"Server signature","player":"Player signature"},"placementTop":"Insert signature above cited messages","global":"Global signature, which would be used on every world:","server":"Server signature, which only would be used on this world:","player":"Player signature, which only would be used for this player:"}},"replacedUrl": {"notification": {"header":"Attention!","text":"You're going to open the link %$1. This happens on your own risk. Proceed?"}}},"troopInformation": {"options": {"show":"Show troop info"},"units": {"label":"Units in %$1","own":"Own units","friends":"Allied units","enemies":"Enemy units"},"ships": {"label":"Ships in %$1","own":"Own ships","friends":"Allied ships","enemies":"Enemy ships"},"button":"Troop information","header":"Troops in %$1","noTroops":"There are no troops in %$1"},"diverse": {"options": {"wrapperTitle":"Diverse"},"name": {"resource": {"gold":"Gold","wood":"Building Material","wine":"Wine","marble":"Marble","glass":"Crystal Glass","sulfur":"Sulphur"},"unit": {"swordsman":"Swordsman","phalanx":"Hoplite","archer":"Archer","marksman":"Sulphur Carabineer","mortar":"Mortar","slinger":"Slinger","catapult":"Catapult","ram":"Battering Ram","steamgiant":"Steam Giant","bombardier":"Balloon-Bombardier","cook":"Cook","medic":"Doctor","girocopter":"Gyrocopter","spearman":"Spearman","spartan":"Spartan"},"ship": {"ballista":"Ballista Ship","catapult":"Catapult Ship","flamethrower":"Fire Ship","mortar":"Mortar Ship","ram":"Ram Ship","steamboat":"Steam Ram","rocketship":"Rocket Ship","submarine":"Diving Boat","paddlespeedship":"Paddle Speedboat","ballooncarrier":"Balloon Carrier","tender":"Tender","transport":"Merchant Ship"}}}});
 	
-	var la_language = ['de', 'gr', 'it', 'lv', 'ru', 'tr'];
+	var la_language = ['de', 'gr', 'fr', 'it', 'lv', 'ru', 'tr'];
 	for(var i = 0; i < la_language.length; i++) {
-		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.1/' + la_language[i] + '.json');
+		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.2/' + la_language[i] + '.json');
 	}
 	
 	// Instantiate the ui script.
