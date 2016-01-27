@@ -33,7 +33,7 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
-// @history			3.2		Release: 26.01.2016
+// @history			3.2		Release: 27.01.2016
 // @history			3.2		Core: Update to Version 2.3 - Bug fixes
 // @history			3.2		Feature: Let the script also run on SSL encripted Ikariam page.
 // @history			3.2		Bugfix: In very rare cases it was possible that the script was to fast and thus did not work.
