@@ -3,7 +3,7 @@
 // @description		Enhancements for the user interface of Ikariam.
 // @namespace		Tobbe
 // @author			Tobbe
-// @version			3.2.1
+// @version			3.2.2
 // @license			MIT License
 //
 // @name:de			Ikariam Enhanced UI
@@ -16,30 +16,30 @@
 // 
 // @include			/https?:\/\/s[0-9]*-[a-z]{2}\.ikariam\.gameforge\.com\/.*/
 // 
-// @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=103830
+// @require			https://greasyfork.org/scripts/5574-ikariam-core/code/Ikariam%20Core.js?version=105280
 //
 // 
-// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/de.json
-// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/gr.json
-// @resource		fr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/fr.json
-// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/it.json
-// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/lv.json
-// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/ru.json
-// @resource		tr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/tr.json
-// @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.3.1/core_de.json
-// @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.3.1/core_de_settings.json
-// @resource		core_fr				http://resources.ikascripts.de/IkariamCore/v2.3.1/core_fr.json
-// @resource		core_fr_settings	http://resources.ikascripts.de/IkariamCore/v2.3.1/core_fr_settings.json
-// @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.3.1/core_gr.json
-// @resource		core_gr_settings	http://resources.ikascripts.de/IkariamCore/v2.3.1/core_gr_settings.json
-// @resource		core_it				http://resources.ikascripts.de/IkariamCore/v2.3.1/core_it.json
-// @resource		core_it_settings	http://resources.ikascripts.de/IkariamCore/v2.3.1/core_it_settings.json
-// @resource		core_lv				http://resources.ikascripts.de/IkariamCore/v2.3.1/core_lv.json
-// @resource		core_lv_settings	http://resources.ikascripts.de/IkariamCore/v2.3.1/core_lv_settings.json
-// @resource		core_ru				http://resources.ikascripts.de/IkariamCore/v2.3.1/core_ru.json
-// @resource		core_ru_settings	http://resources.ikascripts.de/IkariamCore/v2.3.1/core_ru_settings.json
-// @resource		core_tr				http://resources.ikascripts.de/IkariamCore/v2.3.1/core_tr.json
-// @resource		core_tr_settings	http://resources.ikascripts.de/IkariamCore/v2.3.1/core_tr_settings.json
+// @resource		de					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/de.json
+// @resource		gr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/gr.json
+// @resource		fr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/fr.json
+// @resource		it					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/it.json
+// @resource		lv					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/lv.json
+// @resource		ru					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/ru.json
+// @resource		tr					http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/tr.json
+// @resource		core_de				http://resources.ikascripts.de/IkariamCore/v2.3.2/core_de.json
+// @resource		core_de_settings	http://resources.ikascripts.de/IkariamCore/v2.3.2/core_de_settings.json
+// @resource		core_fr				http://resources.ikascripts.de/IkariamCore/v2.3.2/core_fr.json
+// @resource		core_fr_settings	http://resources.ikascripts.de/IkariamCore/v2.3.2/core_fr_settings.json
+// @resource		core_gr				http://resources.ikascripts.de/IkariamCore/v2.3.2/core_gr.json
+// @resource		core_gr_settings	http://resources.ikascripts.de/IkariamCore/v2.3.2/core_gr_settings.json
+// @resource		core_it				http://resources.ikascripts.de/IkariamCore/v2.3.2/core_it.json
+// @resource		core_it_settings	http://resources.ikascripts.de/IkariamCore/v2.3.2/core_it_settings.json
+// @resource		core_lv				http://resources.ikascripts.de/IkariamCore/v2.3.2/core_lv.json
+// @resource		core_lv_settings	http://resources.ikascripts.de/IkariamCore/v2.3.2/core_lv_settings.json
+// @resource		core_ru				http://resources.ikascripts.de/IkariamCore/v2.3.2/core_ru.json
+// @resource		core_ru_settings	http://resources.ikascripts.de/IkariamCore/v2.3.2/core_ru_settings.json
+// @resource		core_tr				http://resources.ikascripts.de/IkariamCore/v2.3.2/core_tr.json
+// @resource		core_tr_settings	http://resources.ikascripts.de/IkariamCore/v2.3.2/core_tr_settings.json
 // 
 // @grant			unsafeWindow
 // @grant			GM_setValue
@@ -53,6 +53,9 @@
 // @bug				Opera & Chrome	No updating of the missing resources is possible due to a missing modification listener.
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
+// 
+// @history			3.2.2	Release: 02.02.2016
+// @history			3.2.2	Core: Update to Version 2.3.2 - Bug fix (permanent reload of crew conversion)
 // 
 // @history			3.2.1	Release: 27.01.2016
 // @history			3.2.1	Core: Update to Version 2.3.1 - Bug fixes
@@ -240,7 +243,7 @@
  * {@link https://greasyfork.org/scripts/4369-enhanced-ui Script on Greasy Fork}
  * {@link https://github.com/IkaScripts/IkariamEnhancedUI Script on GitHub}
  * 
- * @version	3.2.1
+ * @version	3.2.2
  * @author	Tobbe	<contact@ikascripts.de>
  * 
  * @global
@@ -3007,7 +3010,7 @@ function EnhancedUI(IC) {
  */
 function main() {
 	// Get the Ikariam core.
-	var IC = new IkariamCore('3.2.1', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
+	var IC = new IkariamCore('3.2.2', 4369, 'Ikariam Enhanced UI', 'Tobbe', false);
 	
 	if(IC.myGM.alreadyExecuted === true)
 		return;
@@ -3018,7 +3021,7 @@ function main() {
 	
 	var la_language = ['de', 'gr', 'fr', 'it', 'lv', 'ru', 'tr'];
 	for(var i = 0; i < la_language.length; i++) {
-		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.1/' + la_language[i] + '.json');
+		IC.Language.registerLanguageResource(la_language[i], la_language[i], 'http://resources.ikascripts.de/IkariamEnhancedUI/v3.2.2/' + la_language[i] + '.json');
 	}
 	
 	// Instantiate the ui script.
