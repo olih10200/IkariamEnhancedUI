@@ -1,13 +1,13 @@
 ﻿// ==UserScript==
-// @name			@SCRIPT_NAME@
-// @description		@SCRIPT_DESCRIPTION_DEFAULT@
-// @namespace		@SCRIPT_NAMESPACE@
-// @author			@SCRIPT_AUTHOR_NAME@
-// @version			@SCRIPT_VERSION@
-// @license			@SCRIPT_LICENSE@
+// @name			//@SCRIPT_NAME@//
+// @description		//@SCRIPT_DESCRIPTION_DEFAULT@//
+// @namespace		//@SCRIPT_NAMESPACE@//
+// @author			//@SCRIPT_AUTHOR_NAME@//
+// @version			//@SCRIPT_VERSION@//
+// @license			//@SCRIPT_LICENSE@//
 //
-// @name:de			@SCRIPT_NAME@
-// @description:de	@SCRIPT_DESCRIPTION_DE@
+// @name:de			//@SCRIPT_NAME@//
+// @description:de	//@SCRIPT_DESCRIPTION_DE@//
 //
 // @run-at			document-idle
 //
@@ -16,9 +16,9 @@
 // 
 // @include			/https?:\/\/s[0-9]*-[a-z]{2}\.ikariam\.gameforge\.com\/.*/
 // 
-// @require			@REQUIRE_IKARIAM_CORE@
+// @require			//@REQUIRE_IKARIAM_CORE@//
 //
-// @RESOURCE_LANGUAGE_INCLUDES@
+// //@RESOURCE_LANGUAGE_INCLUDES@//
 // 
 // @grant			unsafeWindow
 // @grant			GM_setValue
@@ -219,19 +219,19 @@
 
 /**
  * Instantiate a new set of enhancement functions.
- * {@link @SCRIPT_LINK_GREASY_FORK@ Script on Greasy Fork}
- * {@link @SCRIPT_LINK_GITHUB@ Script on GitHub}
+ * {@link //@SCRIPT_LINK_GREASY_FORK@// Script on Greasy Fork}
+ * {@link //@SCRIPT_LINK_GITHUB@// Script on GitHub}
  * 
- * @version	@SCRIPT_VERSION@
- * @author	@SCRIPT_AUTHOR_NAME@	<@SCRIPT_AUTHOR_EMAIL@>
+ * @version	//@SCRIPT_VERSION@//
+ * @author	//@SCRIPT_AUTHOR_NAME@//	<//@SCRIPT_AUTHOR_EMAIL@//>
  * 
  * @global
  * 
  * @class
- * @classdesc	@SCRIPT_DESCRIPTION_DEFAULT@
+ * @classdesc	//@SCRIPT_DESCRIPTION_DEFAULT@//
  * 
  * @param	{IkariamCore}	$
- *   A instance of the Ikariam Core.
+ *   An instance of the Ikariam Core.
  */
 function EnhancedUI(IC) {
 	/**
@@ -256,43 +256,43 @@ function EnhancedUI(IC) {
 	IC.con.groupCollapsed('IkariamEnhancedUI initalization ...');
 	IC.con.timeStamp('IkariamEnhancedUI: toolbar and general styles created');
 	
-	@ENHANCE_VIEW@
+	//@ENHANCE_VIEW@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: view functions created');
 	
-	@ENHANCE_ISLAND@
+	//@ENHANCE_ISLAND@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: island functions created');
 	
-	@ENHANCE_FINANCE@
+	//@ENHANCE_FINANCE@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: finance functions created');
 	
-	@ENHANCE_MISSING_RESOURCES@
+	//@ENHANCE_MISSING_RESOURCES@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: missing resource functions created');
 	
-	@ENHANCE_TOOLTIPS@
+	//@ENHANCE_TOOLTIPS@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: tooltip functions created');
 	
-	@ENHANCE_ZOOM@
+	//@ENHANCE_ZOOM@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: zoom functions created');
 	
-	@ENHANCE_RESOURCE_INFORMATION@
+	//@ENHANCE_RESOURCE_INFORMATION@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: resource information functions created');
 	
-	@ENHANCE_HIGHSCORE@
+	//@ENHANCE_HIGHSCORE@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: highscore functions created');
 	
-	@ENHANCE_MESSAGES@
+	//@ENHANCE_MESSAGES@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: message functions created');
 	
-	@ENHANCE_TROOP_INFORMATION@
+	//@ENHANCE_TROOP_INFORMATION@//
 	
 	IC.con.timeStamp('IkariamEnhancedUI: troop information functions created');
 	IC.con.groupEnd();
@@ -305,18 +305,18 @@ function EnhancedUI(IC) {
  */
 function main() {
 	// Get the Ikariam core.
-	var IC = new IkariamCore('@SCRIPT_VERSION@', @SCRIPT_ID@, '@SCRIPT_NAME@', '@SCRIPT_AUTHOR_NAME@', @SCRIPT_DEBUG@);
+	var IC = new IkariamCore('//@SCRIPT_VERSION@//', //@SCRIPT_ID@//, '//@SCRIPT_NAME@//', '//@SCRIPT_AUTHOR_NAME@//', //@SCRIPT_DEBUG@//);
 	
 	if(IC.myGM.alreadyExecuted === true)
 		return;
 	
 	IC.Language.setDefaultLanguage('en');
 	
-	IC.Language.addLanguageText('en', @SCRIPT_LANGUAGE_DEFAULT@);
+	IC.Language.addLanguageText('en', //@SCRIPT_LANGUAGE_DEFAULT@//);
 	
-	var la_language = @SCRIPT_TRANSLATIONS_ARRAY@;
+	var la_language = //@SCRIPT_TRANSLATIONS_ARRAY@//;
 	for(var i = 0; i < la_language.length; i++) {
-		IC.Language.registerLanguageResource(la_language[i], la_language[i], '@RESOURCE_LANGUAGE_URL@/' + la_language[i] + '.json');
+		IC.Language.registerLanguageResource(la_language[i], la_language[i], '//@RESOURCE_LANGUAGE_URL@///' + la_language[i] + '.json');
 	}
 	
 	// Instantiate the ui script.
