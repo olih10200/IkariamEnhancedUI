@@ -456,10 +456,17 @@
 			 * Add the direct income fields.
 			 */
 			var _lf_addFields = function() {
-				IC.Ikariam.resourceNames.forEach(function(is_resource, ii_index) {
-					var la_hourlyClasses	= [IC.myGM.prefix + 'hourlyIncomeResource'];
-					var la_dailyClasses		= ['smallFont', IC.myGM.prefix + 'dailyIncomeResourceWrapper'];
+				if(!IC.myGM.$('js_GlobalMenu_production_container_wood') === true) {
+					var le_woodProductionContainer	= IC.myGM.$('#js_GlobalMenu_resourceProduction').parentNode;
+					le_woodProductionContainer.id	= 'js_GlobalMenu_production_container_wood';
 					
+				}
+				
+				IC.Ikariam.resourceNames.forEach(function(is_resource, ii_index) {
+					var ls_resourceParent	= is_resource === 'glass' ? 'crystal' : is_resource;
+					var la_hourlyClasses	= [IC.myGM.prefix + 'hourlyIncomeResource'];
+					var la_dailyClasses		= ['altTooltip', IC.myGM.prefix + 'dailyIncomeResourceWrapper'];
+
 					if(ii_index >= 2) {
 						la_hourlyClasses.push('invisible');
 						la_dailyClasses.push('invisible');
@@ -467,14 +474,23 @@
 					
 					IC.myGM.addElement('span', IC.myGM.$('#resources_' + is_resource), { 'id': 'hourlyIncomeResource' + is_resource, 'classes': la_hourlyClasses });
 					
-					var le_dailyIncomeParent	= IC.myGM.$('#resources_' + is_resource + ' .tooltip');
-					var le_dailyIncomeWrapper	= IC.myGM.addElement('p', le_dailyIncomeParent, {
-						'id':			'dailyIncomeResourceWrapper' + is_resource,
-						'classes':		la_dailyClasses,
-						'innerHTML':	IC.Language.$('resourceInformation.dailyProduction', [IC.Language.$('diverse.name.resource.' + is_resource)]) + ' '
-					}, null, IC.myGM.$('p:nth-child(2)', le_dailyIncomeParent));
+					var le_dailyIncomeParent		= IC.myGM.$('#js_GlobalMenu_' + ls_resourceParent + '_tooltip tbody');
+					var le_dailyIncomeInsertBefore	= IC.myGM.$('#js_GlobalMenu_production_container_' + ls_resourceParent + ' + tr');
+					var le_dailyIncomeWrapper		= IC.myGM.addElement('tr', le_dailyIncomeParent, {
+						'id':		'dailyIncomeResourceWrapper' + is_resource,
+						'classes':	la_dailyClasses,
+					}, null, le_dailyIncomeInsertBefore);
 					
-					IC.myGM.addElement('span', le_dailyIncomeWrapper, { 'id': 'dailyIncomeResource' + is_resource });
+					IC.myGM.addElement('td', le_dailyIncomeWrapper, {
+						'id':			'dailyIncomeResourceLabel' + is_resource,
+						'class':		'smallFont',
+						'innerHTML':	IC.Language.$('resourceInformation.dailyProduction', [IC.Language.$('diverse.name.resource.' + is_resource)]) + ' '
+					});
+					
+					IC.myGM.addElement('td', le_dailyIncomeWrapper, {
+						'id':		'dailyIncomeResource' + is_resource,
+						'class':	'rightText'
+					});
 				});
 				
 				_lf_updateFields(true);
