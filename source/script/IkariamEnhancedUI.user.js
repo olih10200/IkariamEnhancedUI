@@ -17,6 +17,8 @@
 // @include			/https?:\/\/s[0-9]*-[a-z]{2}\.ikariam\.gameforge\.com\/.*/
 // 
 // @require			//@REQUIRE_IKARIAM_CORE@//
+// 
+// @connect			greasyfork.org
 //
 // //@RESOURCE_LANGUAGE_INCLUDES@//
 // 
