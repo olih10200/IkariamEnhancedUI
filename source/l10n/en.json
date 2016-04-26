@@ -93,7 +93,8 @@
 				}
 			}
 		},
-		"dailyProduction":	"Daily production %$1:"
+		"dailyProduction":	"Daily production %$1:",
+		"dailyExpenses":	"Daily expenses %$1:"
 	},
 	"highscore": {
 		"options": {

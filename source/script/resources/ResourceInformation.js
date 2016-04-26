@@ -437,11 +437,17 @@
 				IC.myGM.$(ls_hourlyPrefix + IC.Ikariam.resourceNames[0]).innerHTML	= IC.Ikariam.formatToIkaNumber(Math.floor(li_woodProduction), true, true);
 				IC.myGM.$(ls_dailyPrefix + IC.Ikariam.resourceNames[0]).innerHTML	= IC.Ikariam.formatToIkaNumber(Math.floor(li_woodProduction * 24), false);
 				
-				IC.myGM.$(ls_hourlyPrefix + IC.Ikariam.resourceNames[1]).innerHTML	= IC.Ikariam.formatToIkaNumber(Math.floor(-1 * li_wineSpending), true, true);
-				IC.myGM.$(ls_dailyPrefix + IC.Ikariam.resourceNames[1]).innerHTML	= IC.Ikariam.formatToIkaNumber(Math.floor(-1 * li_wineSpending * 24), false);
+				IC.myGM.$(ls_hourlyPrefix + IC.Ikariam.resourceNames[1]).innerHTML			= IC.Ikariam.formatToIkaNumber(Math.floor(-1 * li_wineSpending), true, true);
+				IC.myGM.$(ls_dailyPrefix + IC.Ikariam.resourceNames[1]).innerHTML			= IC.Ikariam.formatToIkaNumber(Math.floor(-1 * li_wineSpending * 24), false);
+				IC.myGM.$(ls_dailyPrefix + 'Label' + IC.Ikariam.resourceNames[1]).innerHTML	= IC.Language.$('resourceInformation.dailyExpenses', [IC.Language.$('diverse.name.resource.' + IC.Ikariam.resourceNames[1])]);
 				
 				if(li_producesWine === true)
 					li_tradegoodProduction = li_tradegoodProduction - li_wineSpending;
+				
+				if(li_tradegoodProduction >= 0)
+					IC.myGM.$(ls_dailyPrefix + 'Label' + ls_tradegoodName).innerHTML	= IC.Language.$('resourceInformation.dailyProduction', [IC.Language.$('diverse.name.resource.' + ls_tradegoodName)]);
+				else
+					IC.myGM.$(ls_dailyPrefix + 'Label' + ls_tradegoodName).innerHTML	= IC.Language.$('resourceInformation.dailyExpenses', [IC.Language.$('diverse.name.resource.' + ls_tradegoodName)]);
 				
 				IC.myGM.$(ls_hourlyPrefix + ls_tradegoodName).innerHTML	= IC.Ikariam.formatToIkaNumber(Math.floor(li_tradegoodProduction), true, true);
 				IC.myGM.$(ls_dailyPrefix + ls_tradegoodName).innerHTML	= IC.Ikariam.formatToIkaNumber(Math.floor(li_tradegoodProduction * 24), false);
@@ -484,7 +490,7 @@
 					IC.myGM.addElement('td', le_dailyIncomeWrapper, {
 						'id':			'dailyIncomeResourceLabel' + is_resource,
 						'class':		'smallFont',
-						'innerHTML':	IC.Language.$('resourceInformation.dailyProduction', [IC.Language.$('diverse.name.resource.' + is_resource)]) + ' '
+						'innerHTML':	IC.Language.$('resourceInformation.dailyProduction', [IC.Language.$('diverse.name.resource.' + is_resource)])
 					});
 					
 					IC.myGM.addElement('td', le_dailyIncomeWrapper, {
