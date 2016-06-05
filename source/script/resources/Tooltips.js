@@ -150,7 +150,7 @@
 					IC.RefreshHandler.add('militaryAdvisor', 'showDirectMilitaryTooltips', _lf_doShowDirectMilitaryTooltips);
 					IC.myGM.addStyle(
 						'#js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon				{ background-image: none; cursor: default; width: 240px; } \
-						 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip		{ display: inline; position: relative; padding: 0px; border: none; } \
+						 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip		{ display: inline; position: relative; padding: 0px; border: none; top: 0px; } \
 						 #js_MilitaryMovementsFleetMovementsTable .military_event_table .magnify_icon .infoTip h5	{ display: none; } \
 						 #js_MilitaryMovementsFleetMovementsTable .military_event_table .icon40						{ background-size: 25px 25px; background-color: transparent; padding: 26px 3px 0px 3px; width: 30px; } \
 						 #js_MilitaryMovementsFleetMovementsTable .military_event_table .icon40.resource_icon		{ background-size: 20px 16px; }',
