@@ -328,19 +328,25 @@
 			var _lf_extractForeignTroops = function(ie_wrapper) {
 				var la_nameCells	= IC.myGM.$$('.table01 .title_img_row th:not(:first-child)', ie_wrapper);
 				var la_numberRows	= IC.myGM.$$('.table01 tr:not(.title_img_row)', ie_wrapper);
+				var lo_numberCells	= {};
 				
-				var li_distance = la_numberRows.length / 2;
+				for(var i = 0; i < la_numberRows.length; i++) {
+					var ls_playerName	= IC.myGM.$('td a', la_numberRows[i]).innerHTML;
+					
+					if(!lo_numberCells[ls_playerName]) {
+						lo_numberCells[ls_playerName] = [];
+					}
+					
+					lo_numberCells[ls_playerName] = lo_numberCells[ls_playerName].concat(IC.myGM.$$('td:not(:first-child)', la_numberRows[i]));
+				}
 				
 				var ra_troops = [];
 				
-				for(var i = 0; i < li_distance; i++) {
-					var la_numberCells	= IC.myGM.$$('td:not(:first-child)', la_numberRows[i]).concat(IC.myGM.$$('td:not(:first-child)', la_numberRows[i + li_distance]));
-					var ls_playerName	= IC.myGM.$('td a', la_numberRows[i]).innerHTML;
+				IC.myGM.forEach(lo_numberCells, function (is_playerName, ia_numberCells) {
+					var lo_playerTroops = _go_storageProvider.foreignTroopList(is_playerName);
 					
-					var lo_playerTroops = _go_storageProvider.foreignTroopList(ls_playerName);
-				
 					for(var i = 0; i < la_nameCells.length; i++) {
-						var li_number = IC.Ikariam.getInt(la_numberCells[i].innerHTML);
+						var li_number = IC.Ikariam.getInt(ia_numberCells[i].innerHTML);
 						
 						if(li_number > 0)
 							lo_playerTroops.addTroop(la_nameCells[i].title, li_number);
@@ -348,7 +354,7 @@
 					
 					if(lo_playerTroops.isEmpty === false)
 						ra_troops.push(lo_playerTroops);
-				}
+				});
 				
 				return ra_troops;
 			};
