@@ -93,7 +93,8 @@
                 }
             }
         },
-        "dailyProduction": "Ежедневное производство %$1:"
+        "dailyProduction": "Ежедневное производство %$1:",
+        "dailyExpenses": ""
     },
     "highscore": {
         "options": {

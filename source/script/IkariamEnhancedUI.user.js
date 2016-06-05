@@ -35,6 +35,13 @@
 // @bug				All				The selected island is not centered in world view.
 // @bug				All				If you are zooming to more than 100%, the view is not centered correctly after a page reload.
 // 
+// @history			3.3		Release: 05.06.2016
+// @history			3.3		Feature: Add @connect information to avoid requests from Tampermonkey.
+// @history			3.3		Feature: Daily expenses in resource information if amount is negative.
+// @history			3.3		Bugfix: Tooltip formatting for resource information broken.
+// @history			3.3		Bugfix: Formatting of direct tooltip in military advisor broken.
+// @history			3.3		Bugfix: Foreign troops are incorrect displayed in troop information.
+// 
 // @history			3.2.2	Release: 02.02.2016
 // @history			3.2.2	Core: Update to Version 2.3.2 - Bug fix (permanent reload of crew conversion)
 // 

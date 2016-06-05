@@ -93,7 +93,8 @@
                 }
             }
         },
-        "dailyProduction": "Ikdienas %$1 produkcija:"
+        "dailyProduction": "Ikdienas %$1 produkcija:",
+        "dailyExpenses": ""
     },
     "highscore": {
         "options": {
