@@ -93,7 +93,8 @@
                 }
             }
         },
-        "dailyProduction": "Tagesproduktion %$1:"
+        "dailyProduction": "Tagesproduktion %$1:",
+        "dailyExpenses": "Tägliche Ausgaben %$1:"
     },
     "highscore": {
         "options": {
